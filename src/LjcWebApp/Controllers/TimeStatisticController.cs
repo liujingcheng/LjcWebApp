@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MvcWords.Domain;
 using  LjcWebApp.Services.DataCRUD;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using Sakura.AspNetCore;
 
 namespace LjcWebApp.Controllers
@@ -13,9 +14,15 @@ namespace LjcWebApp.Controllers
     [Authorize]
     public class TimeStatisticController : Controller
     {
+        private readonly IOptions<AppSettings> _appSettings;
         //
         // GET: /TimeStatistic/
         TimeStatisticService _timeStatisticService = new TimeStatisticService();
+
+        public TimeStatisticController(IOptions<AppSettings> settings)
+        {
+            _appSettings = settings;
+        }
 
         public ActionResult Index()
         {
@@ -211,9 +218,7 @@ namespace LjcWebApp.Controllers
             ViewBag.PageSize = pageSize;//防止分页后丢失PageSize add by ljc 2015-12-05
             if (pageSize == null)//如果为空，则从配置文件读取
             {
-                int pageSize1;
-                var pageSizeStr = WebConfigurationManager.AppSettings["PageSize"];
-                if (!int.TryParse(pageSizeStr, out pageSize1)) pageSize1 = 20;//配置文件读不出来的情况下，给20
+                int pageSize1= _appSettings.Value.PageSize;
                 pageSize = pageSize1;
             }
 
