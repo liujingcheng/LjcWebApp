@@ -64,8 +64,8 @@ namespace LjcWebApp.Controllers
                 if (ModelState.IsValid)
                 {
                     var entity = new question();
-
-                    if (TryUpdateModel(entity, collection) && _service.Add(entity))
+                    TryUpdateModelAsync(entity);
+                    if (_service.Add(entity))
                     {
                         return RedirectToAction("Index", new { likeStr = entity.QuestionMember });
                     }
@@ -123,8 +123,8 @@ namespace LjcWebApp.Controllers
                 if (ModelState.IsValid)
                 {
                     var entity = new question();
-
-                    if (TryUpdateModel(entity, collection) && _service.Update(entity))
+                    TryUpdateModelAsync(entity);
+                    if (_service.Update(entity))
                     {
                         return RedirectToAction("Index");
                     }

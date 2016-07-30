@@ -86,8 +86,8 @@ namespace LjcWebApp.Controllers
                 if (ModelState.IsValid)
                 {
                     var word = new word_tb();
-
-                    if (TryUpdateModel(word, collection) && _service.UpdateWord(word))
+                    TryUpdateModelAsync(word);
+                    if (_service.UpdateWord(word))
                     {
                         return RedirectToAction("Index", new { likeStr = word.Spelling });
                     }
