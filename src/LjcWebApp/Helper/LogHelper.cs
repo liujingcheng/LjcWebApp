@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvcWords.Domain
+namespace LjcWebApp.Helper
 {
     /**/
     /// <summary>  

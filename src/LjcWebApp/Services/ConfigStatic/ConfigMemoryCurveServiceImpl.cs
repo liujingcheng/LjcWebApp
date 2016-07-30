@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using MvcWords.Domain;
 using System.Linq;
+using LjcWebApp.Helper;
 
 namespace LjcWebApp.Services.ConfigStatic
 {

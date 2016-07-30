@@ -5,7 +5,6 @@ using System.Text;
 using LjcWebApp;
 using LjcWebApp.Helper;
 using Microsoft.EntityFrameworkCore;
-using MvcWords.Domain;
 
 namespace LjcWebApp.Services.ConfigStatic
 {

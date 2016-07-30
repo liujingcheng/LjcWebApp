@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LjcWebApp;
-using MvcWords.Domain;
+using LjcWebApp.Helper;
 
 namespace LjcWebApp.Services.Word
 {

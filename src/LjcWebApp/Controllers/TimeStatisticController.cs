@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LjcWebApp.Helper;
 using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using MvcWords.Domain;
 using  LjcWebApp.Services.DataCRUD;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
@@ -11,7 +11,7 @@ using Sakura.AspNetCore;
 
 namespace LjcWebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class TimeStatisticController : Controller
     {
         private readonly IOptions<AppSettings> _appSettings;

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace LjcWebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class QuestionController : Controller
     {
         //

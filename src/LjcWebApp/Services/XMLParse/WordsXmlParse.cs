@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using LjcWebApp;
-using MvcWords.Domain;
+using LjcWebApp.Helper;
 
 
 namespace LjcWebApp.Services.XMLParse

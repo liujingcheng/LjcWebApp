@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LjcWebApp.Helper;
 using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MvcWords.Domain;
 using  LjcWebApp.Services.DataCRUD;
 using  LjcWebApp.Services.DataLoad;
 using  LjcWebApp.Services.DataStorage;
@@ -16,7 +16,7 @@ using Sakura.AspNetCore;
 
 namespace LjcWebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class DefaultController : Controller
     {
         public const int MAX_PROCESS = 20;

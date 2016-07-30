@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LjcWebApp;
-using MvcWords.Domain;
+using LjcWebApp.Helper;
 using  LjcWebApp.Services.ConfigStatic;
 
 namespace LjcWebApp.Services.DataLoad
