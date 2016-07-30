@@ -2042,6 +2042,59 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "Sakura.AspNetCore.Mvc.PagedList/2.0.6": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0",
+          "Microsoft.AspNetCore.Razor.Runtime": "1.0.0",
+          "Sakura.AspNetCore.PagedList.Abstractions": "2.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.6/Sakura.AspNetCore.Mvc.PagedList.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/Sakura.AspNetCore.Mvc.PagedList.dll": {}
+        }
+      },
+      "Sakura.AspNetCore.PagedList/2.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Sakura.AspNetCore.PagedList.Abstractions": "2.0.0",
+          "System.Linq.Queryable": "4.0.1",
+          "System.Threading": "4.0.11"
+        },
+        "compile": {
+          "lib/netstandard1.0/Sakura.AspNetCore.PagedList.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/Sakura.AspNetCore.PagedList.dll": {}
+        }
+      },
+      "Sakura.AspNetCore.PagedList.Abstractions/2.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.0/Sakura.AspNetCore.PagedList.Abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/Sakura.AspNetCore.PagedList.Abstractions.dll": {}
+        }
+      },
+      "Sakura.AspNetCore.PagedList.Async/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "1.0.0",
+          "Sakura.AspNetCore.PagedList": "2.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/Sakura.AspNetCore.PagedList.Async.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Sakura.AspNetCore.PagedList.Async.dll": {}
+        }
+      },
       "System.AppContext/4.1.0": {
         "type": "package",
         "dependencies": {
@@ -5588,6 +5641,54 @@
         "lib/netstandard1.0/_._",
         "runtime.native.System.Security.Cryptography.4.0.0.nupkg.sha512",
         "runtime.native.System.Security.Cryptography.nuspec"
+      ]
+    },
+    "Sakura.AspNetCore.Mvc.PagedList/2.0.6": {
+      "sha512": "VeRo8KRNoDnwMBhwCAw5Zbt+iKCo1mMfXrZlkoJ0l448GxBJrRhDZD/hAkjNkmTBAGR04wAzpglT5ciasEp37g==",
+      "type": "package",
+      "path": "Sakura.AspNetCore.Mvc.PagedList/2.0.6",
+      "files": [
+        "Sakura.AspNetCore.Mvc.PagedList.2.0.6.nupkg.sha512",
+        "Sakura.AspNetCore.Mvc.PagedList.nuspec",
+        "lib/net451/Sakura.AspNetCore.Mvc.PagedList.dll",
+        "lib/net451/Sakura.AspNetCore.Mvc.PagedList.xml",
+        "lib/netstandard1.6/Sakura.AspNetCore.Mvc.PagedList.dll",
+        "lib/netstandard1.6/Sakura.AspNetCore.Mvc.PagedList.xml"
+      ]
+    },
+    "Sakura.AspNetCore.PagedList/2.0.0": {
+      "sha512": "sE8DdQ2RgSrXl9pSloEXBvahegXjvZwg7vfXCCg6XMGC9HvEbaEg5COZdJh7nrqrW47SRMy5KQJagU6RFWd4Zg==",
+      "type": "package",
+      "path": "Sakura.AspNetCore.PagedList/2.0.0",
+      "files": [
+        "Sakura.AspNetCore.PagedList.2.0.0.nupkg.sha512",
+        "Sakura.AspNetCore.PagedList.nuspec",
+        "lib/netstandard1.0/Sakura.AspNetCore.PagedList.dll",
+        "lib/netstandard1.0/Sakura.AspNetCore.PagedList.xml"
+      ]
+    },
+    "Sakura.AspNetCore.PagedList.Abstractions/2.0.0": {
+      "sha512": "oUlEi6NRtcBM8++U5mUf18B7gTri/dKJdrEvQvNb5Qc1z84IQwk93WTCDTudTDEEst1fbIyhGDsMlzGHUNVYKQ==",
+      "type": "package",
+      "path": "Sakura.AspNetCore.PagedList.Abstractions/2.0.0",
+      "files": [
+        "Sakura.AspNetCore.PagedList.Abstractions.2.0.0.nupkg.sha512",
+        "Sakura.AspNetCore.PagedList.Abstractions.nuspec",
+        "lib/netstandard1.0/Sakura.AspNetCore.PagedList.Abstractions.dll",
+        "lib/netstandard1.0/Sakura.AspNetCore.PagedList.Abstractions.xml"
+      ]
+    },
+    "Sakura.AspNetCore.PagedList.Async/1.0.0": {
+      "sha512": "aq3GVvL96ft36WpQ54ScmXlgIv6fSiWMoeA74vEB9ZYcR20Kmt37x+8M2BcYZJta5NBdg24p6dDtL8w5PlGNvw==",
+      "type": "package",
+      "path": "Sakura.AspNetCore.PagedList.Async/1.0.0",
+      "files": [
+        "Sakura.AspNetCore.PagedList.Async.1.0.0.nupkg.sha512",
+        "Sakura.AspNetCore.PagedList.Async.nuspec",
+        "lib/net451/Sakura.AspNetCore.PagedList.Async.dll",
+        "lib/net451/Sakura.AspNetCore.PagedList.Async.xml",
+        "lib/netstandard1.3/Sakura.AspNetCore.PagedList.Async.dll",
+        "lib/netstandard1.3/Sakura.AspNetCore.PagedList.Async.xml"
       ]
     },
     "System.AppContext/4.1.0": {
@@ -10175,7 +10276,11 @@
       "Microsoft.NETCore.App >= 1.0.0",
       "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0",
       "Pomelo.Data.MySql >= 1.0.0-prerelease-20160727",
-      "Pomelo.EntityFrameworkCore.MySql >= 1.0.0-prerelease-20160727"
+      "Pomelo.EntityFrameworkCore.MySql >= 1.0.0-prerelease-20160727",
+      "Sakura.AspNetCore.Mvc.PagedList >= 2.0.6",
+      "Sakura.AspNetCore.PagedList >= 2.0.0",
+      "Sakura.AspNetCore.PagedList.Abstractions >= 2.0.0",
+      "Sakura.AspNetCore.PagedList.Async >= 1.0.0"
     ],
     ".NETCoreApp,Version=v1.0": []
   },

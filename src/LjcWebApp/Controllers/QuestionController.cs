@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Web;
 using Microsoft.AspNetCore.Mvc;
-using MvcWords.Domain;
 using  LjcWebApp.Services.Introspection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -21,8 +21,11 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
     "Pomelo.Data.MySql": "1.0.0-prerelease-20160727",
-    "Pomelo.EntityFrameworkCore.MySql": "1.0.0-prerelease-20160727"
-  },
+    "Pomelo.EntityFrameworkCore.MySql": "1.0.0-prerelease-20160727",
+    "Sakura.AspNetCore.PagedList": "2.0.0",
+    "Sakura.AspNetCore.PagedList.Async": "1.0.0",
+    "Sakura.AspNetCore.PagedList.Abstractions": "2.0.0",
+    "Sakura.AspNetCore.Mvc.PagedList": "2.0.6"  },
 
   "tools": {
     "BundlerMinifier.Core": "2.0.238",

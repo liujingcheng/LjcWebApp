@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Configuration;
 using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using MvcWords.Domain;
 using  LjcWebApp.Services.DataCRUD;
 using Microsoft.AspNetCore.Authorization;
-using MvcWords.Web.Models;
-using PagedList;
-using PagedList.Mvc;
+using Sakura.AspNetCore;
 
 namespace LjcWebApp.Controllers
 {
@@ -165,9 +161,7 @@ namespace LjcWebApp.Controllers
             {
                 LogHelper.WriteLog(ex.Message, ex);
             }
-            return Request.IsAjaxRequest()
-                           ? (ActionResult)PartialView("HistoryPartial")
-                           : View();
+            return (ActionResult)PartialView("HistoryPartial");
         }
 
         [HttpPost]
@@ -259,9 +253,7 @@ namespace LjcWebApp.Controllers
                 LogHelper.WriteLog(ex.Message, ex);
             }
 
-            return Request.IsAjaxRequest()
-                           ? partial
-                           : View();
+            return partial;
         }
 
         [HttpPost]

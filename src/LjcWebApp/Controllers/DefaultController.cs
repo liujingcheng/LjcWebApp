@@ -12,6 +12,7 @@ using  LjcWebApp.Services.DataCRUD;
 using  LjcWebApp.Services.DataLoad;
 using  LjcWebApp.Services.DataStorage;
 using  LjcWebApp.Services.XMLParse;
+using Sakura.AspNetCore;
 
 namespace LjcWebApp.Controllers
 {
@@ -925,9 +926,7 @@ namespace LjcWebApp.Controllers
             {
                 LogHelper.WriteLog(ex.Message, ex);
             }
-            return Request.IsAjaxRequest()
-                           ? (ActionResult)PartialView("WordsPartial")
-                           : View();
+            return  (ActionResult)PartialView("WordsPartial");
         }
 
     }
