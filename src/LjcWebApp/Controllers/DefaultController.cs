@@ -4,14 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Configuration;
 using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MvcWords.Domain;
-using MvcWords.Models;
-using PagedList;
 using  LjcWebApp.Services.DataCRUD;
 using  LjcWebApp.Services.DataLoad;
 using  LjcWebApp.Services.DataStorage;
@@ -564,10 +560,10 @@ namespace LjcWebApp.Controllers
             try
             {
                 var nowTime = DateTime.Now;
-                if (common.CurrentNode.Value.IsRemembered != 1)
+                if (common.CurrentNode.Value.IsRemembered != true)
                 {
                     var wordTb = common.CurrentNode.Value;
-                    wordTb.IsRemembered = 1;
+                    wordTb.IsRemembered = true;
 
                     //FirstLearn如果为null的话,只在用户按YES或NO按钮时才对其赋值,也就是用户表态该单词记住或是未记住后该单词才被认为是已经记忆过(而不是第一次记忆),
                     //否则该单词还会被认为是从未记忆过的单词(虽然可能这时用户看到了这个单词)
@@ -658,9 +654,9 @@ namespace LjcWebApp.Controllers
                 }
 
 
-                if (common.CurrentNode.Value.IsRemembered == 1)//此种场景一般是之前按错键把没记住按成了记住，然后现在重新改回来
+                if (common.CurrentNode.Value.IsRemembered == true)//此种场景一般是之前按错键把没记住按成了记住，然后现在重新改回来
                 {
-                    common.CurrentNode.Value.IsRemembered = 0;
+                    common.CurrentNode.Value.IsRemembered = false;
                     common.CurrentNode.Value.Process--;
                     common.CurrentNode.Value.YesTotalCount--;
                     if (common.CurrentNode.Value.ModifiedOn == DateTime.MinValue)//说明该单词之前是第一次被记忆，原先的lastlearn应为空

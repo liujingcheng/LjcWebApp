@@ -7,6 +7,8 @@ using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using MvcWords.Domain;
 using  LjcWebApp.Services.Introspection;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace LjcWebApp.Controllers
 {
@@ -14,7 +16,7 @@ namespace LjcWebApp.Controllers
     public class QuestionController : Controller
     {
         //
-        // GET: /Question/
+        // GET: /question/
         QuestionService _service = new QuestionService();
 
         public ActionResult Index()
@@ -25,7 +27,7 @@ namespace LjcWebApp.Controllers
 
         public ActionResult Search(string likeStr = null)
         {
-            var list = new List<Question>();
+            var list = new List<question>();
             if (!string.IsNullOrWhiteSpace(likeStr))
             {
                 list = _service.Search(likeStr);
@@ -34,7 +36,7 @@ namespace LjcWebApp.Controllers
         }
 
         //
-        // GET: /Question/Details/5
+        // GET: /question/Details/5
 
         public ActionResult Details(string id)
         {
@@ -47,7 +49,7 @@ namespace LjcWebApp.Controllers
         }
 
         //
-        // GET: /Question/Create
+        // GET: /question/Create
 
         public ActionResult Create()
         {
@@ -55,7 +57,7 @@ namespace LjcWebApp.Controllers
         }
 
         //
-        // POST: /Question/Create
+        // POST: /question/Create
 
         [HttpPost]
         public ActionResult Create(FormCollection collection)
@@ -64,7 +66,7 @@ namespace LjcWebApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var entity = new Question();
+                    var entity = new question();
 
                     if (TryUpdateModel(entity, collection) && _service.Add(entity))
                     {
@@ -101,7 +103,7 @@ namespace LjcWebApp.Controllers
         }
 
         //
-        // GET: /Question/Edit/5
+        // GET: /question/Edit/5
 
         public ActionResult Edit(string id)
         {
@@ -114,7 +116,7 @@ namespace LjcWebApp.Controllers
         }
 
         //
-        // POST: /Question/Edit/5
+        // POST: /question/Edit/5
 
         [HttpPost]
         public ActionResult Edit(string id, FormCollection collection)
@@ -123,7 +125,7 @@ namespace LjcWebApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var entity = new Question();
+                    var entity = new question();
 
                     if (TryUpdateModel(entity, collection) && _service.Update(entity))
                     {
@@ -139,7 +141,7 @@ namespace LjcWebApp.Controllers
         }
 
         //
-        // GET: /Question/Delete/5
+        // GET: /question/Delete/5
 
         public ActionResult Delete(string id)
         {
@@ -152,7 +154,7 @@ namespace LjcWebApp.Controllers
         }
 
         //
-        // POST: /Question/Delete/5
+        // POST: /question/Delete/5
 
         [HttpPost]
         public ActionResult Delete(string id, FormCollection collection)
@@ -185,12 +187,12 @@ namespace LjcWebApp.Controllers
                 if (string.IsNullOrEmpty(str) || !str.StartsWith("* ")) continue;
                 listStr.Add(str.Substring(2));
             }
-            sr.Close();
+            sr.Dispose();
 
             int sort = 1;
             foreach (var lineStr in listStr)
             {
-                var entity = new Question();
+                var entity = new question();
                 entity.QuestionMember = lineStr;
                 entity.FullScore = 10;
                 entity.Sort = sort++;

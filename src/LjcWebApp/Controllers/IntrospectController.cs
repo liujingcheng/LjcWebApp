@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Microsoft.AspNetCore.Mvc;
-using MvcWords.Domain;
 using Newtonsoft.Json;
 using  LjcWebApp.Services.ConfigStatic;
 using  LjcWebApp.Services.Introspection;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LjcWebApp.Controllers
 {
@@ -25,11 +23,11 @@ namespace LjcWebApp.Controllers
         }
 
         [HttpPost]
-        public string SaveIntorspect(Question question, double score)
+        public string SaveIntorspect(question question, double score)
         {
             var introspect = new introspect();
             introspect.QuestionId = question.Id;
-            introspect.Question = question.QuestionMember;
+            introspect.question = question.QuestionMember;
             introspect.Score = score;
             introspect.Weight = question.Weight;
             introspect.IsYes = question.IsYes;
@@ -39,7 +37,7 @@ namespace LjcWebApp.Controllers
             var success = false;
             if (_introspectService.IsExist(introspect))
             {
-                var entity = _introspectService.GetByQuestionAndDate(introspect.Question, introspect.Date.Value);
+                var entity = _introspectService.GetByQuestionAndDate(introspect.question, introspect.Date.Value);
                 introspect.Id = entity.Id;
                 success = _introspectService.Update(introspect);
             }
@@ -55,7 +53,7 @@ namespace LjcWebApp.Controllers
         }
 
         [HttpPost]
-        public string GetNextQuestion(Question currentQuestion)
+        public string GetNextQuestion(question currentQuestion)
         {
             if (currentQuestion != null && currentQuestion.Id == null)
             //当前端传null过来时，这里接收到的结果会序列化成一个各字段内容都为空的实例，而不是直接null，所以这里处理下
@@ -74,7 +72,7 @@ namespace LjcWebApp.Controllers
 
 
         [HttpPost]
-        public string GetPreviousQuestion(Question currentQuestion)
+        public string GetPreviousQuestion(question currentQuestion)
         {
             if (currentQuestion != null && currentQuestion.Id == null)
             //当前端传null过来时，这里接收到的结果会序列化成一个各字段内容都为空的实例，而不是直接null，所以这里处理下
@@ -119,7 +117,7 @@ namespace LjcWebApp.Controllers
         /// <param name="currentQuestion"></param>
         /// <returns></returns>
         [HttpPost]
-        public string GetPreviousUnhandledQuestion(Question currentQuestion)
+        public string GetPreviousUnhandledQuestion(question currentQuestion)
         {
             if (currentQuestion != null && currentQuestion.Id == null)
             //当前端传null过来时，这里接收到的结果会序列化成一个各字段内容都为空的实例，而不是直接null，所以这里处理下
