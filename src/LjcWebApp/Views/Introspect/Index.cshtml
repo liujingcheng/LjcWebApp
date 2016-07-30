@@ -1,0 +1,123 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Index";
+}
+@section head{
+    @Styles.Render("~/Content/Introspect.css")
+}
+<div class="maininfo">
+    <div>
+        <label id="lblSingleInfo"></label>
+        <label id="lblStaticInfo">/@(ViewBag.QuestionCount)；</label>
+        <label id="lblLastScore"></label>
+    </div>
+    <div id="lblSummaryInfo"></div>
+    <textarea id="lblQuestion" readonly></textarea>
+</div>
+<div>
+    <input type="button" class="BtnLeft" score="0" value="0" onclick="saveIntorspect(this)" />
+    <input type="button" class="BtnMiddle" value="上一个" onclick="getPreviousQuestion(); " />
+    <input type="button" class="BtnRight" score="10" value="10" onclick="saveIntorspect(this)" />
+    <br />
+    <input type="button" class="BtnLeft" score="1" value="1" onclick="saveIntorspect(this)" />
+    <input type="button" class="BtnMiddle" score="2" value="2" onclick="saveIntorspect(this)" />
+    <input type="button" class="BtnRight" score="3" value="3" onclick="saveIntorspect(this)" />
+    <br />
+    <input type="button" class="BtnLeft" score="4" value="4" onclick="saveIntorspect(this)" />
+    <input type="button" class="BtnMiddle" score="5" value="5" onclick="saveIntorspect(this)" />
+    <input type="button" class="BtnRight" score="6" value="6" onclick="saveIntorspect(this)" />
+    <br />
+    <input type="button" class="BtnLeft" score="7" value="7" onclick="saveIntorspect(this)" />
+    <input type="button" class="BtnMiddle" score="8" value="8" onclick="saveIntorspect(this)" />
+    <input type="button" class="BtnRight" score="9" value="9" onclick="saveIntorspect(this)" />
+    <br />
+    <input type="button" class="BtnLeft" score="0" value="0" onclick="saveIntorspect(this)" />
+    <input type="button" class="BtnMiddle" value="下一个" onclick="getNextQuestion(); " />
+    <input type="button" class="BtnRight" score="10" value="10" onclick="saveIntorspect(this)" />
+    <br />
+    <input type="button" class="BtnLeft" value="分数统计" onclick="getStatisticInfo()" />
+    <input type="button" class="BtnMiddle" value="前一个待答" onclick="getPreviousUnhandledQuestion()" />
+    <input type="button" class="BtnRight" score="0" value="0" onclick="saveIntorspect(this)" />
+</div>
+
+
+@Scripts.Render("~/Scripts/jquery.json.js")
+<script type="text/javascript">
+    $.ajaxSetup({ contentType: 'application/json' });
+    var currentQuestion = null;
+
+    $(document).ready(function () {
+        getNextQuestion();//首次页面加载时显示
+        getStatisticInfo();
+    });
+
+    function saveIntorspect(obj) {
+        var score = $(obj).attr("score");
+        if (score != null) {
+            $("#lblLastScore").text("上一个得分：" + score);
+        }
+
+        $.post("/Introspect/SaveIntorspect", $.toJSON({ question: currentQuestion, score: score }), function (data) {
+            if (data == "false") {
+                alert("操作失败");
+                return;
+            }
+            getNextQuestion(score);
+        });
+    }
+
+    function getNextQuestion(score) {
+        $.post("/Introspect/GetNextQuestion", $.toJSON(currentQuestion), function (data) {
+            if (data == "end") {
+                if (score != null && currentQuestion != null && currentQuestion.Score == null) {
+                    //如果已经选了分数的，要将分数显示出来
+                    currentQuestion.Score = score;
+                    refresh();
+                }
+                alert("亲，已经是最后一个了~");
+                return;
+            }
+            currentQuestion = $.evalJSON(data);
+            refresh();
+        });
+    }
+
+    function getPreviousQuestion() {
+        $.post("/Introspect/GetPreviousQuestion", $.toJSON(currentQuestion), function (data) {
+            if (data == "end") {
+                alert("亲，没有上一个了~");
+                return;
+            }
+            currentQuestion = $.evalJSON(data);
+            refresh();
+        });
+    }
+
+    function refresh() {
+        if (currentQuestion != null) {
+            $("#lblQuestion").text(currentQuestion.QuestionMember);
+            $("#lblSingleInfo").text(currentQuestion.Score + "/" + currentQuestion.Sort);
+        } else {
+            alert("操作失败");
+            return;
+        }
+    }
+
+    function getStatisticInfo() {
+        $.post("/Introspect/GetStatisticInfo", null, function (data) {
+            $("#lblSummaryInfo").text(data);
+        });
+    }
+
+    function getPreviousUnhandledQuestion() {
+        $.post("/Introspect/GetPreviousUnhandledQuestion", $.toJSON(currentQuestion), function (data) {
+            if (data == "end") {
+                alert("亲，没有你想要的结果哦~");
+                return;
+            }
+            currentQuestion = $.evalJSON(data);
+            refresh();
+        });
+    }
+
+</script>

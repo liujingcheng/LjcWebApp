@@ -1,0 +1,96 @@
+﻿@using MvcWords.Web.Models
+@using PagedList.Mvc;
+@using PagedList;
+<table>
+    <tr>
+        <th>
+            Date
+        </th>
+        <th>
+            EventName
+        </th>
+        <th>
+            StartTime
+        </th>
+        <th>
+            EndTime
+        </th>
+        <th>
+            EffectiveTime
+        </th>
+        <th>
+            PlanTime
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Remark
+        </th>
+    </tr>
+
+    @foreach (var ondayDataModel in ViewBag.OnePageOfHistoryList)
+    {
+        var copyText = "";
+        if (ondayDataModel.EventModelList.Count > 0)
+        {
+            var list = (List<EventModel>)ondayDataModel.EventModelList;
+            copyText = string.Join("；", list.Select(p => p.EventName));
+        }
+        foreach (var item in ondayDataModel.EventModelList)
+        {
+            <tr>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+                    @item.EventName
+                </td>
+                <td>
+                    @item.StartTime
+                </td>
+                <td>
+                    @item.EndTime
+                </td>
+                <td>
+                    @item.EffectiveTime
+                </td>
+                <td>
+                    @item.PlanTime
+                </td>
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    @item.Remark
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                @ondayDataModel.Date
+            </td>
+            <td>
+                <div copytext="@copyText" data-toggle="popover" data-delay="{show: 500,hide:100}"
+                     data-placement="right" data-content="复制成功" class="copy-button-wrap">
+                    <input type="button" value="复制" class="copy-button" />
+                </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td>
+                @ondayDataModel.TotalEffectiveTime
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
+    }
+    @Html.PagedListPager((IPagedList)ViewBag.OnePageOfHistoryList, page => Url.Action("GetHistoryList",
+    new { page, startDateStr = ViewBag.StartDateStr, endDateStr = ViewBag.EndDateStr }),
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+    new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "unobtrusive-historylist", OnComplete = "updatePagedParameters" }))
+</table>

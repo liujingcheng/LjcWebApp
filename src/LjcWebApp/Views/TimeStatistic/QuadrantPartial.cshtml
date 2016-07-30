@@ -1,0 +1,50 @@
+﻿@if (Model != null)
+{
+    foreach (var onequadrantModel in Model)
+    {
+        <tr>
+            <td></td>
+            <td>
+                <input type="text" class="txtEventName" value="@onequadrantModel.EventName" title="@onequadrantModel.EventName" />
+            </td>
+            <td>
+                <input type="hidden" class="hddEventId" value="@onequadrantModel.EventId" />
+            </td>
+            <td>
+                <input type="hidden" class="hddlastticks" value="@onequadrantModel.ModifiedOn.Ticks" />
+            </td>
+            <td>
+                <input type="button" class="btnToStart" value="Go" />
+            </td>
+            <td>
+                <input type="button" class="btnUp" value="Up" />
+            </td>
+            <td>
+                <input type="button" class="btnDown" value="Down" />
+            </td>
+            <td>
+                <input type="button" class="btnDelete" value="Del" />
+            </td>
+            <td>
+                <input type="button" class="btnQuat1" value="1" />
+            </td>
+            <td>
+                <input type="button" class="btnQuat2" value="2" />
+            </td>
+            <td>
+                <input type="button" class="btnQuat3" value="3" />
+            </td>
+            <td>
+                <input type="button" class="btnQuat4" value="4" />
+            </td>
+        </tr>
+    }
+}
+<tr>
+    <td>
+        <input type="button" class="btnNew" value="New" />
+    </td>
+    <td>
+        <input type="text" class="txtNewEventName" />
+    </td>
+</tr>

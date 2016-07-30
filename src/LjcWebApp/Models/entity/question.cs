@@ -15,7 +15,7 @@ namespace LjcWebApp
     public partial class question
     {
         public string Id { get; set; }
-        public string Question1 { get; set; }
+        public string QuestionMember { get; set; }
         public Nullable<double> FullScore { get; set; }
         public Nullable<double> Weight { get; set; }
         public Nullable<short> IsYes { get; set; }

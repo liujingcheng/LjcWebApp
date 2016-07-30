@@ -1,0 +1,103 @@
+﻿@model LjcWebApp.Models.ViewModels.AccountModels
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html id="html_hide">
+<head>
+    <title>登录</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    @Styles.Render("~/Content/css/reset.css?cssv1")
+    @Styles.Render("~/Content/bootstrap/bootstrap.css?cssv1")
+    @Styles.Render("~/Content/css/common.css?cssv1")
+    @Styles.Render("~/Content/css/index.css?cssv1")
+    <script src="@Url.Content("~/Scripts/jquery-1.9.0.min.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"> </script>
+</head>
+<body class="bodyBg">
+    <div class="wrap">
+        <div class="laginwrap">
+            <div class="container clearfix">
+                <div class="lagin">
+                    <div class="laginHead clearfix">
+                        <div class="divRight">
+                        </div>
+                        <div class="divLeft">
+                        </div>
+                        <h1>
+                            用户登录
+                        </h1>
+                    </div>
+                    <div class="laginMain">
+                        @using (Html.BeginForm(new { ReturnUrl = Request.QueryString["ReturnUrl"] }))
+                        {
+                            @Html.AntiForgeryToken()  //防止跨站请求伪造(CSRF:Cross-site request forgery)攻击
+                                                    @Html.ValidationSummary(true)
+                                                    <p class="pTitle">
+                                                        用户名：
+                                                    </p>
+                                                    <div class="divint">
+                                                        @Html.TextBoxFor(m => m.UserName, new { @class = "txt-name", @maxlength = "20" })
+                                                    </div>
+                                                    <span class="checked">@Html.ValidationMessageFor(m => m.UserName)</span>
+                                                    <p class="pTitle">
+                                                        密码：
+                                                    </p>
+                                                    <div class="divint">
+                                                        @Html.PasswordFor(m => m.Password, new { @style = "", @class = "txt-pass", @maxlength = "30" })
+                                                    </div>
+                                                    <span class="checked">@Html.ValidationMessageFor(m => m.Password)</span>
+
+                                                    <input type="submit" value="登 录" class="btnan btn-on" />
+                        }
+                    </div>
+                    <div class="laginFoot clearfix">
+                        <div class="divRight">
+                        </div>
+                        <div class="divLeft">
+                        </div>
+                        <h1></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/Scripts/bootstrapjqueryui")
+    }
+    <script type="text/javascript">
+        $(function () {
+            $(".btnan").mouseover(function () {
+
+                $(this).addClass("active");
+            });
+            $(".btnan").mouseleave(function () {
+                $(this).removeClass("active");
+            });
+        });
+
+        //防点击劫持攻击
+        if (window != top) top.location.href = '@Url.Content("~/Account/Login/")';
+
+        //add by ljc 尝试使机顶盒4.4版本浏览器在登录框能够输入内容
+        if ($(".txt-name").first().val() == '') {
+            $(".txt-name").focus();
+        } else if ($(".txt-pass").first().val() == '') {
+            $(".txt-pass").focus();
+        } else {
+            $(".txt-name").focus();
+        }
+        $(".input-validation-error").bind("keypress", function (evt) {
+            evt = evt || window.event;
+            var keyCode = evt.keyCode || evt.which;
+            if (keyCode == 13) {
+                $(this).focus();
+            }
+        });
+
+    </script>
+</body>
+</html>

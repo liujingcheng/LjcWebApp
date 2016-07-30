@@ -1,0 +1,167 @@
+﻿@model MvcWords.Domain.word_tb
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>word_tb</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.WordId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.WordId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Spelling)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Spelling)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Phonetic)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Phonetic)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Paraphrase)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Paraphrase)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Process)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Process)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Priority)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Priority)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LastLearn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LastLearn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FirstLearn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FirstLearn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Import)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Import)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Classs)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Classs)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsRemembered)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsRemembered)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedOn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ModifiedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ModifiedBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ModifiedOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ModifiedOn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LastLearnBackup)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LastLearnBackup)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LastProcess)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LastProcess)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LastForget)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LastForget)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.YesTotalCount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.YesTotalCount)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.NoTotalCount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.NoTotalCount)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Deadline)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Deadline)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

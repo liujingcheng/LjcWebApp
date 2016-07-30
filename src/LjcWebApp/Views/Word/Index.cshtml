@@ -1,0 +1,163 @@
+﻿@model IEnumerable<MvcWords.Domain.word_tb>
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Search</h2>
+<a href="@Url.Action("Index", "Default")" target="_blank">Words</a>
+<p>
+    <input id="txtSearch" />
+    <a id="search" style="width:300px;cursor: pointer">Search</a>
+</p>
+
+<p style="display: none">
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Spelling)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phonetic)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Paraphrase)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Process)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Priority)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastLearn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstLearn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Import)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Classs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Deadline)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Spelling)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phonetic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Paraphrase)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Process)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Priority)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastLearn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstLearn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Import)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Classs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.WordId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.WordId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.WordId })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script type="text/javascript">
+    $(function () {
+        //搜索
+        $("#search").click(function () {
+            var likeStr = $("#txtSearch").val().trim();
+            if (likeStr != "") {
+                window.location.href = "/Word/Index?likeStr=" + likeStr;
+            }
+            else {
+                return;
+            }
+        });
+
+        //回车触发搜索
+        $(document).on("keypress", "#txtSearch", function (evt) {
+            evt = evt || window.event;
+            var keyCode = evt.keyCode || evt.which;
+
+            if (keyCode == 13 && document.activeElement == this) {
+                $("#search").click();
+            }
+        });
+
+        //将url中的搜索关键字填入搜索框
+        $("#txtSearch").val(getUrlParam("likeStr"));
+        //一进页面就聚焦到搜索框且光标停留在文本框最后
+        $("#txtSearch").focusEnd();
+    });
+
+    //获取url中的参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return decodeURI(r[2]); return null; //返回参数值
+    }
+
+    //----------------光标停留在文本框最后-------------//
+
+    $.fn.setCursorPosition = function (position) {
+        if (this.lengh == 0) return this;
+        return $(this).setSelection(position, position);
+    }
+
+    $.fn.setSelection = function (selectionStart, selectionEnd) {
+        if (this.lengh == 0) return this;
+        input = this[0];
+
+        if (input.createTextRange) {
+            var range = input.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', selectionEnd);
+            range.moveStart('character', selectionStart);
+            range.select();
+        } else if (input.setSelectionRange) {
+            input.focus();
+            input.setSelectionRange(selectionStart, selectionEnd);
+        }
+
+        return this;
+    }
+
+    $.fn.focusEnd = function () {
+        this.setCursorPosition(this.val().length);
+    }
+
+    //----------------光标停留在文本框最后-------------//
+
+</script>

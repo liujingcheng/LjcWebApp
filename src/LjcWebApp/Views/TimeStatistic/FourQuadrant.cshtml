@@ -1,0 +1,320 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewBag.Title = "Quadrant";
+}
+@section head{
+    @Styles.Render("~/Content/PagedList.css")
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Styles.Render("~/Content/TimeStatistic.css")
+}
+
+<div>
+    <a href="@Url.Action("Control", "TimeStatistic")" target="_blank">control</a>
+    <a href="@Url.Action("Index", "TimeStatistic")" target="_blank">index</a>
+    <a href="@Url.Action("FourQuadrant", "TimeStatistic")" target="_blank">quadrant</a>
+    <a href="@Url.Action("Index", "Default")" target="_blank">words</a>
+    <span>   </span>
+    <a href="@Url.Action("FourQuadrant", "TimeStatistic", new RouteValueDictionary() { { "pageSize",10 } })">10</a>
+    <a href="@Url.Action("FourQuadrant", "TimeStatistic", new RouteValueDictionary() { { "pageSize", 20 } })">20</a>
+    <a href="@Url.Action("FourQuadrant", "TimeStatistic", new RouteValueDictionary() { { "pageSize", 50 } })">50</a>
+    <a href="@Url.Action("FourQuadrant", "TimeStatistic", new RouteValueDictionary() { { "pageSize", 100 } })">100</a>
+</div>
+<div id="divComputerVisible">
+    <div style="float:left;">
+        <div id="unobtrusive-historylist1">
+            @Html.Partial("QuadrantPartial1")
+        </div>
+        <div id="unobtrusive-historylist3">
+            @Html.Partial("QuadrantPartial3")
+        </div>
+    </div>
+
+    <div style="float:right;">
+        <div id="unobtrusive-historylist2">
+            @Html.Partial("QuadrantPartial2")
+        </div>
+        <div id="unobtrusive-historylist4">
+            @Html.Partial("QuadrantPartial4")
+        </div>
+    </div>
+</div>
+
+<div id="divMobileVisible" class="hide">
+    <div id="unobtrusive-historylist1">
+        @Html.Partial("QuadrantPartial1")
+    </div>
+    <div id="unobtrusive-historylist2">
+        @Html.Partial("QuadrantPartial2")
+    </div>
+    <div id="unobtrusive-historylist3">
+        @Html.Partial("QuadrantPartial3")
+    </div>
+    <div id="unobtrusive-historylist4">
+        @Html.Partial("QuadrantPartial4")
+    </div>
+</div>
+
+<div id="onComplete"></div>
+
+<script type="text/javascript" src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript" src="~/Scripts/bussiness/common.js"></script>
+
+<script>
+    $(document).ready(function () {
+        if (navigator.userAgent.match(/mobile/i)) {
+            $("#divComputerVisible").addClass("hide");
+            $("#divMobileVisible").removeClass("hide");
+        }
+    });
+
+    function PagedOnComplete(obj) {
+        console.log(obj);
+        var $oncomplete = $('#oncomplete');
+        $oncomplete
+            .text('Paging operation completed.')
+            .css('backgroundColor', 'yellow')
+            .fadeOut({
+                complete: function () {
+                    $oncomplete.css('backgroundColor', 'transparent').text('').show();
+                }
+            });
+    }
+
+    $(document).on('click', ".btnNew", function () {
+        var txtNewEventName = $(this).parent().parent().find(".txtNewEventName").first();
+        if ($(txtNewEventName).val() == "") {
+            $(txtNewEventName).focus();
+            return;
+        }
+        var insertTd = '<td><input type="text" class="txtEventName" /></td>' +
+            '<td><input type="hidden" class="hddEventId" value="" /></td>' +
+            '<td><input type="hidden" class="hddlastticks" value="" /></td>' +
+            '<td><input type="button" class="btnToStart" value="Go" /></td>' +
+            '<td><input type="button" class="btnUp" value="Up" /></td>' +
+            '<td><input type="button" class="btnDown" value="Down" /></td>' +
+            '<td><input type="button" class="btnDelete" value="Del" /></td>' +
+            '<td><input type="button" class="btnQuat1" value="1" /></td>' +
+            '<td><input type="button" class="btnQuat2" value="2" /></td>' +
+            '<td><input type="button" class="btnQuat3" value="3" /></td>' +
+            '<td><input type="button" class="btnQuat4" value="4" /></td>';
+        $(insertTd).insertAfter($(this).parent());
+        var txtEventName = $(this).parent().parent().find(".txtEventName").first();
+        $(txtEventName).val($(txtNewEventName).val());
+        $(txtEventName).attr("title", $(txtEventName).val());//增加浮动显示文本
+        $(txtNewEventName).val("");
+
+        var quadrant = $(this).parent().parent().parent().children().eq(0).attr("quadrant");
+        var ajaxResult = saveEvent1(null, $(txtEventName).val(), null, null, "New", null, quadrant);
+        if (ajaxResult == -1) {
+            alert("保存数据库失败");
+            return;
+        }
+        else {
+            var eventId = ajaxResult.split("|")[0];
+            var lastticks = ajaxResult.split("|")[1];
+            var hddEventId = $(this).parent().parent().find(".hddEventId").first();
+            var hddlastticks = $(this).parent().parent().find(".hddlastticks").first();
+            $(hddEventId).val(eventId);
+            $(hddlastticks).val(lastticks);
+        }
+
+        var tr = $(this).parent().parent();
+        $(txtNewEventName).remove();
+        $(this).remove();
+        var insertTr = '<tr><td><input type="button" class="btnNew" value="New" /></td><td><input type="text" class="txtNewEventName" /></td></tr>';
+        $(tr).after(insertTr);
+    });
+
+    function saveEvent1(eventId, eventName, effectiveTime, planMinutes, status, lastticks, quadrant) {
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/SaveEvent1',
+            cache: false,
+            type: 'Post',
+            async: false,
+            data: JSON.stringify({ eventId: eventId, eventName: eventName, effectiveTime: effectiveTime, planMinutes: planMinutes, status: status, lastticks: lastticks, quadrant: quadrant }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        return ajaxResult;
+    }
+
+    $(document).on('click', ".btnToStart", function () {
+        var currentLine = $(this).parent().parent();
+        var hddEventId = $(currentLine).find(".hddEventId").first();
+
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/ChangeInQuadrant',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: JSON.stringify({ eventId: $(hddEventId).val(), inQuadrant: 0 }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        if (ajaxResult == 0) {
+            $(currentLine).remove();
+        }
+        else {
+            alert("ToStart failed");
+        }
+    });
+
+    //编辑EventName
+    $(document).on('focus', '.txtEventName', function () {
+        $(this).attr("oldValue", $(this).val());
+    });
+    $(document).on('blur', '.txtEventName', function () {
+        var status = "Edit";
+        //空值返回
+        if ($(this).val().trim() == '' || $(this).attr("oldValue") == undefined) {
+            return;
+        }
+
+        var currentLine = $(this).parent().parent();
+        var hddEventId = $(currentLine).find(".hddEventId").first();
+        var txtEventName = $(currentLine).find(".txtEventName").first();
+        var hddlastticks = $(currentLine).find(".hddlastticks").first();
+        //与原值相同则无需修改
+        if ($(this).val().trim() == $(this).attr("oldValue").trim()) {
+            return;
+        }
+
+        var quadrant = $(this).parent().parent().parent().children().eq(0).attr("quadrant");
+        var ajaxResult = saveEvent1($(hddEventId).val(), $(txtEventName).val(), null, null, status, $(hddlastticks).val(), quadrant);
+        if (ajaxResult == -1) {
+            alert("保存数据库失败");
+            return;
+        } else if (ajaxResult == "need refresh") {
+            alert("data has modified by other page,please refresh this page first!");
+            return;
+        }
+        $(hddlastticks).val(ajaxResult);
+    });
+
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).on('click', ".btnUp", function () {
+            var currentLine = $(this).parent().parent();
+            var tradeLine = $(currentLine).prev();
+
+            var currentLineEventId = $(currentLine).find(".hddEventId").first().val();
+            var tradeLineEventId = $(tradeLine).find(".hddEventId").first().val();
+            if (updateOrder(currentLineEventId, tradeLineEventId) == 0) {
+                $(currentLine).after(tradeLine);
+            } else {
+                alert("update order failed");
+            }
+        });
+        $(document).on('click', ".btnDown", function () {
+            var currentLine = $(this).parent().parent();
+            var tradeLine = $(currentLine).next();
+
+            var currentLineEventId = $(currentLine).find(".hddEventId").first().val();
+            var tradeLineEventId = $(tradeLine).find(".hddEventId").first().val();
+            if (updateOrder(currentLineEventId, tradeLineEventId) == 0) {
+                $(currentLine).before(tradeLine);
+            } else {
+                alert("update order failed");
+            }
+        });
+        $(document).on('click', ".btnDelete", function () {
+            if (confirm("delete sure?")) {
+                var currentLine = $(this).parent().parent();
+                var hddEventId = $(currentLine).find(".hddEventId").first();
+                var ajaxResult;
+                $.ajax({
+                    url: '/TimeStatistic/Delete',
+                    cache: false,
+                    async: false,
+                    type: 'Post',
+                    data: JSON.stringify({ eventId: $(hddEventId).val() }),
+                    contentType: 'application/json;charset=utf-8',
+                    success: function (data, status, xhr) {
+                        ajaxResult = data;
+                    },
+                    error: function (data, status, e) {
+                        alert("ajax error");
+                    }
+                });
+
+                if (ajaxResult == 0) {
+                    $(currentLine).remove();
+                } else {
+                    alert("delete failed");
+                }
+            }
+        });
+    });
+
+    //更新排序字段（交换两记录排序字段的值）
+    function updateOrder(eventId1, eventId2) {
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/UpdateOrder',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: JSON.stringify({ eventId1: eventId1, eventId2: eventId2 }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        return ajaxResult;
+    }
+
+    //切换任一象限
+    $(document).on('click', ".btnQuat1,.btnQuat2,.btnQuat3,.btnQuat4", function () {
+        var currentLine = $(this).parent().parent();
+        var hddEventId = $(currentLine).find(".hddEventId").first();
+        var quat = $(this).attr("value");
+
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/ChangeQuadrant',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: JSON.stringify({ eventId: $(hddEventId).val(), quadrant: quat }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        if (ajaxResult == 0) {
+            $(currentLine).remove();
+        }
+        else {
+            alert("ChangeQuadrant failed");
+        }
+    });
+
+</script>

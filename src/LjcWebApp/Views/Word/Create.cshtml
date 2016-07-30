@@ -1,0 +1,197 @@
+﻿@model MvcWords.Domain.word_tb
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>word_tb</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.WordId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.WordId)
+            @Html.ValidationMessageFor(model => model.WordId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Spelling)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Spelling)
+            @Html.ValidationMessageFor(model => model.Spelling)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Phonetic)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Phonetic)
+            @Html.ValidationMessageFor(model => model.Phonetic)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Paraphrase)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Paraphrase)
+            @Html.ValidationMessageFor(model => model.Paraphrase)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Process)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Process)
+            @Html.ValidationMessageFor(model => model.Process)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Priority)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Priority)
+            @Html.ValidationMessageFor(model => model.Priority)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastLearn)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastLearn)
+            @Html.ValidationMessageFor(model => model.LastLearn)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FirstLearn)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstLearn)
+            @Html.ValidationMessageFor(model => model.FirstLearn)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Import)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Import)
+            @Html.ValidationMessageFor(model => model.Import)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Classs)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Classs)
+            @Html.ValidationMessageFor(model => model.Classs)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsRemembered)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsRemembered)
+            @Html.ValidationMessageFor(model => model.IsRemembered)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreatedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreatedBy)
+            @Html.ValidationMessageFor(model => model.CreatedBy)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreatedOn)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreatedOn)
+            @Html.ValidationMessageFor(model => model.CreatedOn)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ModifiedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ModifiedBy)
+            @Html.ValidationMessageFor(model => model.ModifiedBy)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ModifiedOn)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ModifiedOn)
+            @Html.ValidationMessageFor(model => model.ModifiedOn)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastLearnBackup)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastLearnBackup)
+            @Html.ValidationMessageFor(model => model.LastLearnBackup)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastProcess)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastProcess)
+            @Html.ValidationMessageFor(model => model.LastProcess)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastForget)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastForget)
+            @Html.ValidationMessageFor(model => model.LastForget)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.YesTotalCount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.YesTotalCount)
+            @Html.ValidationMessageFor(model => model.YesTotalCount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NoTotalCount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.NoTotalCount)
+            @Html.ValidationMessageFor(model => model.NoTotalCount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Deadline)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Deadline)
+            @Html.ValidationMessageFor(model => model.Deadline)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

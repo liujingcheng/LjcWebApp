@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LjcWebApp.Helper;
 using LjcWebApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,7 +32,7 @@ namespace LjcWebApp
         {
             // Add framework services.
             services.AddMvc();
-            services.AddDbContext<MyContext>(x => x.UseMySql("server=rdsfarfbifarfbi.mysql.rds.aliyuncs.com;database=wordtest;uid=aspuser;pwd=ljc1qazse4"));
+            //services.AddDbContext<LjcDbContext>(x => x.UseMySql(DbHelper.DbConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

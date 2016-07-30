@@ -1,0 +1,131 @@
+﻿@model MvcWords.Domain.Question
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Question</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Id)
+            @Html.ValidationMessageFor(model => model.Id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.QuestionMember)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.QuestionMember)
+            @Html.ValidationMessageFor(model => model.QuestionMember)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FullScore)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FullScore)
+            @Html.ValidationMessageFor(model => model.FullScore)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Weight)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Weight)
+            @Html.ValidationMessageFor(model => model.Weight)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsYes)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsYes)
+            @Html.ValidationMessageFor(model => model.IsYes)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsPositive)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsPositive)
+            @Html.ValidationMessageFor(model => model.IsPositive)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Sort)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Sort)
+            @Html.ValidationMessageFor(model => model.Sort)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreatedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreatedBy)
+            @Html.ValidationMessageFor(model => model.CreatedBy)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreatedOn)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreatedOn)
+            @Html.ValidationMessageFor(model => model.CreatedOn)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ModifiedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ModifiedBy)
+            @Html.ValidationMessageFor(model => model.ModifiedBy)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ModifiedOn)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ModifiedOn)
+            @Html.ValidationMessageFor(model => model.ModifiedOn)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+        <p>
+            <input id="txtFilePath" type="text" style="width: 300px" />
+            <input type="button" value="QuickCreate" onclick="quickCreate();" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/jquery.json.js")
+}
+
+<script type="text/javascript">
+    $.ajaxSetup({ contentType: 'application/json' });
+    function quickCreate() {
+        $.post("/Question/QuickCreate", $.toJSON({ filePath: $("#txtFilePath").val() }), function (data) {
+            alert(data);
+        });
+    }
+</script>

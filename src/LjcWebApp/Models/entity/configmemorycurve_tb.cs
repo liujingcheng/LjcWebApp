@@ -15,9 +15,9 @@ namespace LjcWebApp
     public partial class configmemorycurve_tb
     {
         public int ConfigMemoryCurveId { get; set; }
-        public int PROCESS { get; set; }
+        public int Process { get; set; }
         public string Curve { get; set; }
-        public int gap { get; set; }
+        public int Gap { get; set; }
         public string CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public string ModifiedBy { get; set; }

@@ -1,0 +1,669 @@
+﻿@using MvcWords.Web.Models
+@{
+    ViewBag.Title = "Control";
+}
+@section head{
+    @Styles.Render("~/Content/TimeStatistic.css")
+}
+<h2>Control</h2>
+<div>
+    <a href="@Url.Action("Control", "TimeStatistic")" target="_blank">control</a>
+    <a href="@Url.Action("Index", "TimeStatistic")" target="_blank">index</a>
+    <a href="@Url.Action("FourQuadrant", "TimeStatistic")" target="_blank">quadrant</a>
+    <a href="@Url.Action("Index", "Default")" target="_blank">words</a>
+</div>
+<table>
+    <tr id="headLine">
+        <th></th>
+        <th>
+            EventName
+        </th>
+        <th>
+            Start/Pause
+        </th>
+        <th>
+            Stop
+        </th>
+        <th>
+            TotalTime
+        </th>
+        <th></th>
+        <th>
+            PlanMinutes
+        </th>
+        <th></th>
+        <th>Status</th>
+        <th></th>
+        <th>LastEndTime</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <td>
+            <input type="button" class="btnInsertAfter" value="Insert" />
+        </td>
+        <th></th>
+    </tr>
+    @foreach (var item in ViewBag.EventList)
+    {
+        //控制正在进行中的事件在另一个页面打开时也还在进行，并且总时间不差
+        if (item.Status == "Started")
+        {
+            item.EffectiveTime += Convert.ToInt32((DateTime.Now - item.ModifiedOn).TotalSeconds);
+        }
+        <tr>
+            <td></td>
+            <td>
+                <input type="text" class="txtEventName controlTxtEventName" value="@item.EventName" title="@item.EventName" />
+            </td>
+            <td>
+                <input type="button" class="btnStart" value="Start" />
+            </td>
+            <td>
+                <input type="button" class="btnStop" disabled="disabled" value="Stop" />
+            </td>
+            <td>
+                <label class="lblTotalTime">@(EventModel.TransferToDateTime(item.EffectiveTime))</label>
+            </td>
+            <td>
+                <input type="hidden" class="hddTotalTime" value="@(item.EffectiveTime ?? 0)" />
+            </td>
+            <td>
+                <input type="text" class="txtPlanMinutes onlyInt" maxlength="8" value="@(item.PlanTime != null ? item.PlanTime / 60 : "")" />
+            </td>
+            <td>
+                <input type="hidden" class="hddEventId" value="@item.EventId" />
+            </td>
+            <td>
+                <label class="lblStatus">@item.Status</label>
+            </td>
+            <td>
+                <input type="hidden" class="hddlastticks" value="@item.ModifiedOn.Ticks" />
+            </td>
+            <td>
+                <label class="lblEndTime">@(item.EndTime != null ? item.EndTime.Day + ":" + item.EndTime.Hour + ":" + item.EndTime.Minute + ":" + item.EndTime.Second : "")</label>
+            </td>
+            <td>
+                <input type="button" class="btnUp" value="Up" />
+            </td>
+            <td>
+                <input type="button" class="btnDown" value="Down" />
+            </td>
+            <td>
+                <input type="button" class="btnDelete" value="Delete" />
+            </td>
+            <td>
+                <input type="button" class="btnInsertAfter" value="Insert" />
+            </td>
+            <td>
+                <input type="button" class="btnToQuadrant" value="Back" />
+            </td>
+            <td>
+                <input type="hidden" class="hddRemark" value="@item.Remark" />
+            </td>
+            <td>
+                <input type="button" class="btnRemark" value="注" />
+            </td>
+        </tr>
+    }
+    <tr>
+        <td>
+            <input type="button" id="btnNew" value="New" />
+        </td>
+        <td>
+            <input type="text" id="txtNewEventName" />
+        </td>
+    </tr>
+    <tr id="remarkLine" class="hide">
+        <td></td>
+        <td>
+            <input type="text" id="txtRemark" />
+        </td>
+        <td>
+            <input type="button" id="btnSaveRemark" value="Save" />
+        </td>
+    </tr>
+</table>
+<div id="divAlarm" class="hide">
+</div>
+
+<script type="text/javascript" src="~/Scripts/bussiness/common.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        //控制正在进行中的事件在另一个页面打开时也还在进行，并且总时间不差
+        $(".lblStatus").each(function () {
+            if ($(this).text() == "Started") {
+                $($(this).parent().parent().children()[2]).children().first().click();
+            }
+        });
+
+    })
+</script>
+
+<script type="text/javascript">
+    var hddEventId;
+    var txtEventName;
+    var btnStart;
+    var btnStop;
+    var lblTotalTime;
+    var hddTotalTime;
+    var txtPlanMinutes;
+    var lblStatus;
+    var hddlastticks;
+    var lblEndTime;
+
+    function setCurrentNodes(obj) {
+        var children = $(obj).parent().parent().children();
+        hddEventId = $(children[7]).children().first();
+        txtEventName = $(children[1]).children().first();
+        btnStart = $(children[2]).children().first();
+        btnStop = $(children[3]).children().first();
+        lblTotalTime = $(children[4]).children().first();
+        hddTotalTime = $(children[5]).children().first();
+        txtPlanMinutes = $(children[6]).children().first();
+        lblStatus = $(children[8]).children().first();
+        hddlastticks = $(children[9]).children().first();
+        lblEndTime = $(children[10]).children().first();
+    }
+
+    function show(obj) {
+        seconds = parseInt($(hddTotalTime).val());
+        seconds++;
+        $(hddTotalTime).val(seconds);
+        $(lblTotalTime).text(transferToDateTime(seconds));
+        if ($(txtPlanMinutes).val() != "" && parseInt($(txtPlanMinutes).val()) * 60 == seconds) {
+            playAlarm();
+        }
+        autoPause(obj);
+    }
+    //11:50和17:50都是快下班的时候，正在进行的任务自动暂停
+    function autoPause(obj) {
+        var children = $(obj).parent().parent().children();
+        var btnStart = $(children[2]).children().first();
+        if ($(btnStart).val() == "Start") {
+            return;
+        }
+        var now = new Date();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        if (hour == 11 && minute == 50) {
+            $(btnStart).click();
+            return;
+        }
+        if (hour == 17 && minute == 50) {
+            $(btnStart).click();
+            return;
+        }
+    }
+
+    //晚上6点过后或第二天开始的时候，自动分割该Event（这样既能方便统计当天的天的工作时间，也可以让的天或之前未完成的任务能看起来还是一个整体）
+    function autoSplit(obj) {
+        var lastTimes = $(lblEndTime).text().trim();
+        if (lastTimes == "") return false;
+
+        lastTimes = lastTimes.split(":")
+        var lastDay = lastTimes[0];
+        var lastHour = lastTimes[1];
+        var lastMinutes = lastTimes[2];
+        var lastSeconds = lastTimes[3];
+
+        var children = $(obj).parent().parent().children();
+        var btnStop = $(children[3]).children().first();
+        var txtEventName = $(children[1]).children().first();
+        var currentEventName = $(txtEventName).val();
+        var currentNumber = 0;
+        var originName = currentEventName;
+        var index = currentEventName.lastIndexOf("_");
+        if (index != -1) {
+            currentNumber = parseInt(currentEventName.substring(index + 1));
+            originName = currentEventName.substring(0, index);
+        }
+        else {
+            currentNumber = 1;
+        }
+
+        var now = new Date();
+        var day = now.getDate();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        if (lastHour < 18 && hour >= 18 || lastDay < day) {
+            $(txtEventName).val(originName + "_" + currentNumber);
+
+            //原先的任务作为一个完成的子任务并移除它（要想再看到它只能去历史记录里）
+            $(btnStop).attr("disabled", false);
+            $(btnStop).click();
+            $(obj).parent().parent().remove();
+
+            //创建新的子任务
+            $("#txtNewEventName").val(originName + "_" + (currentNumber + 1));
+            $("#btnNew").click();
+
+            //创建完新的子任务后再点击它的开始按钮
+            var newBtnStart = $($("#btnNew").parent().parent().prev().children()[2]).children().first();
+            newBtnStart.click();
+            return true;
+        }
+
+        return false;
+    }
+
+    var showTime = undefined;
+    $(document).on('click', ".btnStart", function () {
+        setCurrentNodes(this);
+        var status;
+        if ($(this).val() == "Start") {
+            /* 暂时关闭该功能 modify on 2015-10-30
+            //控制第一次点Start时提示先输入PlanMinutes，不输就算了
+            if ($(txtPlanMinutes).val() == "" && $(lblStatus).text() == "New" && !$(txtPlanMinutes).hasClass("firstStarted")) {
+                $(txtPlanMinutes).focus();
+                $(txtPlanMinutes).addClass("firstStarted");
+                return;
+            }
+			*/
+            //modify by ljc 2015-06-01 暂时禁用AutoSplit功能，因为改成了四象限方式，这个功能不兼容，同时现在也不是很想要这个功能
+            //if (autoSplit(this)) {
+            //    return;
+            //}
+
+            status = "Started";
+            var ajaxResult = saveEvent($(hddEventId).val(), $(txtEventName).val(), $(hddTotalTime).val(), $(txtPlanMinutes).val(), status, $(hddlastticks).val());
+            if (ajaxResult == -1) {
+                alert("保存数据库失败");
+                return;
+            } else if (ajaxResult == "need refresh") {
+                alert("data has modified by other page,please refresh this page first!");
+                return;
+            }
+            showTime = setInterval(show, 1000, this);
+            $(lblStatus).text(status);
+            $(hddlastticks).val(ajaxResult);
+
+            $(this).val("Pause");
+            $(".btnStart").attr("disabled", true);
+            $(this).attr('disabled', false);
+            $(".btnStop").attr("disabled", true);
+            $(btnStop).attr('disabled', false);
+            $(txtPlanMinutes).attr('disabled', false);
+        } else {
+            status = "Paused";
+            var ajaxResult = saveEvent($(hddEventId).val(), $(txtEventName).val(), $(hddTotalTime).val(), $(txtPlanMinutes).val(), status, $(hddlastticks).val());
+            if (ajaxResult == -1) {
+                alert("保存数据库失败");
+                return;
+            } else if (ajaxResult == "need refresh") {
+                alert("data has modified by other page,please refresh this page first!");
+                return;
+            }
+            clearInterval(showTime);
+            showTime = undefined;
+            $(lblStatus).text(status);
+            $(hddlastticks).val(ajaxResult);
+            $(this).val("Start");
+            $(".btnStart").attr("disabled", false);
+
+            var now = new Date();
+            var day = now.getDate();
+            var hour = now.getHours();
+            var minute = now.getMinutes();
+            var second = now.getSeconds();
+            $(lblEndTime).text(day + ":" + hour + ":" + minute + ":" + second);
+        }
+
+    });
+
+    $(document).on('click', ".btnStop", function () {
+        setCurrentNodes(this);
+        var status = "Stopped";
+
+        var ajaxResult = saveEvent($(hddEventId).val(), $(txtEventName).val(), $(hddTotalTime).val(), $(txtPlanMinutes).val(), status, $(hddlastticks).val());
+        if (ajaxResult == -1) {
+            alert("保存数据库失败");
+            return;
+        } else if (ajaxResult == "need refresh") {
+            alert("data has modified by other page,please refresh this page first!");
+            return;
+        }
+
+        clearInterval(showTime);
+        showTime = undefined;
+        $(lblStatus).text(status);
+        $(hddlastticks).val(ajaxResult);
+
+        //$(txtEventName).attr('readonly', true);
+        //$(txtPlanMinutes).attr('readonly', true);
+        //$(btnStart).attr('disabled', true);
+        //$(btnStart).removeClass("btnStart");
+        $(this).attr('disabled', true);
+        //$(this).removeClass("btnStop");
+        $(".btnStart").attr('disabled', false);//启用其它非Stopped状态的开始按钮
+        $(btnStart).val("Start");
+        $(this).parent().parent().remove();//Stop后就删除该行
+    });
+
+    //编辑EventName或PlanMinutes
+    $(document).on('focus', '.txtEventName,.txtPlanMinutes', function () {
+        $(this).attr("oldValue", $(this).val());
+    });
+    $(document).on('blur', '.txtEventName,.txtPlanMinutes', function () {
+        var status = "Edit";
+
+        //空值返回
+        if ($(this).val().trim() == '' || $(this).attr("oldValue") == undefined) {
+            return;
+        }
+
+        //这里不可以用setCurrentNodes方法
+        var children = $(this).parent().parent().children();
+        var hddEventId = $(children[7]).children().first();
+        var txtEventName = $(children[1]).children().first();
+        var hddTotalTime = $(children[5]).children().first();
+        var txtPlanMinutes = $(children[6]).children().first();
+        var hddlastticks = $(children[9]).children().first();
+        //与原值相同则无需修改
+        if ($(this).val().trim() == $(this).attr("oldValue").trim()) {
+            return;
+        }
+
+        var ajaxResult = saveEvent($(hddEventId).val(), $(txtEventName).val(), $(hddTotalTime).val(), $(txtPlanMinutes).val(), status, $(hddlastticks).val());
+        if (ajaxResult == -1) {
+            alert("保存数据库失败");
+            return;
+        } else if (ajaxResult == "need refresh") {
+            alert("data has modified by other page,please refresh this page first!");
+            return;
+        }
+        $(hddlastticks).val(ajaxResult);
+    });
+
+
+    function saveEvent(eventId, eventName, effectiveTime, planMinutes, status, lastticks) {
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/SaveEvent',
+            cache: false,
+            type: 'Post',
+            async: false,
+            data: JSON.stringify({ eventId: eventId, eventName: eventName, effectiveTime: effectiveTime, planMinutes: planMinutes, status: status, lastticks: lastticks }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        return ajaxResult;
+    }
+
+    $(document).on('click', "#btnNew", function () {
+        if ($("#txtNewEventName").val() == "") {
+            $("#txtNewEventName").focus();
+            return;
+        }
+        var insertTd = '<td><input type="text" class="txtEventName controlTxtEventName" /></td>' +
+            '<td><input type="button" class="btnStart" value="Start" /></td>' +
+            '<td><input type="button" class="btnStop" disabled="true" value="Stop" /></td>' +
+            '<td><label class="lblTotalTime"></label></td>' +
+            '<td><input type="hidden" class="hddTotalTime" value="0" /></td>' +
+            '<td><input type="text" class="txtPlanMinutes onlyInt" maxlength="8" value="" /></td>' +
+            '<td><input type="hidden" class="hddEventId" value="" /></td>' +
+            '<td><label class="lblStatus">New</label></td>' +
+            '<td><input type="hidden" class="hddlastticks" value="" /></td>' +
+            '<td><label class="lblEndTime"></label></td>' +
+            '<td><input type="button" class="btnUp" value="Up" /></td>' +
+            '<td><input type="button" class="btnDown" value="Down" /></td>' +
+            '<td><input type="button" class="btnDelete" value="Delete" /></td>' +
+            '<td><input type="button" class="btnInsertAfter" value="Insert" /></td>' +
+            '<td><input type="button" class="btnToQuadrant" value="Back" /></td>' +
+            '<td><input type="hidden" class="hddRemark" value="" /></td>' +
+            '<td><input type="button" class="btnRemark" value="注" /></td>';
+        $(insertTd).insertAfter($(this).parent());
+        var txtEventName = $(this).parent().parent().children().eq(1).children().first();
+        $(txtEventName).val($("#txtNewEventName").val());
+        $(txtEventName).attr("title", $(txtEventName).val());//增加浮动显示文本
+        $("#txtNewEventName").val("");
+
+        var ajaxResult = saveEvent(null, $(txtEventName).val(), null, null, "New", null);
+        if (ajaxResult == -1) {
+            alert("保存数据库失败");
+            return;
+        }
+        else {
+            var eventId = ajaxResult.split("|")[0];
+            var lastticks = ajaxResult.split("|")[1];
+            hddEventId = $($(this).parent().parent().children()[7]).children().first();
+            hddlastticks = $($(this).parent().parent().children()[9]).children().first();
+            $(hddEventId).val(eventId);
+            $(hddlastticks).val(lastticks);
+
+            updateOrderAfterInsert(eventId);
+        }
+
+        if (showTime != undefined) {
+            var btnStart = $(this).parent().parent().children().eq(2).children().first();
+            $(btnStart).attr('disabled', true);
+        }
+
+        var tr = $(this).parent().parent();
+        $("#txtNewEventName").remove();
+        $(this).remove();
+        var insertTr = '<tr><td><input type="button" id="btnNew" value="New" /></td><td><input type="text" id="txtNewEventName" /></td></tr>';
+        $(tr).after(insertTr);
+    });
+
+    function playAlarm() {
+        var alarm = '<embed type="audio/mp3" src="/Content/alarm.mp3" />';
+        $("#divAlarm").removeClass("hide");
+        $("#divAlarm").empty();
+        $("#divAlarm").append(alarm);
+    }
+
+    //更新排序
+    function updateOrderAfterInsert(insertedEventId) {
+        var txtNewEventNameLine = $("#txtNewEventName").parent().parent();//插入的新行
+        var beforeNewEventLine = $(txtNewEventNameLine).prev(); //插入的新行的上一行
+        var beforNewLingeEventId;
+        if (beforeNewEventLine.attr("id") == "headLine") {
+            //如果是从行头往下插入
+            beforNewLingeEventId = "heqadLineId";
+        } else {
+            beforNewLingeEventId = $($(beforeNewEventLine).children()[7]).children().first().val();//插入的新行的上一行的EventId
+        }
+        $.ajax({
+            url: '/TimeStatistic/UpdateOrderAfterInsert',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: JSON.stringify({ beforNewLingeEventId: beforNewLingeEventId, insertedEventId: insertedEventId }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                if (data != "true") {
+                    alert(data);
+                }
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+    }
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).on('click', ".btnUp", function () {
+            var currentLine = $(this).parent().parent();
+            var tradeLine = $(currentLine).prev();
+
+            var currentLineEventId = $($(currentLine).children()[7]).children().first().val();
+            var tradeLineEventId = $($(tradeLine).children()[7]).children().first().val();
+            if (updateOrder(currentLineEventId, tradeLineEventId) == 0) {
+                $(currentLine).after(tradeLine);
+            }
+            else {
+                alert("update order failed");
+            }
+        });
+        $(document).on('click', ".btnDown", function () {
+            var currentLine = $(this).parent().parent();
+            var tradeLine = $(currentLine).next();
+
+            var currentLineEventId = $($(currentLine).children()[7]).children().first().val();
+            var tradeLineEventId = $($(tradeLine).children()[7]).children().first().val();
+            if (updateOrder(currentLineEventId, tradeLineEventId) == 0) {
+                $(currentLine).before(tradeLine);
+            }
+            else {
+                alert("update order failed");
+            }
+        });
+        $(document).on('click', ".btnDelete", function () {
+            if (confirm("delete sure?")) {
+                var hddEventId = $($(this).parent().parent().children()[7]).children().first();
+                var currentLine = $(this).parent().parent();
+                var ajaxResult;
+                $.ajax({
+                    url: '/TimeStatistic/Delete',
+                    cache: false,
+                    async: false,
+                    type: 'Post',
+                    data: JSON.stringify({ eventId: $(hddEventId).val() }),
+                    contentType: 'application/json;charset=utf-8',
+                    success: function (data, status, xhr) {
+                        ajaxResult = data;
+                    },
+                    error: function (data, status, e) {
+                        alert("ajax error");
+                    }
+                });
+
+                if (ajaxResult == 0) {
+                    $(currentLine).remove();
+                }
+                else {
+                    alert("delete failed");
+                }
+            }
+        });
+
+        //在当前行后面插入新任务
+        $(document).on('click', ".btnInsertAfter", function () {
+            var currentLine = $(this).parent().parent();
+            var newLine = $("#btnNew").parent().parent();
+            $(currentLine).after(newLine);
+            $("#txtNewEventName").focus();
+        });
+
+    })
+
+    //更新排序字段（交换两记录排序字段的值）
+    function updateOrder(eventId1, eventId2) {
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/UpdateOrder',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: JSON.stringify({ eventId1: eventId1, eventId2: eventId2 }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        return ajaxResult;
+    }
+
+    $(document).on('click', ".btnToQuadrant", function () {
+        var currentLine = $(this).parent().parent();
+        var hddEventId = $(currentLine).find(".hddEventId").first();
+
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/ChangeInQuadrant',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: JSON.stringify({ eventId: $(hddEventId).val(), inQuadrant: 1 }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        if (ajaxResult == 0) {
+            $(currentLine).remove();
+        }
+        else {
+            alert("btnToQuadrant failed");
+        }
+    });
+
+    $(document).on('click', ".btnRemark", function () {
+        if (!$("#remarkLine").hasClass("hide")) {
+            $("#remarkLine").addClass("hide");
+            return;
+        }
+        $("#remarkLine").removeClass("hide");
+        var currentLine = $(this).parent().parent();
+        var remarkLine = $("#txtRemark").parent().parent();
+        $(currentLine).after(remarkLine);
+
+        var children = $(currentLine).children();
+        var hddRemark = $(children[16]).children().first().val();
+        $("#txtRemark").val(hddRemark);
+        $("#txtRemark").focus();
+    });
+
+    $(document).on('click', "#btnSaveRemark", function () {
+        if ($("#txtRemark").val() == "") {
+            $("#txtRemark").focus();
+            return;
+        }
+        var currentLine = $(this).parent().parent().prev();
+        var hddEventId = $(currentLine).find(".hddEventId").first();
+        var remark = $("#txtRemark").val();
+
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/UpdateRemark',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: JSON.stringify({ eventId: $(hddEventId).val(), remark: remark }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        if (ajaxResult == 0) {
+            $("#remarkLine").addClass("hide");
+        }
+        else {
+            alert("UpdateRemark failed");
+        }
+    });
+
+    //回车时点保存按钮
+    $(function () {
+        $(document).on("keypress", "#txtRemark", function (evt) {
+            evt = evt || window.event;
+            var keyCode = evt.keyCode || evt.which;
+
+            if (keyCode == 13 && document.activeElement == this) {
+                $("#btnSaveRemark").click();
+            }
+        });
+    });
+</script>

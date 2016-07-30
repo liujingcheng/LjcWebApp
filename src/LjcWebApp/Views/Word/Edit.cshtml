@@ -1,0 +1,68 @@
+﻿@model MvcWords.Domain.word_tb
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>word_tb</legend>
+        <div class="editor-label" style="display: none">
+            @Html.LabelFor(model => model.WordId)
+        </div>
+        <div class="editor-field" style="display: none">
+            @Html.EditorFor(model => model.WordId)
+            @Html.ValidationMessageFor(model => model.WordId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Spelling)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Spelling)
+            @Html.ValidationMessageFor(model => model.Spelling)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Phonetic)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Phonetic)
+            @Html.ValidationMessageFor(model => model.Phonetic)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Paraphrase)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Paraphrase)
+            @Html.ValidationMessageFor(model => model.Paraphrase)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Classs)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Classs)
+            @Html.ValidationMessageFor(model => model.Classs)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

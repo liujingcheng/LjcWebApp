@@ -1,0 +1,535 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewBag.Title = "Words";
+}
+@section head{
+    @Styles.Render("~/Content/uploadify/uploadify.css")
+    @Scripts.Render("~/Content/uploadify/jquery.uploadify.js")
+    @Scripts.Render("~/Scripts/bussiness/common.js")
+
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+}
+<div id="divImport" class="hide">
+    <div style="padding-left: 3px;">
+        <div id="buttons-panel" style="float: left;">
+            <div class="b-button js-fileapi-wrapper">
+                <a href="@Url.Action("Index", "Word")" target="_blank">Search</a>
+                <input type="file" name="file_upload" id="file_upload" />
+            </div>
+        </div>
+    </div>
+    <div id="file_upload_list">
+    </div>
+    <div>
+        <ul id="uploadSuccess" class="uploadify-upload-list"></ul>
+    </div>
+    <input type="text" id="txtImportFile" style="width: 448px; height: 22px;" />
+    <input type="hidden" id="txtImportFileName" style="width: 448px; height: 22px;" />
+    <input type="button" id="btnImport" value="Import" style="width: 100px; height: 30px;" onclick="importFile(this)" />
+    <input type="radio" name="priority" value="2" />High
+    <input type="radio" name="priority" value="1" />Middle
+    <input type="radio" name="priority" value="0" />Low
+    <!--Modal-->
+    <div id="addModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-
+                              hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title">Add</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label for="areaSpelling">Spelling:</label>
+                        <textarea id="areaSpelling" maxlength="5000"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="txtPonetic">Phonetic:</label>
+                        <input type="text" id="txtPhonetic" maxlength="50" />
+                    </div>
+
+                    <div>
+                        <label for="areaParaphrase">Paraphrase:</label>
+                        <textarea id="areaParaphrase" maxlength="5000"></textarea>
+                    </div>
+
+                    <div>
+                        <input type="radio" name="addPriority" value="2" checked="checked" />
+                        <label>High</label>
+                        <input type="radio" name="addPriority" value="1" />
+                        <label>Middle</label>
+                        <input type="radio" name="addPriority" value="0" />
+                        <label>Low</label>
+                    </div>
+
+                    <div>
+                        <label for="txtClasss">Class</label>
+                        <input type="text" id="txtClasss" maxlength="50" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addWord()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Modal-->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">
+        Add
+    </button>
+
+</div>
+<div style="width: 560px;margin: 0 auto;">
+    <div class="maininfo">
+        <div id="lblWordInfo"></div>
+        <div id="lblRemain"></div>
+    </div>
+    <div class="maininfo" style="font-size:x-large">
+        <textarea id="lblSpelling" readonly style="width: 550px; height: 95px; background-color: MintCream"></textarea>
+        <div style="font-size:medium">
+            <label id="lblPhonetic" style="width: 450px; height: 20px;float: left"></label>
+            <label id="nowTime" style="width: 100px; height: 20px; float: right;"></label>
+        </div>
+        <textarea id="lblParaphrase" readonly style="width: 550px; height: 95px; background-color:MintCream"></textarea>
+    </div>
+    <div>
+        <input id="btnYes11" type="button" class="BtnYES" value="YES" style="width: 114px;" onclick="BtnYesClick(this)" />
+        <input id="btnNo11" type="button" class="BtnNO" value="NO" style="width: 114px;float: right;"
+               onclick="BtnNoClick(this)" />
+        <input type="button" class="BtnYES" value="YES" style="width: 120px;" onclick="BtnYesClick(this)" />
+        <input type="button" class="BtnNO" value="NO" style="width: 114px;" onclick="BtnNoClick(this)" />
+        <input type="button" class="BtnYES" value="YES" style="width: 114px;float: right;" onclick="BtnYesClick(this)" />
+        <input type="button" class="BtnNO" value="NO" style="width: 120px;" onclick="BtnNoClick(this)" />
+        <input type="button" class="BtnYES" value="YES" style="width: 114px;" onclick="BtnYesClick(this)" />
+        <input type="button" class="BtnNO" value="NO" style="width: 114px;float: right;" onclick="BtnNoClick(this)" />
+        <input type="button" class="BtnYES" value="YES" style="width: 120px;" onclick="BtnYesClick(this)" />
+    </div>
+    <div style="display: none">
+        <input type="radio" id="rbHideRandom" name="hideWhat" value="0" checked="checked" />HideRandom
+        <input type="radio" id="rbHideSpelling" name="hideWhat" value="1" />HideSpelling
+        <input type="radio" id="rbHideParaphrase" name="hideWhat" value="2" />HideParaphrase
+    </div>
+    <div>
+        <input type="button" class="BtnPrevious" value="Previous" style="width: 114px;" onclick="BtnPreviousClick(this)" />
+        <input type="button" class="BtnNext" value="Next" style="width: 120px;" onclick="BtnNextClick(this)" />
+        <input type="button" class="Reset" value="Reset" style="width: 120px;height: 60px" onclick="resetScrollToMid();" />
+        <input type="button" id="BtnDelete" value="Delete" style="width: 113px;float: right;"
+               onclick="BtnDeleteClick(this)" />
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#txtImportFile").val("");
+        if ($("input[name='priority']:checked").length > 0) {
+            $("input[name='priority']:checked")[0].checked = false;
+        }
+        if (!navigator.userAgent.match(/mobile/i)) {
+            $("#divImport").removeClass("hide");
+            refreshWord();//为了首次页面加载能显示单词信息
+        } else {
+            $(".BtnYES,.BtnNO").addClass("hide");
+            $("body").css("text-align:center", "center");
+            refreshWord();//为了首次页面加载能显示单词信息
+            $("body").scrollTop(mid);
+            intervalId = setInterval(function () {
+                $("body").scrollTop(mid);
+                if ($("body").scrollTop() == mid) {
+                    $(window).on("scroll", learnWhenScroll);
+                }
+            }, 100);
+        }
+    });
+
+    function importFile(obj) {
+        var fileUrl = $("#txtImportFile").val();
+        var priority = $("input[name='priority']:checked").val();
+        if (fileUrl == "") {
+            alert("please upload file first");
+            return;
+        }
+        if (priority == undefined) {
+            alert("please select priority");
+            return;
+        }
+        var fileName = $("#txtImportFileName").val();
+        $.ajax({
+            url: '/Default/ImportYoudaoWords',
+            cache: false,
+            type: 'Post',
+            async: false,
+            data: JSON.stringify({ fileUrl: fileUrl, priority: priority, fileName: fileName }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                alert(data);
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+    }
+
+    var requestCompleted = false;
+    function refreshWord() {
+        var result;
+        var responsed = false;
+        setTimeout(function () {
+            if (responsed == false) {
+                window.location.reload();
+            }
+        }, 5000);
+        var checkedRadioValue = $("input[name='hideWhat']:checked").val();
+        $.ajax({
+            url: '/Default/GetCurrentWordInfoStr',
+            cache: false,
+            type: 'Post',
+            async: false,
+            data: JSON.stringify({ pCheckedRadioValue: checkedRadioValue }),
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                responsed = true;
+                result = data;
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                window.location.reload();
+            }
+        });
+        if (result == "ajax error") return false;
+
+        var list = result.split("%");
+        $("#lblWordInfo").text(list[1]);
+        $("#lblRemain").text(list[2]);
+        $("#lblSpelling").text(list[3]);
+        $("#lblPhonetic").text(list[4]);
+        $("#nowTime").text(getNowTime());
+        $("#lblParaphrase").text(list[5]);
+
+        enableBtn();
+        requestCompleted = true;
+    }
+
+    //取当前时间字符串
+    function getNowTime() {
+        var seperator2 = ":";
+        var date = new Date();
+        return date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+    }
+
+    function enableBtn() {
+        var result;
+        $.ajax({
+            url: '/Default/GetEnableBtnStr',
+            cache: false,
+            type: 'Post',
+            async: false,
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                result = data;
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                alert(result);
+            }
+        });
+        if (result == "ajax error") return false;
+
+        var list = result.split("%");
+
+        for (var i = 0; i < list.length; i++) {
+            list[i] = list[i] == "True" ? false : true;
+        }
+
+        $(".BtnNO").attr("disabled", list[1]);
+        $(".BtnYES").attr("disabled", list[2]);
+        $(".BtnPrevious").attr("disabled", list[3]);
+        $(".BtnNext").attr("disabled", list[4]);
+        $("#BtnDelete").attr("disabled", list[5]);
+    }
+
+    function BtnNoClick(thisObj) {
+        if (!requestCompleted) return false;
+        requestCompleted = false;
+        var result;
+
+        var responsed = false;
+        setTimeout(function () {
+            if (responsed == false) {
+                window.location.reload();
+            }
+        }, 5000);
+        $(thisObj).attr("disabled", true);
+        $.ajax({
+            url: '/Default/BtnNoClick',
+            cache: false,
+            type: 'Post',
+            async: true,
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                responsed = true;
+                refreshWord();
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                window.location.reload();
+            }
+        });
+        $(thisObj).attr("disabled", false);
+        if (result == "ajax error") {
+            return false;
+        }
+    }
+
+    function BtnYesClick(thisObj) {
+        if (!requestCompleted) return false;
+        requestCompleted = false;
+
+        var result;
+        var responsed = false;
+        setTimeout(function () {
+            if (responsed == false) {
+                window.location.reload();
+            }
+        }, 5000);
+        $(thisObj).attr("disabled", true);
+        $.ajax({
+            url: '/Default/BtnYesClick',
+            cache: false,
+            type: 'Post',
+            async: true,
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+                responsed = true;
+                refreshWord();
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                window.location.reload();
+            }
+        });
+        $(thisObj).attr("disabled", false);
+        if (result == "ajax error") {
+            return false;
+        }
+    }
+
+    function BtnNextClick(thisObj) {
+        var result;
+        $(thisObj).attr("disabled", true);
+        $.ajax({
+            url: '/Default/BtnNextClick',
+            cache: false,
+            type: 'Post',
+            async: false,
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                alert(result);
+            }
+        });
+        $(thisObj).attr("disabled", false);
+        if (result == "ajax error") {
+            return false;
+        }
+        refreshWord();
+    }
+
+    function BtnPreviousClick(thisObj) {
+        var result;
+        $(thisObj).attr("disabled", true);
+        $.ajax({
+            url: '/Default/BtnPreviousClick',
+            cache: false,
+            type: 'Post',
+            async: false,
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                alert(result);
+            }
+        });
+        $(thisObj).attr("disabled", false);
+        if (result == "ajax error") {
+            return false;
+        }
+        refreshWord();
+    }
+
+    function BtnDeleteClick(thisObj) {
+        var result;
+        $(thisObj).attr("disabled", true);
+        var sure = confirm("delete sure?")
+        if (!sure) {
+            return;
+        }
+
+        $.ajax({
+            url: '/Default/BtnDeleteClick',
+            cache: false,
+            type: 'Post',
+            async: false,
+            contentType: 'application/json;charset=utf-8',
+            success: function (data, status, xhr) {
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                alert(result);
+            }
+        });
+        if (result == "ajax error") {
+            $(thisObj).attr("disabled", false);
+            return false;
+        }
+        refreshWord();
+    }
+
+</script>
+
+<!--Upload-->
+@Scripts.Render("~/Scripts/upload.js")
+<script type="text/javascript">
+    var uploadifySet = {
+        auto: true,
+        buttonText: 'Upload File',
+        cancelImg: '/Content/uploadify/uploadify-cancel.png',
+        fileSizeLimit: 1024 * 10, //10M
+        swf: '/Content/uploadify/uploadify.swf',
+        uploader: '/Default/UploadFile',
+    };
+</script>
+<!--End Upload-->
+<!--Add word-->
+<script type="text/javascript">
+    $(function () {
+        if (!navigator.userAgent.match(/mobile/i)) {
+            clearAddFields();
+            $("#addModal").on('hidden.bs.modal', function (e) {
+                clearAddFields();
+            });
+        }
+
+        //新增时弹出框出来时自动聚焦到Spelling
+        $('#addModal').on('shown.bs.modal', function () {
+            $("#areaSpelling").focus();
+        });
+    });
+
+    //清空所有新增单词的字段
+    function clearAddFields() {
+        $("#addModal input[type='text']").val("");
+        $("#addModal textarea").val("");
+    }
+
+    function addWord() {
+        var spelling = $("#areaSpelling").val();
+        var phonetic = $("#txtPhonetic").val();
+        var paraphrase = $("#areaParaphrase").val();
+        var addPriority = $("input[name='addPriority']:checked").val();
+        var classs = $("#txtClasss").val();
+
+        if (spelling == "") {
+            $("#areaSpelling").focus();
+            return false;
+        }
+        if (addPriority == undefined) {
+            alert("select priority");
+            return false;
+        }
+
+        var ajaxResult;
+        $.ajax({
+            url: "/Default/AddWord",
+            cache: false,
+            type: "Post",
+            async: false,
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({
+                spelling: spelling, phonetic: phonetic, paraphrase: paraphrase, classs: classs,
+
+                priority: addPriority
+            }),
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+        switch (ajaxResult) {
+            case "0":
+                //$("#addModal").modal("hide");
+                clearAddFields();
+                break;
+            case "1":
+                alert("Exceptions happened,contact admin!");
+                break;
+            case "2":
+                alert("this spelling is already exist");
+                break;
+            case "3":
+                alert("spelling is null");
+        }
+    }
+</script>
+<!--End Add word-->
+<!--在手机上用时，通过线控音量增减控制页面上下滚动来记忆-->
+<script type="text/javascript">
+    var mid = 3,
+        isFirstScroll = true,
+        scrollLocked = false;
+
+    function learnWhenScroll() {
+        if (isFirstScroll) {
+            clearInterval(intervalId);//对应首次加载时的定时器（修复有时自动记忆的问题）
+            isFirstScroll = false;
+            return;
+        }
+        if (scrollLocked) {
+            return;
+        }
+        scrollLocked = true;
+        isFirstScroll = false;
+        var currTop = $("body").scrollTop();
+        if (currTop < mid) { //判断小于则为向上滚动
+            scrollClick(true);
+        } else {
+            scrollClick(false);
+        }
+    }
+
+    var intervalId;
+
+    function scrollClick(isNo) {
+        $("body").scrollTop(mid);
+        intervalId = setInterval(function () {
+            if ($("body").scrollTop() == mid) {
+                if (isNo) {
+                    BtnNoClick($("#btnNo11"));
+                } else {
+                    BtnYesClick($("#btnYes11"));
+                }
+                scrollLocked = false;
+                clearInterval(intervalId);
+            }
+        }, 50);
+    }
+
+    function resetScrollToMid() {
+        $("body").scrollTop(mid);
+    }
+
+</script>
+<!--End-->

@@ -1,0 +1,15 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+<table>
+    <tr quadrant="3">
+        <th></th>
+        <th>
+            不重要-很紧急
+        </th>
+    </tr>
+    @Html.Partial("QuadrantPartial", (IPagedList)ViewBag.OnePageOfQuadrantList3)
+    @Html.PagedListPager((IPagedList)ViewBag.OnePageOfQuadrantList3, page => Url.Action("GetQuadrantList",
+                    new { page, quadrant = 3, ViewBag.PageSize }),
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+    new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "unobtrusive-historylist3" }))
+</table>

@@ -16,7 +16,7 @@ namespace LjcWebApp
     {
         public string Id { get; set; }
         public string QuestionId { get; set; }
-        public string Question { get; set; }
+        public string question { get; set; }
         public Nullable<double> Score { get; set; }
         public string Remark { get; set; }
         public Nullable<double> Weight { get; set; }
