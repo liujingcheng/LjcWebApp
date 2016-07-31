@@ -36,3 +36,32 @@ textarea {
     display: none
   }
 }
+
+/*add by ljc 2016年7月31日*/
+.hide
+{
+	display: none;
+}
+
+.handCursor
+{
+	cursor: pointer;
+}
+
+.modal-body textarea
+{
+	width: 370px;
+	height: 150px;
+}
+
+.BtnNO, .BtnYES, .BtnPrevious, .BtnNext, #BtnDelete
+{
+	width: 100px;
+	height: 60px;
+	margin:1px 1px 1px 1px;
+}
+
+.maininfo
+{
+	margin:1px 2px 0 2px;
+}

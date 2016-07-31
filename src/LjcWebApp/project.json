@@ -25,7 +25,11 @@
     "Sakura.AspNetCore.PagedList": "2.0.0",
     "Sakura.AspNetCore.PagedList.Async": "1.0.0",
     "Sakura.AspNetCore.PagedList.Abstractions": "2.0.0",
-    "Sakura.AspNetCore.Mvc.PagedList": "2.0.6"  },
+    "Sakura.AspNetCore.Mvc.PagedList": "2.0.6",
+    "Newtonsoft.Json": "9.0.1",
+    "Microsoft.jQuery.Unobtrusive.Ajax": "3.2.3",
+    "Microsoft.jQuery.Unobtrusive.Validation": "3.2.3",
+    "BuildBundlerMinifier": "2.1.258"  },
 
   "tools": {
     "BundlerMinifier.Core": "2.0.238",
