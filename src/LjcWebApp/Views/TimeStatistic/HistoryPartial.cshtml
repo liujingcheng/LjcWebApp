@@ -95,5 +95,5 @@
     PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
     new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "unobtrusive-historylist", OnComplete = "updatePagedParameters" }))*@
 
-    <pager source="(IPagedList)ViewBag.OnePageOfHistoryList"/>
+    <pager source="(IPagedList)ViewBag.OnePageOfHistoryList" setting-link-attr-data-ajax="true"/>
 </table>
