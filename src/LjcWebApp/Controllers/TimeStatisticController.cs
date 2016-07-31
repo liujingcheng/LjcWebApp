@@ -24,20 +24,6 @@ namespace LjcWebApp.Controllers
             _appSettings = settings;
         }
 
-        public ActionResult Index()
-        {
-            try
-            {
-                var today = DateTime.Now.Date;
-                GetHistoryList(1, today.ToString(), today.ToString());
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(ex.Message, ex);
-            }
-            return View();
-        }
-
         public ActionResult Control()
         {
             //HttpContext.Response.Buffer = true;
@@ -88,7 +74,7 @@ namespace LjcWebApp.Controllers
             }
         }
 
-        public ActionResult GetHistoryList(int? page, string startDateStr, string endDateStr)
+        public ActionResult Index(int? page, string startDateStr, string endDateStr)
         {
             try
             {
@@ -168,7 +154,7 @@ namespace LjcWebApp.Controllers
             {
                 LogHelper.WriteLog(ex.Message, ex);
             }
-            return (ActionResult)PartialView("HistoryPartial");
+            return View();
         }
 
         [HttpPost]

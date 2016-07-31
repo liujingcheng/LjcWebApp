@@ -1,74 +1,130 @@
-﻿@{
+﻿@using System.Collections.Generic
+@using LjcWebApp;
+@using LjcWebApp.Models.ViewModels
+@using Sakura.AspNetCore;
+@{
     ViewBag.Title = "Index";
 }
 <h2>Index</h2>
 
-<input id="txtStartDate" class="datepicker" />--<input id="txtEndDate" class="datepicker" />
+<input id="txtStartDate" class="datepicker" value="@ViewBag.StartDateStr"/>--<input id="txtEndDate" class="datepicker" value="@ViewBag.EndDateStr"/>
 <input id="btnSearch" type="button" value="go" />
-
 <div id="unobtrusive-historylist">
-    @Html.Partial("HistoryPartial")
+    <table>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                EventName
+            </th>
+            <th>
+                StartTime
+            </th>
+            <th>
+                EndTime
+            </th>
+            <th>
+                EffectiveTime
+            </th>
+            <th>
+                PlanTime
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Remark
+            </th>
+        </tr>
+
+        @foreach (var ondayDataModel in ViewBag.OnePageOfHistoryList)
+        {
+            var copyText = "";
+            if (ondayDataModel.EventModelList.Count > 0)
+            {
+                var list = (List<EventModel>)ondayDataModel.EventModelList;
+                copyText = string.Join("；", list.Select(p => p.EventName));
+            }
+            foreach (var item in ondayDataModel.EventModelList)
+            {
+                <tr>
+                    <td>
+                        @item.Date
+                    </td>
+                    <td style="width:700px">
+                        @item.EventName
+                    </td>
+                    <td>
+                        @item.StartTime
+                    </td>
+                    <td>
+                        @item.EndTime
+                    </td>
+                    <td>
+                        @item.EffectiveTime
+                    </td>
+                    <td>
+                        @item.PlanTime
+                    </td>
+                    <td>
+                        @item.Status
+                    </td>
+                    <td>
+                        @item.Remark
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    @ondayDataModel.Date
+                </td>
+                <td>
+                    <div copytext="@copyText" data-toggle="popover" data-delay="{show: 500,hide:100}"
+                         data-placement="right" data-content="复制成功" class="copy-button-wrap">
+                        <input type="button" value="复制" class="copy-button" />
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    @ondayDataModel.TotalEffectiveTime
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+        }
+        <pager source="(IPagedList)ViewBag.OnePageOfHistoryList" setting-link-attr-data-ajax="true" />
+    </table>
 </div>
 <div id="onComplete"></div>
-<script type="text/javascript" src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 <script src="~/lib/pikaday/pikaday.js"></script>
 <script>
     $(function () {
-        var picker1 = new Pikaday({ field: document.getElementById('txtStartDate') });
-        var picker2 = new Pikaday({ field: document.getElementById('txtEndDate') });
+        var picker1 = new Pikaday({
+            field: document.getElementById('txtStartDate'),
+            format: 'yyyy-MM-dd',
+            onSelect: function () {
+                this.hide();
+            }
+        });
+        var picker2 = new Pikaday({
+            field: document.getElementById('txtEndDate'),
+            format: 'yyyy-MM-dd',
+            onSelect: function () {
+                this.hide();
+            }
+        });
         $('#btnSearch').click(function () {
             var startDate = $('#txtStartDate').val();
             var endDate = $('#txtEndDate').val();
-            //if (startDate == "") {
-            //    $('#txtStartDate').focus();
-            //    return false;
-            //}
-            //if (endDate == "") {
-            //    $('#txtEndDate').focus();
-            //    return false;
-            //}
-
-            $.ajax({
-                url: '/TimeStatistic/GetHistoryList',
-                cache: false,
-                type: 'post',
-                async: false,
-                data: { startDateStr: startDate, endDateStr: endDate },
-                success: function (data, status, xhr) {
-                    $('#unobtrusive-historylist').empty();
-                    $('#unobtrusive-historylist').append(data);
-                    updatePagedParameters();
-                },
-                error: function (data, status, e) {
-                    alert("ajax error");
-                }
-            });
+            picker1.destroy();
+            picker2.destroy();
+            window.location.href = "/TimeStatistic/Index?startDateStr=" + startDate + "&endDateStr=" + endDate;
         });
     });
-
-    function updatePagedParameters() {
-        var startDate = $('#txtStartDate').val();
-        var endDate = $('#txtEndDate').val();
-        $('.pagination li a').each(function () {
-            var href = $(this).attr('href');
-            if (href != undefined) {
-                href = href + '&startDateStr=' + startDate + '&endDateStr=' + endDate;
-                $(this).attr('href', href);
-            }
-        });
-        InitZeroClip();//由于是异步，所以得再初始化一遍复制功能
-    }
-
-    function PagedOnComplete(obj) {
-        console.log(obj);
-        var $oncomplete = $('#oncomplete');
-        $oncomplete
-        .text('Paging operation completed.')
-        .css('backgroundColor', 'yellow')
-        .fadeOut({
-            complete: function () {
-                $oncomplete.css('backgroundColor', 'transparent').text('').show();
-            }
-        });
-    }
 </script>
