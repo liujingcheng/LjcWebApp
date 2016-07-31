@@ -33,8 +33,7 @@
                 cache: false,
                 type: 'post',
                 async: false,
-                data: JSON.stringify({ startDateStr: startDate, endDateStr: endDate }),
-                contentType: 'application/json;charset=utf-8',
+                data: { startDateStr: startDate, endDateStr: endDate },
                 success: function (data, status, xhr) {
                     $('#unobtrusive-historylist').empty();
                     $('#unobtrusive-historylist').append(data);
