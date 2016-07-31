@@ -90,8 +90,10 @@
         <tr></tr>
         <tr></tr>
     }
-    @Html.PagedListPager((IPagedList)ViewBag.OnePageOfHistoryList, page => Url.Action("GetHistoryList",
+    @*@Html.PagedListPager((IPagedList)ViewBag.OnePageOfHistoryList, page => Url.Action("GetHistoryList",
     new { page, startDateStr = ViewBag.StartDateStr, endDateStr = ViewBag.EndDateStr }),
     PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
-    new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "unobtrusive-historylist", OnComplete = "updatePagedParameters" }))
+    new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "unobtrusive-historylist", OnComplete = "updatePagedParameters" }))*@
+
+    <pager source="(IPagedList)ViewBag.OnePageOfHistoryList"/>
 </table>

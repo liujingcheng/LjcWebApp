@@ -4,7 +4,7 @@ using System.Linq;
 using LjcWebApp.Helper;
 using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using  LjcWebApp.Services.DataCRUD;
+using LjcWebApp.Services.DataCRUD;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Sakura.AspNetCore;
@@ -160,7 +160,7 @@ namespace LjcWebApp.Controllers
                 }
 
                 //注意，这里的查询方式使用的是假分页，若要使用真分页得看具体使用的ORM而定
-                var pagedList = ondayDataModelList.ToPagedList(pageNumber, 7);//7指的是一页只显示7天的数据
+                var pagedList = ondayDataModelList.ToPagedList(_appSettings.Value.DaysOnOnePage, pageNumber);
 
                 ViewBag.OnePageOfHistoryList = pagedList;
             }
@@ -218,7 +218,7 @@ namespace LjcWebApp.Controllers
             ViewBag.PageSize = pageSize;//防止分页后丢失PageSize add by ljc 2015-12-05
             if (pageSize == null)//如果为空，则从配置文件读取
             {
-                int pageSize1= _appSettings.Value.PageSize;
+                int pageSize1 = _appSettings.Value.PageSize;
                 pageSize = pageSize1;
             }
 
