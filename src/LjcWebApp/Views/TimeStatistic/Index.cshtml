@@ -11,9 +11,11 @@
 </div>
 <div id="onComplete"></div>
 <script type="text/javascript" src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/lib/pikaday/pikaday.js"></script>
 <script>
     $(function () {
-        $('.datepicker').pickadate();
+        var picker1 = new Pikaday({ field: document.getElementById('txtStartDate') });
+        var picker2 = new Pikaday({ field: document.getElementById('txtEndDate') });
         $('#btnSearch').click(function () {
             var startDate = $('#txtStartDate').val();
             var endDate = $('#txtEndDate').val();
