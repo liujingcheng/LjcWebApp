@@ -114,7 +114,7 @@ namespace LjcWebApp.Services.DataStorage
                             entity.Paraphrase = wordTb.Paraphrase + Environment.NewLine + "(合)" + entity.Paraphrase;
                             LogHelper.WriteLog(wordTb.Spelling + "单词已经存在！");
                         }
-                        context.word_tb.Add(entity);
+                        context.word_tb.Update(entity);
                         context.SaveChanges();
                         return 2;
                     }

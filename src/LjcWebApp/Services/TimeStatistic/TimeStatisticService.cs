@@ -82,8 +82,14 @@ namespace LjcWebApp.Services.DataCRUD
                         entity.EventName = eventName;
                         entity.PlanTime = planTime;
                     }
-
-                    context.timestatistic.Add(entity);
+                    if (entity.EventId == null)
+                    {
+                        context.timestatistic.Add(entity);
+                    }
+                    else
+                    {
+                        context.timestatistic.Update(entity);
+                    }
                     context.SaveChanges();
 
                     return result;
