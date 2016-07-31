@@ -380,8 +380,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            data: JSON.stringify({ eventId: eventId, eventName: eventName, effectiveTime: effectiveTime, planMinutes: planMinutes, status: status, lastticks: lastticks }),
-            contentType: 'application/json;charset=utf-8',
+            data: { eventId: eventId, eventName: eventName, effectiveTime: effectiveTime, planMinutes: planMinutes, status: status, lastticks: lastticks },
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },

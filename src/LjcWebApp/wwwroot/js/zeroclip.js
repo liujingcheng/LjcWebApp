@@ -4,7 +4,7 @@
 
 function InitZeroClip () {
 
-    var client = new ZeroClipboard($('.copy-button'), { moviePath: "/Scripts/ZeroClipboard.swf" }, { forceHandCursor: true });
+    var client = new ZeroClipboard($('.copy-button'), { moviePath: "~/lib/zeroclipboard/dist/ZeroClipboard.swf" }, { forceHandCursor: true });
 
     client.on('datarequested', function () {
         client.setText($(this).parent().attr('copyText').replace(new RegExp("/", "gm"), "\\"));
