@@ -20,8 +20,6 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
-    "Pomelo.Data.MySql": "1.0.0-prerelease-20160727",
-    "Pomelo.EntityFrameworkCore.MySql": "1.0.0-prerelease-20160727",
     "Sakura.AspNetCore.PagedList": "2.0.0",
     "Sakura.AspNetCore.PagedList.Async": "1.0.0",
     "Sakura.AspNetCore.PagedList.Abstractions": "2.0.0",
@@ -29,10 +27,12 @@
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.jQuery.Unobtrusive.Ajax": "3.2.3",
     "Microsoft.jQuery.Unobtrusive.Validation": "3.2.3",
-    "BuildBundlerMinifier": "2.1.258"  },
+    "BuildBundlerMinifier": "2.1.258",
+    "BundlerMinifier.Core": "2.1.258",
+    "Pomelo.Data.MySql": "1.0.0-prerelease-20160730",
+    "Pomelo.EntityFrameworkCore.MySql": "1.0.0-prerelease-20160730" },
 
   "tools": {
-    "BundlerMinifier.Core": "2.0.238",
     "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final"
   },
