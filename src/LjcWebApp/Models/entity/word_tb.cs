@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace LjcWebApp
 {
     using System;
@@ -14,6 +16,7 @@ namespace LjcWebApp
     
     public partial class word_tb
     {
+        [Key]
         public long WordId { get; set; }
         public string Spelling { get; set; }
         public string Phonetic { get; set; }

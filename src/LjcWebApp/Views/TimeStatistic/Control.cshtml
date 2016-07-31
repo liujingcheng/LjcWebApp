@@ -1,16 +1,14 @@
-﻿@using LjcWebApp
+﻿@using System
+@using LjcWebApp.Models.ViewModels
 @{
     ViewBag.Title = "Control";
 }
-@section head{
-    @Styles.Render("~/Content/TimeStatistic.css")
-}
 <h2>Control</h2>
 <div>
-    <a href="@Url.Action("Control", "TimeStatistic")" target="_blank">control</a>
-    <a href="@Url.Action("Index", "TimeStatistic")" target="_blank">index</a>
-    <a href="@Url.Action("FourQuadrant", "TimeStatistic")" target="_blank">quadrant</a>
-    <a href="@Url.Action("Index", "Default")" target="_blank">words</a>
+    <a asp-controller="TimeStatistic" asp-action="Control" target="_blank">control</a>
+    <a asp-controller="TimeStatistic" asp-action="Index" target="_blank">index</a>
+    <a asp-controller="TimeStatistic" asp-action="FourQuadrant" target="_blank">quadrant</a>
+    <a asp-controller="Default" asp-action="Index" target="_blank">words</a>
 </div>
 <table>
     <tr id="headLine">
@@ -126,7 +124,6 @@
 <div id="divAlarm" class="hide">
 </div>
 
-<script type="text/javascript" src="~/Scripts/bussiness/common.js"></script>
 <script type="text/javascript">
     $(function () {
 

@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace LjcWebApp
 {
     using System;
@@ -14,6 +16,7 @@ namespace LjcWebApp
     
     public partial class configmemorycurve_tb
     {
+        [Key]
         public int ConfigMemoryCurveId { get; set; }
         public int Process { get; set; }
         public string Curve { get; set; }

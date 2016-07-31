@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace LjcWebApp
 {
     using System;
@@ -14,6 +16,7 @@ namespace LjcWebApp
     
     public partial class timestatistic
     {
+        [Key]
         public string EventId { get; set; }
         public string EventName { get; set; }
         public Nullable<System.DateTime> StartTime { get; set; }

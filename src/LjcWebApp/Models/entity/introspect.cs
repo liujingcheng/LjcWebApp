@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace LjcWebApp
 {
     using System;
@@ -14,6 +16,7 @@ namespace LjcWebApp
     
     public partial class introspect
     {
+        [Key]
         public string Id { get; set; }
         public string QuestionId { get; set; }
         public string question { get; set; }

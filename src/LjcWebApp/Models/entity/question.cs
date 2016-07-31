@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace LjcWebApp
 {
     using System;
@@ -14,6 +16,7 @@ namespace LjcWebApp
     
     public partial class question
     {
+        [Key]
         public string Id { get; set; }
         public string QuestionMember { get; set; }
         public Nullable<double> FullScore { get; set; }

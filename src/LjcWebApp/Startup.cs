@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sakura.AspNetCore.Mvc;
 
 namespace LjcWebApp
 {
@@ -35,6 +36,12 @@ namespace LjcWebApp
             //services.AddDbContext<LjcDbContext>(x => x.UseMySql(DbHelper.DbConnectionString));
             services.AddOptions();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            services.AddBootstrapPagerGenerator(options =>
+            {
+                // Use default pager options.
+                options.ConfigureDefault();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
