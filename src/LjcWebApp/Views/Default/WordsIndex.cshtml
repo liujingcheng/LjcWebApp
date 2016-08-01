@@ -1,46 +1,102 @@
-﻿@{
+﻿@using Sakura.AspNetCore;
+@{
     ViewBag.Title = "WordsIndex";
-}
-@section head{
-    @Styles.Render("~/Content/PagedList.css")
-    @Scripts.Render("~/bundles/pickadate")
 }
 
 <h2>Index</h2>
 
-<div id="unobtrusive-historylist">
-    @Html.Partial("WordsPartial")
-</div>
-<div id="onComplete"></div>
-<script type="text/javascript" src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-<script>
-    $(function () {
-            $.ajax({
-                url: '/Default/GetWordsList',
-                cache: false,
-                type: 'post',
-                async: false,
-                contentType: 'application/json;charset=utf-8',
-                success: function (data, status, xhr) {
-                    $('#unobtrusive-historylist').empty();
-                    $('#unobtrusive-historylist').append(data);
-                },
-                error: function (data, status, e) {
-                    alert("ajax error");
-                }
-            });
-        });
+<table>
+    <tr>
+        <th>
+            Spelling
+        </th>
+        <th>
+            Phonetic
+        </th>
+        <th>
+            Paraphrase
+        </th>
+        <th>
+            Process
+        </th>
+        <th>
+            Priority
+        </th>
+        <th>
+            LastLearn
+        </th>
+        <th>
+            FirstLearn
+        </th>
+        <th>
+            Import
+        </th>
+        <th>
+            Classs
+        </th>
+        <th>
+            ModifiedOn
+        </th>
+        <th>
+            Deadline
+        </th>
+        <th>
+            LastForget
+        </th>
+        <th>
+            YesTotalCount
+        </th>
+        <th>
+            NoTotalCount
+        </th>
+    </tr>
 
-    function PagedOnComplete(obj) {
-        console.log(obj);
-        var $oncomplete = $('#oncomplete');
-        $oncomplete
-        .text('Paging operation completed.')
-        .css('backgroundColor', 'yellow')
-        .fadeOut({
-            complete: function () {
-                $oncomplete.css('backgroundColor', 'transparent').text('').show();
-            }
-        });
+    @foreach (var item in ViewBag.OnePageOfHistoryList)
+    {
+        <tr>
+            <td>
+                @item.Spelling
+            </td>
+            <td>
+                @item.Phonetic
+            </td>
+            <td>
+                @item.Paraphrase
+            </td>
+            <td>
+                @item.Process
+            </td>
+            <td>
+                @item.Priority
+            </td>
+            <td>
+                @item.LastLearn
+            </td>
+            <td>
+                @item.FirstLearn
+            </td>
+            <td>
+                @item.Import
+            </td>
+            <td>
+                @item.Classs
+            </td>
+            <td>
+                @item.ModifiedOn
+            </td>
+            <td>
+                @item.Deadline
+            </td>
+            <td>
+                @item.LastForget
+            </td>
+            <td>
+                @item.YesTotalCount
+            </td>
+            <td>
+                @item.NoTotalCount
+            </td>
+        </tr>
     }
-</script>
+    <pager />
+</table>

@@ -135,8 +135,8 @@
             cache: false,
             type: 'Post',
             async: false,
-            data: JSON.stringify({ eventId: eventId, eventName: eventName, effectiveTime: effectiveTime, planMinutes: planMinutes, status: status, lastticks: lastticks, quadrant: quadrant }),
-            contentType: 'application/json;charset=utf-8',
+            data: { eventId: eventId, eventName: eventName, effectiveTime: effectiveTime, planMinutes: planMinutes, status: status, lastticks: lastticks, quadrant: quadrant },
+            
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },
@@ -158,8 +158,8 @@
             cache: false,
             async: false,
             type: 'Post',
-            data: JSON.stringify({ eventId: $(hddEventId).val(), inQuadrant: 0 }),
-            contentType: 'application/json;charset=utf-8',
+            data: { eventId: $(hddEventId).val(), inQuadrant: 0 },
+            
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },
@@ -247,8 +247,8 @@
                     cache: false,
                     async: false,
                     type: 'Post',
-                    data: JSON.stringify({ eventId: $(hddEventId).val() }),
-                    contentType: 'application/json;charset=utf-8',
+                    data: { eventId: $(hddEventId).val() },
+                    
                     success: function (data, status, xhr) {
                         ajaxResult = data;
                     },
@@ -274,8 +274,8 @@
             cache: false,
             async: false,
             type: 'Post',
-            data: JSON.stringify({ eventId1: eventId1, eventId2: eventId2 }),
-            contentType: 'application/json;charset=utf-8',
+            data: { eventId1: eventId1, eventId2: eventId2 },
+            
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },
@@ -299,8 +299,8 @@
             cache: false,
             async: false,
             type: 'Post',
-            data: JSON.stringify({ eventId: $(hddEventId).val(), quadrant: quat }),
-            contentType: 'application/json;charset=utf-8',
+            data: { eventId: $(hddEventId).val(), quadrant: quat },
+            
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },

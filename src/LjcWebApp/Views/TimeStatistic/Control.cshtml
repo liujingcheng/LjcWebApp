@@ -471,8 +471,8 @@
             cache: false,
             async: false,
             type: 'Post',
-            data: JSON.stringify({ beforNewLingeEventId: beforNewLingeEventId, insertedEventId: insertedEventId }),
-            contentType: 'application/json;charset=utf-8',
+            data: { beforNewLingeEventId: beforNewLingeEventId, insertedEventId: insertedEventId },
+            
             success: function (data, status, xhr) {
                 if (data != "true") {
                     alert(data);
@@ -524,8 +524,8 @@
                     cache: false,
                     async: false,
                     type: 'Post',
-                    data: JSON.stringify({ eventId: $(hddEventId).val() }),
-                    contentType: 'application/json;charset=utf-8',
+                    data: { eventId: $(hddEventId).val() },
+                    
                     success: function (data, status, xhr) {
                         ajaxResult = data;
                     },
@@ -561,8 +561,8 @@
             cache: false,
             async: false,
             type: 'Post',
-            data: JSON.stringify({ eventId1: eventId1, eventId2: eventId2 }),
-            contentType: 'application/json;charset=utf-8',
+            data: { eventId1: eventId1, eventId2: eventId2 },
+            
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },
@@ -584,8 +584,8 @@
             cache: false,
             async: false,
             type: 'Post',
-            data: JSON.stringify({ eventId: $(hddEventId).val(), inQuadrant: 1 }),
-            contentType: 'application/json;charset=utf-8',
+            data: { eventId: $(hddEventId).val(), inQuadrant: 1 },
+            
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },
@@ -633,8 +633,8 @@
             cache: false,
             async: false,
             type: 'Post',
-            data: JSON.stringify({ eventId: $(hddEventId).val(), remark: remark }),
-            contentType: 'application/json;charset=utf-8',
+            data: { eventId: $(hddEventId).val(), remark: remark },
+            
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },

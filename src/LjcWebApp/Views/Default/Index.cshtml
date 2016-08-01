@@ -4,19 +4,11 @@
 @{
     ViewBag.Title = "Words";
 }
-@section head{
-    @Styles.Render("~/Content/uploadify/uploadify.css")
-    @Scripts.Render("~/Content/uploadify/jquery.uploadify.js")
-    @Scripts.Render("~/Scripts/bussiness/common.js")
-
-    @Styles.Render("~/Content/bootstrap.min.css")
-    @Scripts.Render("~/Scripts/bootstrap.min.js")
-}
 <div id="divImport" class="hide">
     <div style="padding-left: 3px;">
         <div id="buttons-panel" style="float: left;">
             <div class="b-button js-fileapi-wrapper">
-                <a href="@Url.Action("Index", "Word")" target="_blank">Search</a>
+                <a asp-controller="Word" asp-action="Index" target="_blank">Search</a>
                 <input type="file" name="file_upload" id="file_upload" />
             </div>
         </div>
@@ -166,8 +158,8 @@
             cache: false,
             type: 'Post',
             async: false,
-            data: JSON.stringify({ fileUrl: fileUrl, priority: priority, fileName: fileName }),
-            contentType: 'application/json;charset=utf-8',
+            data: { fileUrl: fileUrl, priority: priority, fileName: fileName },
+            
             success: function (data, status, xhr) {
                 alert(data);
             },
@@ -192,8 +184,8 @@
             cache: false,
             type: 'Post',
             async: false,
-            data: JSON.stringify({ pCheckedRadioValue: checkedRadioValue }),
-            contentType: 'application/json;charset=utf-8',
+            data: { pCheckedRadioValue: checkedRadioValue },
+            
             success: function (data, status, xhr) {
                 responsed = true;
                 result = data;
@@ -232,7 +224,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            contentType: 'application/json;charset=utf-8',
+            
             success: function (data, status, xhr) {
                 result = data;
             },
@@ -273,7 +265,7 @@
             cache: false,
             type: 'Post',
             async: true,
-            contentType: 'application/json;charset=utf-8',
+            
             success: function (data, status, xhr) {
                 responsed = true;
                 refreshWord();
@@ -306,7 +298,7 @@
             cache: false,
             type: 'Post',
             async: true,
-            contentType: 'application/json;charset=utf-8',
+            
             success: function (data, status, xhr) {
                 responsed = true;
                 refreshWord();
@@ -330,7 +322,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            contentType: 'application/json;charset=utf-8',
+            
             success: function (data, status, xhr) {
             },
             error: function (data, status, e) {
@@ -353,7 +345,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            contentType: 'application/json;charset=utf-8',
+            
             success: function (data, status, xhr) {
             },
             error: function (data, status, e) {
@@ -381,7 +373,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            contentType: 'application/json;charset=utf-8',
+            
             success: function (data, status, xhr) {
             },
             error: function (data, status, e) {
@@ -399,7 +391,6 @@
 </script>
 
 <!--Upload-->
-@Scripts.Render("~/Scripts/upload.js")
 <script type="text/javascript">
     var uploadifySet = {
         auto: true,
@@ -456,11 +447,11 @@
             type: "Post",
             async: false,
             contentType: "application/json;charset=utf-8",
-            data: JSON.stringify({
+            data: {
                 spelling: spelling, phonetic: phonetic, paraphrase: paraphrase, classs: classs,
 
                 priority: addPriority
-            }),
+            },
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },

@@ -882,21 +882,7 @@ namespace LjcWebApp.Controllers
             return _wordStorageImpl.AddWord(wordTb);
         }
 
-        public ActionResult WordsIndex()
-        {
-            try
-            {
-                var today = DateTime.Now.Date;
-                GetWordsList(1);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(ex.Message, ex);
-            }
-            return View();
-        }
-
-        public ActionResult GetWordsList(int? page)
+        public ActionResult WordsIndex(int? page)
         {
             try
             {
@@ -926,7 +912,7 @@ namespace LjcWebApp.Controllers
             {
                 LogHelper.WriteLog(ex.Message, ex);
             }
-            return  (ActionResult)PartialView("WordsPartial");
+            return View();
         }
 
     }
