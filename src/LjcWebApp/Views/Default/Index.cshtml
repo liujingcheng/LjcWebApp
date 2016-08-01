@@ -446,10 +446,8 @@
             cache: false,
             type: "Post",
             async: false,
-            contentType: "application/json;charset=utf-8",
             data: {
                 spelling: spelling, phonetic: phonetic, paraphrase: paraphrase, classs: classs,
-
                 priority: addPriority
             },
             success: function (data, status, xhr) {
@@ -460,17 +458,17 @@
             }
         });
         switch (ajaxResult) {
-            case "0":
+            case 0:
                 //$("#addModal").modal("hide");
                 clearAddFields();
                 break;
-            case "1":
+            case 1:
                 alert("Exceptions happened,contact admin!");
                 break;
-            case "2":
+            case 2:
                 alert("this spelling is already exist");
                 break;
-            case "3":
+            case 3:
                 alert("spelling is null");
         }
     }
