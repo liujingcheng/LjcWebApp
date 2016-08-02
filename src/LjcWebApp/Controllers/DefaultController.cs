@@ -923,15 +923,15 @@ namespace LjcWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult New([FromServices]IHostingEnvironment env, UploadModel upload)
+        public IActionResult Upload([FromServices]IHostingEnvironment env, UploadModel upload)
         {
-            var fileName = Path.Combine("upload", DateTime.Now.ToString("MMddHHmmss") + ".jpg");
+            var fileName = Path.Combine("upload", DateTime.Now.ToString("MMddHHmmss") + ".xml");
             using (var stream = new FileStream(Path.Combine(env.WebRootPath, fileName), FileMode.CreateNew))
             {
                 upload.UploadedFile.CopyTo(stream);
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Upload));
         }
 
     }

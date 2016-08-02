@@ -4,81 +4,6 @@
 @{
     ViewBag.Title = "Words";
 }
-<div id="divImport" class="hide">
-    <div style="padding-left: 3px;">
-        <div id="buttons-panel" style="float: left;">
-            <div class="b-button js-fileapi-wrapper">
-                <a asp-controller="Word" asp-action="Index" target="_blank">Search</a>
-                <input type="file" name="file_upload" id="file_upload" />
-            </div>
-        </div>
-    </div>
-    <div id="file_upload_list">
-    </div>
-    <div>
-        <ul id="uploadSuccess" class="uploadify-upload-list"></ul>
-    </div>
-    <input type="text" id="txtImportFile" style="width: 448px; height: 22px;" />
-    <input type="hidden" id="txtImportFileName" style="width: 448px; height: 22px;" />
-    <input type="button" id="btnImport" value="Import" style="width: 100px; height: 30px;" onclick="importFile(this)" />
-    <input type="radio" name="priority" value="2" />High
-    <input type="radio" name="priority" value="1" />Middle
-    <input type="radio" name="priority" value="0" />Low
-    <!--Modal-->
-    <div id="addModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-
-                              hidden="true">&times;</span><span class="sr-only">Close</span>
-                    </button>
-                    <h4 class="modal-title">Add</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <label for="areaSpelling">Spelling:</label>
-                        <textarea id="areaSpelling" maxlength="5000"></textarea>
-                    </div>
-
-                    <div>
-                        <label for="txtPonetic">Phonetic:</label>
-                        <input type="text" id="txtPhonetic" maxlength="50" />
-                    </div>
-
-                    <div>
-                        <label for="areaParaphrase">Paraphrase:</label>
-                        <textarea id="areaParaphrase" maxlength="5000"></textarea>
-                    </div>
-
-                    <div>
-                        <input type="radio" name="addPriority" value="2" checked="checked" />
-                        <label>High</label>
-                        <input type="radio" name="addPriority" value="1" />
-                        <label>Middle</label>
-                        <input type="radio" name="addPriority" value="0" />
-                        <label>Low</label>
-                    </div>
-
-                    <div>
-                        <label for="txtClasss">Class</label>
-                        <input type="text" id="txtClasss" maxlength="50" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addWord()">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--End Modal-->
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">
-        Add
-    </button>
-
-</div>
 <div style="width: 560px;margin: 0 auto;">
     <div class="maininfo">
         <div id="lblWordInfo"></div>
@@ -120,54 +45,17 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#txtImportFile").val("");
-        if ($("input[name='priority']:checked").length > 0) {
-            $("input[name='priority']:checked")[0].checked = false;
-        }
-        if (!navigator.userAgent.match(/mobile/i)) {
-            $("#divImport").removeClass("hide");
-            refreshWord();//为了首次页面加载能显示单词信息
-        } else {
-            $(".BtnYES,.BtnNO").addClass("hide");
-            $("body").css("text-align:center", "center");
-            refreshWord();//为了首次页面加载能显示单词信息
+        $(".BtnYES,.BtnNO").addClass("hide");
+        $("body").css("text-align:center", "center");
+        refreshWord();//为了首次页面加载能显示单词信息
+        $("body").scrollTop(mid);
+        intervalId = setInterval(function () {
             $("body").scrollTop(mid);
-            intervalId = setInterval(function () {
-                $("body").scrollTop(mid);
-                if ($("body").scrollTop() == mid) {
-                    $(window).on("scroll", learnWhenScroll);
-                }
-            }, 100);
-        }
-    });
-
-    function importFile(obj) {
-        var fileUrl = $("#txtImportFile").val();
-        var priority = $("input[name='priority']:checked").val();
-        if (fileUrl == "") {
-            alert("please upload file first");
-            return;
-        }
-        if (priority == undefined) {
-            alert("please select priority");
-            return;
-        }
-        var fileName = $("#txtImportFileName").val();
-        $.ajax({
-            url: '/Default/ImportYoudaoWords',
-            cache: false,
-            type: 'Post',
-            async: false,
-            data: { fileUrl: fileUrl, priority: priority, fileName: fileName },
-            
-            success: function (data, status, xhr) {
-                alert(data);
-            },
-            error: function (data, status, e) {
-                alert("ajax error");
+            if ($("body").scrollTop() == mid) {
+                $(window).on("scroll", learnWhenScroll);
             }
-        });
-    }
+        }, 100);
+    });
 
     var requestCompleted = false;
     function refreshWord() {
@@ -185,7 +73,7 @@
             type: 'Post',
             async: false,
             data: { pCheckedRadioValue: checkedRadioValue },
-            
+
             success: function (data, status, xhr) {
                 responsed = true;
                 result = data;
@@ -224,7 +112,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            
+
             success: function (data, status, xhr) {
                 result = data;
             },
@@ -265,7 +153,7 @@
             cache: false,
             type: 'Post',
             async: true,
-            
+
             success: function (data, status, xhr) {
                 responsed = true;
                 refreshWord();
@@ -298,7 +186,7 @@
             cache: false,
             type: 'Post',
             async: true,
-            
+
             success: function (data, status, xhr) {
                 responsed = true;
                 refreshWord();
@@ -322,7 +210,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            
+
             success: function (data, status, xhr) {
             },
             error: function (data, status, e) {
@@ -345,7 +233,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            
+
             success: function (data, status, xhr) {
             },
             error: function (data, status, e) {
@@ -373,7 +261,7 @@
             cache: false,
             type: 'Post',
             async: false,
-            
+
             success: function (data, status, xhr) {
             },
             error: function (data, status, e) {
@@ -390,18 +278,6 @@
 
 </script>
 
-<!--Upload-->
-<script type="text/javascript">
-    var uploadifySet = {
-        auto: true,
-        buttonText: 'Upload File',
-        cancelImg: '/Content/uploadify/uploadify-cancel.png',
-        fileSizeLimit: 1024 * 10, //10M
-        swf: '/Content/uploadify/uploadify.swf',
-        uploader: '/Default/UploadFile',
-    };
-</script>
-<!--End Upload-->
 <!--Add word-->
 <script type="text/javascript">
     $(function () {

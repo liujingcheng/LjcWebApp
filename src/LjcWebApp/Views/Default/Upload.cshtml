@@ -2,7 +2,7 @@
     ViewData["Title"] = "New Page";
 }
 @model LjcWebApp.Models.ViewModels.UploadModel
-<form asp-controller="Home" role="form" asp-action="New" enctype="multipart/form-data" method="post">
+<form asp-controller="Default" role="form" asp-action="Upload" enctype="multipart/form-data" method="post">
     <div class="form-group">
         <label asp-for="UploadedFile"></label>
         <input type="file" asp-for="UploadedFile" />
