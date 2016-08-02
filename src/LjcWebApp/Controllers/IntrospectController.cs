@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LjcWebApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class IntrospectController : Controller
     {
         //

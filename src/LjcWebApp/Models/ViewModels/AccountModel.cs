@@ -2,7 +2,7 @@
 
 namespace LjcWebApp.Models.ViewModels
 {
-    public class AccountModels
+    public class AccountModel
     {
         /// <summary>
         /// 用户名

@@ -1,0 +1,29 @@
+﻿@model LjcWebApp.Models.ViewModels.AccountModel
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html id="html_hide">
+<head>
+    <title>登录</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+</head>
+<body class="bodyBg">
+    <form asp-controller="Account" asp-action="Login"  asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+        <div>
+            <label asp-for="UserName"></label>
+            <input asp-for="UserName" type="text"/>
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-default">登录</button>
+    </form>
+
+</body>
+</html>

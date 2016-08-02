@@ -11,7 +11,7 @@ using Sakura.AspNetCore;
 
 namespace LjcWebApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class TimeStatisticController : Controller
     {
         private readonly IOptions<AppSettings> _appSettings;

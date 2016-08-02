@@ -17,7 +17,7 @@ using Sakura.AspNetCore;
 
 namespace LjcWebApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class DefaultController : Controller
     {
         public const int MAX_PROCESS = 20;
