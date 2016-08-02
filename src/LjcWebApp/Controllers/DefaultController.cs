@@ -8,10 +8,11 @@ using LjcWebApp.Helper;
 using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using  LjcWebApp.Services.DataCRUD;
-using  LjcWebApp.Services.DataLoad;
-using  LjcWebApp.Services.DataStorage;
-using  LjcWebApp.Services.XMLParse;
+using LjcWebApp.Services.DataCRUD;
+using LjcWebApp.Services.DataLoad;
+using LjcWebApp.Services.DataStorage;
+using LjcWebApp.Services.XMLParse;
+using Microsoft.AspNetCore.Hosting;
 using Sakura.AspNetCore;
 
 namespace LjcWebApp.Controllers
@@ -913,6 +914,24 @@ namespace LjcWebApp.Controllers
                 LogHelper.WriteLog(ex.Message, ex);
             }
             return View();
+        }
+
+        public IActionResult Upload()
+        {
+            var model = new UploadModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult New([FromServices]IHostingEnvironment env, UploadModel upload)
+        {
+            var fileName = Path.Combine("upload", DateTime.Now.ToString("MMddHHmmss") + ".jpg");
+            using (var stream = new FileStream(Path.Combine(env.WebRootPath, fileName), FileMode.CreateNew))
+            {
+                upload.UploadedFile.CopyTo(stream);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
     }
