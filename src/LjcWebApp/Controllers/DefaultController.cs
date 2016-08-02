@@ -916,22 +916,37 @@ namespace LjcWebApp.Controllers
             return View();
         }
 
-        public IActionResult Upload()
+        public IActionResult Upload(UploadModel model)
         {
-            var model = new UploadModel();
+            if (model.Tip == null)
+            {
+                model = new UploadModel()
+                {
+                    Priority = 2
+                };
+            }
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Upload([FromServices]IHostingEnvironment env, UploadModel upload)
+        public IActionResult Upload([FromServices]IHostingEnvironment env, UploadModel uploadModel)
         {
-            var fileName = Path.Combine("upload", DateTime.Now.ToString("MMddHHmmss") + ".xml");
-            using (var stream = new FileStream(Path.Combine(env.WebRootPath, fileName), FileMode.CreateNew))
+            var fileName = DateTime.Now.ToString("MMddHHmmss") + ".xml";
+            var filePath = Path.Combine(env.WebRootPath + "\\upload", fileName);
+            try
             {
-                upload.UploadedFile.CopyTo(stream);
+                using (var stream = new FileStream(filePath, FileMode.CreateNew))
+                {
+                    uploadModel.UploadedFile.CopyTo(stream);
+                }
+                uploadModel.Tip = ImportYoudaoWords(filePath, fileName, uploadModel.Priority);
+            }
+            catch (Exception ex)
+            {
+                uploadModel.Tip = "发生异常：" + ex.Message;
             }
 
-            return RedirectToAction(nameof(Upload));
+            return RedirectToAction(nameof(Upload), uploadModel);
         }
 
     }

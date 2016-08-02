@@ -1,13 +1,23 @@
 ﻿@{
-    ViewData["Title"] = "New Page";
+    ViewData["Title"] = "Upload Page";
 }
 @model LjcWebApp.Models.ViewModels.UploadModel
 <form asp-controller="Default" role="form" asp-action="Upload" enctype="multipart/form-data" method="post">
-    <div class="form-group">
-        <label asp-for="UploadedFile"></label>
-        <input type="file" asp-for="UploadedFile" />
-        <p class="help-block">上传</p>
+    <div>
+        <label asp-for="Tip"></label>
+        <textarea asp-for="Tip" style="width: 560px;margin: 0 auto;"></textarea>
     </div>
-    <button type="submit" class="btn btn-default">提交</button>
+    <div class="form-group">
+        <label asp-for="Priority"></label>
+        <select asp-for="Priority">
+            <option value="2" selected="selected">2</option>
+            <option value="1">1</option>
+            <option value="0">0</option>
+        </select>
+        <p/>
+        <label asp-for="UploadedFile"></label>
+        <input type="file" asp-for="UploadedFile"/>
+    </div>
+    <button type="submit" class="btn btn-default">上传</button>
 </form>
 
