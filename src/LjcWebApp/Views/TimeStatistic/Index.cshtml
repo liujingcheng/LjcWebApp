@@ -1,4 +1,5 @@
-﻿@using System.Collections.Generic
+﻿@using System
+@using System.Collections.Generic
 @using LjcWebApp;
 @using LjcWebApp.Models.ViewModels
 @using Sakura.AspNetCore;
@@ -44,7 +45,7 @@
             if (ondayDataModel.EventModelList.Count > 0)
             {
                 var list = (List<EventModel>)ondayDataModel.EventModelList;
-                copyText = string.Join("；", list.Select(p => p.EventName));
+                copyText = String.Join("；", list.Select(p => p.EventName));
             }
             foreach (var item in ondayDataModel.EventModelList)
             {
@@ -80,10 +81,7 @@
                     @ondayDataModel.Date
                 </td>
                 <td>
-                    <div copytext="@copyText" data-toggle="popover" data-delay="{show: 500,hide:100}"
-                         data-placement="right" data-content="复制成功" class="copy-button-wrap">
-                        <input type="button" value="复制" class="copy-button" />
-                    </div>
+                    <div class="clip_button" data-clipboard-text="@copyText" title="Click to copy.">复制</div>
                 </td>
                 <td></td>
                 <td></td>
