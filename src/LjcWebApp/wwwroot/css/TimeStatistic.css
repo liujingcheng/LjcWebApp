@@ -1,46 +1,63 @@
-﻿.txtNewEventName,.txtEventName {
+﻿.txtNewEventName, .txtEventName {
 	width: 490px;
 }
 
-#txtNewEventName{
+#txtNewEventName {
 	width: 850px;
 }
 
 .controlTxtEventName {
 	width: 850px;
 }
+
 .txtPlanMinutes {
 	width: 75px;
 }
 
-.copy-button-wrap 
-{
-    display:inline-block;
-    *display:inline;
-    *zoom:1;
-    width:34px;
-    height:24px;
+.copy-button-wrap {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	width: 34px;
+	height: 24px;
 }
-.copy-button 
-{
-    width:34px;
-    height:24px;
-    padding:0;
-    margin:0;
-    border-radius:3px;
-    border:1px solid #c3c1c1;
-    background:#fff;
-    font-family:"Microsoft Yahei";
-    font-size:12px;
-    color:#333;
-    vertical-align:top;
-    line-height:normal;
+
+.copy-button {
+	width: 34px;
+	height: 24px;
+	padding: 0;
+	margin: 0;
+	border-radius: 3px;
+	border: 1px solid #c3c1c1;
+	background: #fff;
+	font-family: "Microsoft Yahei";
+	font-size: 12px;
+	color: #333;
+	vertical-align: top;
+	line-height: normal;
 }
 
 table tr:hover {
-	background: lightgreen
+	background: lightgreen;
 }
 
 #txtRemark {
-	width: 850px
+	width: 850px;
 }
+
+.clip_button {
+	text-align: center;
+	border: 1px solid black;
+	background-color: #ccc;
+	margin: 2px;
+	width: 50px;
+	height: 22px;
+}
+
+	.clip_button.zeroclipboard-is-hover {
+		background-color: #eee;
+	}
+
+	.clip_button.zeroclipboard-is-active {
+		background-color: #aaa;
+	}
