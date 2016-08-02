@@ -932,7 +932,7 @@ namespace LjcWebApp.Controllers
         public IActionResult Upload([FromServices]IHostingEnvironment env, UploadModel uploadModel)
         {
             var fileName = DateTime.Now.ToString("MMddHHmmss") + ".xml";
-            var filePath = Path.Combine(env.WebRootPath + "\\upload", fileName);
+            var filePath = Path.Combine(env.WebRootPath + "/upload", fileName);
             try
             {
                 using (var stream = new FileStream(filePath, FileMode.CreateNew))
