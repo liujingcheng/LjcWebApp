@@ -32,7 +32,6 @@ namespace LjcWebApp.Services.DataCRUD
                     if (status == "New" && eventId == null)
                     {
                         entity = new timestatistic();
-                        entity.EventId = Guid.NewGuid().ToString();
                         entity.CreatedOn = DateTime.Now;
                         entity.ModifiedOn = DateTime.Now;
                         entity.EventName = eventName;
@@ -41,7 +40,6 @@ namespace LjcWebApp.Services.DataCRUD
                         entity.Status = status;
                         entity.InQuadrant = inQuadrant;
                         if (quadrant != null) entity.Quadrant = quadrant;
-                        result = entity.EventId + "|" + entity.ModifiedOn.Ticks;
                     }
                     else
                     {
@@ -84,6 +82,8 @@ namespace LjcWebApp.Services.DataCRUD
                     }
                     if (entity.EventId == null)
                     {
+                        entity.EventId = Guid.NewGuid().ToString();
+                        result = entity.EventId + "|" + entity.ModifiedOn.Ticks;
                         context.timestatistic.Add(entity);
                     }
                     else
