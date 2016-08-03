@@ -1,33 +1,19 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using LjcWebApp.Models;
-using LjcWebApp.Models.ViewModels;
+﻿using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace LjcWebApp.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private readonly IOptions<AppSettings> _appSettings;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountController(IOptions<AppSettings> settings,
-            UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(IOptions<AppSettings> settings)
         {
             _appSettings = settings;
-            _userManager = userManager;
-            _signInManager = signInManager;
         }
 
-        //
-        // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
@@ -36,8 +22,6 @@ namespace LjcWebApp.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -48,8 +32,7 @@ namespace LjcWebApp.Controllers
             {
                 var userNameStr = _appSettings.Value.UserName;
                 var passwordStr = _appSettings.Value.Password;
-                var result = _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, lockoutOnFailure: false);
-                if (result.IsCompleted && model.UserName == userNameStr && model.Password == passwordStr)
+                if (model.UserName == userNameStr && model.Password == passwordStr)
                 {
                     return RedirectToLocal(returnUrl);
                 }
@@ -57,7 +40,6 @@ namespace LjcWebApp.Controllers
                 return View(model);
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -73,14 +55,5 @@ namespace LjcWebApp.Controllers
             }
         }
 
-        //
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogOff()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(HomeController.Index), "Home");
-        }
     }
 }
