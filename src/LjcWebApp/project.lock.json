@@ -10806,6 +10806,7 @@
     "": [
       "BuildBundlerMinifier >= 2.1.258",
       "BundlerMinifier.Core >= 2.1.258",
+      "Microsoft.AspNetCore.Authentication.Cookies >= 1.0.0",
       "Microsoft.AspNetCore.Diagnostics >= 1.0.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 1.0.0",
       "Microsoft.AspNetCore.Mvc >= 1.0.0",

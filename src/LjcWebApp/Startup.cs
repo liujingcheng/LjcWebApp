@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -54,7 +55,14 @@ namespace LjcWebApp
             }
 
             app.UseStaticFiles();
-
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            {
+                AuthenticationScheme = "MyCookieMiddlewareInstance",
+                LoginPath = new PathString("/Account/Login/"),
+                AccessDeniedPath = new PathString("/Account/Login/"),
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

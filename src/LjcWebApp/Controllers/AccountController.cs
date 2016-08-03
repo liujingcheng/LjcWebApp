@@ -1,4 +1,6 @@
-﻿using LjcWebApp.Models.ViewModels;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -34,6 +36,14 @@ namespace LjcWebApp.Controllers
                 var passwordStr = _appSettings.Value.Password;
                 if (model.UserName == userNameStr && model.Password == passwordStr)
                 {
+                    var claims = new List<Claim>()
+                    {
+                        new Claim( ClaimTypes.Name, userNameStr),
+                        new Claim( ClaimTypes.UserData, userNameStr + passwordStr)
+                    };
+                    var identity=new ClaimsIdentity(claims,"MyClaimsLogin");
+                    var principal=new ClaimsPrincipal(identity);
+                    HttpContext.Authentication.SignInAsync("MyCookieMiddlewareInstance", principal);
                     return RedirectToLocal(returnUrl);
                 }
                 ModelState.AddModelError("Password", "用户名或密码错误");

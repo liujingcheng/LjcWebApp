@@ -32,7 +32,8 @@
     "Pomelo.Data.MySql": "1.0.0-prerelease-20160730",
     "Pomelo.EntityFrameworkCore.MySql": "1.0.0-prerelease-20160730",
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0",
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0" },
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0",
+    "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0" },
 
   "tools": {
     "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
