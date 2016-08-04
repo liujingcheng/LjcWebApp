@@ -15,7 +15,7 @@ namespace LjcWebApp.Services.Introspection
         /// <returns></returns>
         public question GetNextQuestion(question currentQuestion)
         {
-            using (var context = new LjcDbContext())
+            var context = DbHelper.GetDbContext();
             {
                 int? nextSort = 1;
                 if (currentQuestion != null && currentQuestion.Sort != null)
@@ -71,7 +71,7 @@ namespace LjcWebApp.Services.Introspection
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     entity.Id = Guid.NewGuid().ToString().Replace("-", "");
                     entity.ModifiedOn = entity.CreatedOn = DateTime.Now;
@@ -97,7 +97,7 @@ namespace LjcWebApp.Services.Introspection
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     var entity = context.introspect.First(p => p.Id == pEntity.Id);
                     entity.QuestionId = pEntity.QuestionId;
@@ -127,7 +127,7 @@ namespace LjcWebApp.Services.Introspection
         /// <returns></returns>
         public bool IsExist(introspect entity)
         {
-            using (var context = new LjcDbContext())
+            var context = DbHelper.GetDbContext();
             {
                 return context.introspect.Any(p => p.question == entity.question && p.Date == entity.Date);
             }
@@ -143,7 +143,7 @@ namespace LjcWebApp.Services.Introspection
             introspect entity = null;
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     entity = context.introspect.First(p => p.Id == id);
                 }
@@ -166,7 +166,7 @@ namespace LjcWebApp.Services.Introspection
             introspect entity = null;
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     entity = context.introspect.FirstOrDefault(p => p.question == question && p.Date == date);
                 }
@@ -185,7 +185,7 @@ namespace LjcWebApp.Services.Introspection
         /// <returns></returns>
         public question GetPreviousQuestion(question currentQuestion)
         {
-            using (var context = new LjcDbContext())
+            var context = DbHelper.GetDbContext();
             {
                 var previousQuestion = context.question.FirstOrDefault(p => p.Sort == currentQuestion.Sort - 1);
 
@@ -211,7 +211,7 @@ namespace LjcWebApp.Services.Introspection
         /// <returns></returns>
         public List<introspect> GetListByDate(DateTime date)
         {
-            using (var context = new LjcDbContext())
+            var context = DbHelper.GetDbContext();
             {
                 return context.introspect.Where(p => p.Date == date).ToList();
             }
@@ -227,7 +227,7 @@ namespace LjcWebApp.Services.Introspection
         {
             if (currentQuestion == null || currentQuestion.Sort == null) return null;
 
-            using (var context = new LjcDbContext())
+            var context = DbHelper.GetDbContext();
             {
                 for (int i = currentQuestion.Sort.Value - 1; i > 0; i--)
                 {

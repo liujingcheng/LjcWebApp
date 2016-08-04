@@ -26,7 +26,7 @@ namespace LjcWebApp.Services.DataCRUD
             string result = "-1";
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     timestatistic entity;
                     if (status == "New" && eventId == null)
@@ -112,7 +112,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     if (startDate == null && endDate == null)
                     {
@@ -147,7 +147,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     return context.timestatistic.Where(p => p.Status != "Stopped" && p.InQuadrant != 1).OrderBy(p => p.OrderValue).ToList();
                 }
@@ -171,7 +171,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     var unfinishedList = context.timestatistic.Where(p => p.Status != "Stopped" && p.InQuadrant != 1).OrderBy(p => p.OrderValue).ToList();
                     if (unfinishedList.Count == 0) return true;
@@ -215,7 +215,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     var entity = context.timestatistic.First(p=>p.EventId==eventId);
                     context.timestatistic.Remove(entity);
@@ -240,7 +240,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     var entity1 = context.timestatistic.First(p=>p.EventId==eventId1);
                     var entity2 = context.timestatistic.First(p=>p.EventId==eventId2);
@@ -268,7 +268,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     return context.timestatistic.
                         Where(p => p.InQuadrant == 1 && p.Quadrant == quadrant).
@@ -290,7 +290,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     var entity = context.timestatistic.First(p=>p.EventId==eventId);
                     entity.Quadrant = newQuadrant;
@@ -313,7 +313,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     var entity = context.timestatistic.First(p=>p.EventId==eventId);
                     entity.InQuadrant = inQuadrant;
@@ -338,7 +338,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     var entity = context.timestatistic.First(p=>p.EventId==eventId);
                     entity.Remark = remark;

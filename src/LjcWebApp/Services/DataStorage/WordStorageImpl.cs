@@ -19,7 +19,7 @@ namespace LjcWebApp.Services.DataStorage
         {
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     foreach (var word in listWordTb)
                     {
@@ -96,7 +96,7 @@ namespace LjcWebApp.Services.DataStorage
 
             try
             {
-                using (var context = new LjcDbContext())
+                var context = DbHelper.GetDbContext();
                 {
                     var entity =
                         context.word_tb.FirstOrDefault(

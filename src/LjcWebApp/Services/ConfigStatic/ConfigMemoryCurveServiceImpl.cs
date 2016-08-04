@@ -18,7 +18,7 @@ namespace LjcWebApp.Services.ConfigStatic
             {
                 try
                 {
-                    using (var context = new LjcDbContext())
+                    var context = DbHelper.GetDbContext();
                     {
                         ListConfigMemoryCurveTb = context.configmemorycurve_tb.ToList();
                     }
