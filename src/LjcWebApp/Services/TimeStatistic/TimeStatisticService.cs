@@ -45,11 +45,11 @@ namespace LjcWebApp.Services.DataCRUD
                     {
                         entity = context.timestatistic.First(p=>p.EventId==eventId);
 
-                        //正在进行中的事件在新页面打开并操作后要刷新旧页面后才能在旧页面上操作
-                        if (entity.ModifiedOn.Ticks > Convert.ToInt64(lastticks))//由于存入数据库精度有损，故不能用==来判断
-                        {
-                            return "need refresh";
-                        }
+                        ////正在进行中的事件在新页面打开并操作后要刷新旧页面后才能在旧页面上操作
+                        //if (entity.ModifiedOn.Ticks > Convert.ToInt64(lastticks))//由于存入数据库精度有损，故不能用==来判断
+                        //{
+                        //    return "need refresh";
+                        //}
                         entity.ModifiedOn = DateTime.Now;
                         entity.InQuadrant = inQuadrant;
                         if (quadrant != null) entity.Quadrant = quadrant;
