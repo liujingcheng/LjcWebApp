@@ -17,7 +17,7 @@ namespace LjcWebApp.Services.Word
             var words = new List<word_tb>();
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     words = context.word_tb.Where(p => p.Spelling.Contains(likeStr)
                         || p.Paraphrase.Contains(likeStr)).ToList();
@@ -40,7 +40,7 @@ namespace LjcWebApp.Services.Word
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     var entity = context.word_tb.First(p=>p.WordId==word.WordId);
                     entity.Spelling = word.Spelling;
@@ -69,7 +69,7 @@ namespace LjcWebApp.Services.Word
             word_tb word = null;
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     word = context.word_tb.First(p => p.WordId == id);
                 }
@@ -90,7 +90,7 @@ namespace LjcWebApp.Services.Word
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     var entity = context.word_tb.First(p => p.WordId == id);
                     context.word_tb.Remove(entity);

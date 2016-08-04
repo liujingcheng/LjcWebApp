@@ -18,7 +18,7 @@ namespace LjcWebApp.Services.DataLoad
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     return context.word_tb.ToList();
                 }
@@ -80,7 +80,7 @@ namespace LjcWebApp.Services.DataLoad
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     var listAll = context.word_tb.ToList();
                     return TrLoadAllLearnWords(time, listAll);
@@ -128,7 +128,7 @@ namespace LjcWebApp.Services.DataLoad
             var words = new List<word_tb>();
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     words = context.word_tb.Where(p => p.Spelling.Contains(likeStr)).ToList();
                 }

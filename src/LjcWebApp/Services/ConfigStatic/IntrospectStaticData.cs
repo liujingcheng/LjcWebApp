@@ -17,7 +17,7 @@ namespace LjcWebApp.Services.ConfigStatic
             {
                 if (_questionCount == null)
                 {
-                    var context = DbHelper.GetDbContext();
+                    using (var context = new LjcDbContext())
                     {
                         _questionCount = context.question.Count();
                     }

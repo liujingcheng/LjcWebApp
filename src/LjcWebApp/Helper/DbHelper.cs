@@ -10,11 +10,5 @@ namespace LjcWebApp.Helper
     {
         public static string DbConnectionString;
         public static DbContextOptionsBuilder Builder = new DbContextOptionsBuilder();
-
-        private static LjcDbContext _dbContext;
-        public static LjcDbContext GetDbContext()
-        {
-            return _dbContext ?? (_dbContext = new LjcDbContext());
-        }
     }
 }

@@ -18,7 +18,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     var entity = context.word_tb.First(p => p.WordId==word.WordId);
                     context.word_tb.Remove(entity);

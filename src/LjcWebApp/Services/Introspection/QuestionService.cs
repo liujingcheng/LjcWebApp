@@ -18,7 +18,7 @@ namespace LjcWebApp.Services.Introspection
             var words = new List<question>();
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     words = context.question.OrderBy(p=>p.Sort).ToList();
                 }
@@ -40,7 +40,7 @@ namespace LjcWebApp.Services.Introspection
             var words = new List<question>();
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     words = context.question.Where(p => p.QuestionMember.Contains(likeStr)).ToList();
                 }
@@ -62,7 +62,7 @@ namespace LjcWebApp.Services.Introspection
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     question.Id = Guid.NewGuid().ToString().Replace("-", "");
                     question.ModifiedOn = question.CreatedOn = DateTime.Now;
@@ -89,7 +89,7 @@ namespace LjcWebApp.Services.Introspection
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     var entity = context.question.First(p=>p.Id==question.Id);
                     entity.QuestionMember = question.QuestionMember;
@@ -122,7 +122,7 @@ namespace LjcWebApp.Services.Introspection
             question entity = null;
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     entity = context.question.First(p=>p.Id==id);
                 }
@@ -143,7 +143,7 @@ namespace LjcWebApp.Services.Introspection
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     var entity = context.question.First(p=>p.Id==id);
                     context.question.Remove(entity);
@@ -171,7 +171,7 @@ namespace LjcWebApp.Services.Introspection
         {
             try
             {
-                var context = DbHelper.GetDbContext();
+                using (var context = new LjcDbContext())
                 {
                     var all = context.question.ToList();
                     context.question.RemoveRange(all);
