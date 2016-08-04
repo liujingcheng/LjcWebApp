@@ -288,10 +288,11 @@
             if (ajaxResult == -1) {
                 alert("保存数据库失败");
                 return;
-            } else if (ajaxResult == "need refresh") {
-                alert("data has modified by other page,please refresh this page first!");
-                return;
             }
+            //else if (ajaxResult == "need refresh") {
+            //    alert("data has modified by other page,please refresh this page first!");
+            //    return;
+            //}
             clearInterval(showTime);
             showTime = undefined;
             $(lblStatus).text(status);
@@ -317,10 +318,11 @@
         if (ajaxResult == -1) {
             alert("保存数据库失败");
             return;
-        } else if (ajaxResult == "need refresh") {
-            alert("data has modified by other page,please refresh this page first!");
-            return;
         }
+        //else if (ajaxResult == "need refresh") {
+        //    alert("data has modified by other page,please refresh this page first!");
+        //    return;
+        //}
 
         clearInterval(showTime);
         showTime = undefined;
@@ -366,10 +368,11 @@
         if (ajaxResult == -1) {
             alert("保存数据库失败");
             return;
-        } else if (ajaxResult == "need refresh") {
-            alert("data has modified by other page,please refresh this page first!");
-            return;
         }
+        //else if (ajaxResult == "need refresh") {
+        //    alert("data has modified by other page,please refresh this page first!");
+        //    return;
+        //}
         $(hddlastticks).val(ajaxResult);
     });
 
