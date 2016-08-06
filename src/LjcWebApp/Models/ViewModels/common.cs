@@ -30,10 +30,5 @@ namespace LjcWebApp.Models.ViewModels
         public static bool BtnDeleteEnabled;
 
         public static bool IsFirstNo;//标识首次点击No，此时只展示全部单词信息，不切换单词
-
-        /// <summary>
-        /// 页面刷新前所有待记的单词
-        /// </summary>
-        public static List<word_tb> WordsToLearnBeforeReload;
     }
 }

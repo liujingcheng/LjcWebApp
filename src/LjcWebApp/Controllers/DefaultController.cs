@@ -28,50 +28,9 @@ namespace LjcWebApp.Controllers
         public ActionResult Index()
         {
             LoadAllReviewWords();
-            LoadNeedLearnWordsAsync();
+            //LoadNeedLearnWordsAsync();//暂时先注释该功能，放在Controller里不合适
             return View();
         }
-
-        private void LoadNeedLearnWordsAsync()
-        {
-            Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(60000);//1分钟执行一次
-                var newList = GetWordsToLearn();
-                newList.ForEach(p =>
-                {
-                    if (common.WordsToLearnBeforeReload.All(q => q.Spelling != p.Spelling))
-                    {
-                        common.WordsToLearnBeforeReload.Add(p);
-                        common.WordsNotRemember.Add(p);
-                    }
-                });
-                newList.Clear();
-            });
-        }
-
-        //[AllowAnonymous]
-        //[HttpPost]
-        //public FineUploaderResult UploadFile(FineUploadWithMulti upload)
-        //{
-        //    try
-        //    {
-        //        var dir = Path.Combine(Request.PhysicalApplicationPath, "Upload");
-        //        string fileName = Path.GetFileName(upload.IsMultipart() ? upload.OriginalFilename : upload.Filename);
-
-        //        var filePath = Path.Combine(dir, Guid.NewGuid().ToString());
-        //        upload.SaveAs(filePath, Path.Combine(dir, Guid.NewGuid().ToString()), true);
-        //        return new FineUploaderResult(true, new
-        //        {
-        //            filePath = filePath
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogHelper.WriteLog(ex.Message, ex);
-        //        return new FineUploaderResult(false, error: ex.Message);
-        //    }
-        //}
 
         /// <summary>
         /// 
@@ -144,13 +103,9 @@ namespace LjcWebApp.Controllers
                 common.CurrentNode = null;
                 common.WordsRemembered = null;
                 common.WordsNotRemember = null;
-                common.WordsToLearnBeforeReload = null;
                 common.LinkedList = new LinkedList<word_tb>();
                 common.WordsRemembered = new List<word_tb>();
-                common.WordsToLearnBeforeReload = new List<word_tb>();
 
-                //以下两个列表得分开，不能是同一个（本应该用深复制的，但赶时间，所以采取了以下取巧的方式）
-                common.WordsToLearnBeforeReload = GetWordsToLearn();
                 common.WordsNotRemember = GetWordsToLearn();
 
                 //var randomIndex = GetRandomIndex(common.WordsNotRemember.Count);
