@@ -45,7 +45,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $(".BtnYES,.BtnNO").addClass("hide");
+        if (navigator.userAgent.match(/mobile/i)) {
+            $(".BtnYES,.BtnNO").addClass("hide");
+        }
         $("body").css("text-align:center", "center");
         refreshWord();//为了首次页面加载能显示单词信息
         $("body").scrollTop(mid);
