@@ -6,6 +6,7 @@ using LjcWebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using LjcWebApp.Services.DataCRUD;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Sakura.AspNetCore;
 
@@ -263,6 +264,28 @@ namespace LjcWebApp.Controllers
         public int UpdateRemark(string eventId, string remark)
         {
             return _timeStatisticService.UpdateRemark(eventId, remark);
+        }
+
+        public IActionResult QuickAdd(EventModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult QuickAdd([FromServices]IHostingEnvironment env, EventModel eventModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = SaveEvent(null, eventModel.EventName, null, null, "New", null);
+                var eventId = result.Split('|')[0];
+                var success = UpdateOrderAfterInsert("heqadLineId", eventId);
+                if (success == "true")
+                {
+                    return RedirectToAction(nameof(QuickAdd), new EventModel());
+                }
+                return RedirectToAction(nameof(QuickAdd), new EventModel() { EventName = success });
+            }
+            return View();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace LjcWebApp.Models.ViewModels
@@ -8,6 +9,9 @@ namespace LjcWebApp.Models.ViewModels
     {
         public string EventId { get; set; }
         public string Date { get; set; }
+        [Required]
+        [StringLength(255, ErrorMessage = "请输入1-255个字符内！", MinimumLength = 1)]
+        [Display(Name = "事件名")]
         public string EventName { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
