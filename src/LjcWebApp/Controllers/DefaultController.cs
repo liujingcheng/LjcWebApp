@@ -28,7 +28,6 @@ namespace LjcWebApp.Controllers
         public ActionResult Index()
         {
             LoadAllReviewWords();
-            //LoadNeedLearnWordsAsync();//暂时先注释该功能，放在Controller里不合适
             return View();
         }
 
