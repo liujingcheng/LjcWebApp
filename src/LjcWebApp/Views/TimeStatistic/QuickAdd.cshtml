@@ -4,10 +4,11 @@
 @model LjcWebApp.Models.ViewModels.EventModel
 <form asp-controller="TimeStatistic" role="form" asp-action="QuickAdd" enctype="multipart/form-data" method="post">
     <div>
-        <label asp-for="EventName"></label>
-        <textarea asp-for="EventName" style="width: 560px;margin: 0 auto;"></textarea>
+        <textarea asp-for="EventName" style="width: 340px; height: 400px;margin: 0 auto;"></textarea>
         <span asp-validation-for="EventName" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-default">确定</button>
+    <div style="margin: 20px auto;">
+        <a asp-controller="TimeStatistic" asp-action="Control" target="_blank">control</a>
+    </div>
 </form>
-
