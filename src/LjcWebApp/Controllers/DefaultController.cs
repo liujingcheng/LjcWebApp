@@ -903,5 +903,10 @@ namespace LjcWebApp.Controllers
             return RedirectToAction(nameof(Upload), uploadModel);
         }
 
+        public IActionResult EditCurrentWord()
+        {
+            return RedirectToAction("Edit", "Word", new { id = common.CurrentNode.Value.WordId });
+        }
+
     }
 }

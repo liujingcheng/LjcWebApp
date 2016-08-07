@@ -79,25 +79,16 @@ namespace LjcWebApp.Controllers
         // POST: /Word/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(word_tb word)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                if (_service.UpdateWord(word))
                 {
-                    var word = new word_tb();
-                    TryUpdateModelAsync(word);
-                    if (_service.UpdateWord(word))
-                    {
-                        return RedirectToAction("Index", new { likeStr = word.Spelling });
-                    }
+                    return RedirectToAction("Index", "Default");
                 }
-                return View();
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         //

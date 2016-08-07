@@ -2,67 +2,58 @@
 
 @{
     ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Edit</h2>
-
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
+<form asp-controller="Word" asp-action="Edit" method="post" class="form-horizontal">
     <fieldset>
         <legend>word_tb</legend>
         <div class="editor-label" style="display: none">
-            @Html.LabelFor(model => model.WordId)
+            <label asp-for="WordId"></label>
         </div>
         <div class="editor-field" style="display: none">
-            @Html.EditorFor(model => model.WordId)
-            @Html.ValidationMessageFor(model => model.WordId)
+            <input type="text" asp-for="WordId" />
+            <span asp-validation-for="WordId" class="text-danger"></span>
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Spelling)
+            <label asp-for="Spelling"></label>
         </div>
         <div class="editor-field">
-            @Html.TextAreaFor(model => model.Spelling)
-            @Html.ValidationMessageFor(model => model.Spelling)
+            <textarea asp-for="Spelling" style="width: 340px;margin: 0 auto;"></textarea>
+            <span asp-validation-for="Spelling" class="text-danger"></span>
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Phonetic)
+            <label asp-for="Phonetic"></label>
         </div>
         <div class="editor-field">
-            @Html.TextAreaFor(model => model.Phonetic)
-            @Html.ValidationMessageFor(model => model.Phonetic)
+            <textarea asp-for="Phonetic" style="width: 340px;margin: 0 auto;"></textarea>
+            <span asp-validation-for="Phonetic" class="text-danger"></span>
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Paraphrase)
+            <label asp-for="Paraphrase"></label>
         </div>
         <div class="editor-field">
-            @Html.TextAreaFor(model => model.Paraphrase)
-            @Html.ValidationMessageFor(model => model.Paraphrase)
+            <textarea asp-for="Paraphrase" style="width: 340px;margin: 0 auto;"></textarea>
+            <span asp-validation-for="Paraphrase" class="text-danger"></span>
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Classs)
+            <label asp-for="Classs"></label>
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Classs)
-            @Html.ValidationMessageFor(model => model.Classs)
+            <input type="text" asp-for="Classs" />
+            <span asp-validation-for="Classs" class="text-danger"></span>
         </div>
 
         <p>
-            <input type="submit" value="Save" />
+            <input type="submit" class="btn btn-default" value="Save" />
         </p>
     </fieldset>
-}
+</form>
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <a asp-controller="Default" asp-action="Index">Back</a>
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
