@@ -1,14 +1,31 @@
-﻿@{
+﻿@model LjcWebApp.Models.ViewModels.EventModel
+@{
     ViewData["Title"] = "Quick Add";
 }
-@model LjcWebApp.Models.ViewModels.EventModel
-<form asp-controller="TimeStatistic" role="form" asp-action="QuickAdd" enctype="multipart/form-data" method="post">
-    <div>
-        <textarea asp-for="EventName" style="width: 340px; height: 400px;margin: 0 auto;"></textarea>
-        <span asp-validation-for="EventName" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-default">确定</button>
-    <div style="margin: 20px auto;">
-        <a asp-controller="TimeStatistic" asp-action="Control" target="_blank">control</a>
-    </div>
-</form>
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <form asp-controller="TimeStatistic" role="form" asp-action="QuickAdd" enctype="multipart/form-data" method="post">
+        <div class="editor-field">
+            <div style="display: inline-block">
+                <textarea asp-for="EventName" style="width: 240px; height: 400px;margin: 0 auto;"></textarea>
+                @*<span asp-validation-for="EventName" class="text-danger"></span>*@
+            </div>
+            <div style="display: inline-block; vertical-align: top">
+                <div>
+                    <button type="submit" style="width: 60px; height: 30px" class="btn btn-default">确定</button>
+                </div>
+                <div style="margin-top: 20px">
+                    <a asp-controller="TimeStatistic" asp-action="Control" target="_blank">control</a>
+                </div>
+            </div>
+    </form>
+</body>
+</html>
