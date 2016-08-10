@@ -1,105 +1,123 @@
 ﻿@using System
 @using System.Collections.Generic
 @using LjcWebApp;
-@using LjcWebApp.Models.ViewModels
 @using Sakura.AspNetCore;
+@using LjcWebApp.Models.ViewModels
 @{
     ViewBag.Title = "Index";
 }
-<h2>Index</h2>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
+    @*<link rel="stylesheet" href="~/css/site.css" />*@
+    @*<link rel="stylesheet" href="~/css/bundle.css" />*@
+    <link href="~/lib/pikaday/css/bundle.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>Index</h2>
+    <input id="txtStartDate" class="datepicker" value="@ViewBag.StartDateStr" />--<input id="txtEndDate" class="datepicker" value="@ViewBag.EndDateStr" />
+    <input id="btnSearch" type="button" value="go" />
+    <div id="unobtrusive-historylist">
+        <table>
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th>
+                    EventName
+                </th>
+                <th>
+                    StartTime
+                </th>
+                <th>
+                    EndTime
+                </th>
+                <th>
+                    EffectiveTime
+                </th>
+                <th>
+                    PlanTime
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Remark
+                </th>
+            </tr>
 
-<input id="txtStartDate" class="datepicker" value="@ViewBag.StartDateStr"/>--<input id="txtEndDate" class="datepicker" value="@ViewBag.EndDateStr"/>
-<input id="btnSearch" type="button" value="go" />
-<div id="unobtrusive-historylist">
-    <table>
-        <tr>
-            <th>
-                Date
-            </th>
-            <th>
-                EventName
-            </th>
-            <th>
-                StartTime
-            </th>
-            <th>
-                EndTime
-            </th>
-            <th>
-                EffectiveTime
-            </th>
-            <th>
-                PlanTime
-            </th>
-            <th>
-                Status
-            </th>
-            <th>
-                Remark
-            </th>
-        </tr>
-
-        @foreach (var ondayDataModel in ViewBag.OnePageOfHistoryList)
-        {
-            var copyText = "";
-            if (ondayDataModel.EventModelList.Count > 0)
+            @foreach (var ondayDataModel in ViewBag.OnePageOfHistoryList)
             {
-                var list = (List<EventModel>)ondayDataModel.EventModelList;
-                copyText = String.Join("；", list.Select(p => p.EventName));
-            }
-            foreach (var item in ondayDataModel.EventModelList)
-            {
+                var copyText = "";
+                if (ondayDataModel.EventModelList.Count > 0)
+                {
+                    var list = (List<EventModel>)ondayDataModel.EventModelList;
+                    copyText = String.Join("；", list.Select(p => p.EventName));
+                }
+                foreach (var item in ondayDataModel.EventModelList)
+                {
+                    <tr>
+                        <td>
+                            @item.Date
+                        </td>
+                        <td style="width:700px">
+                            @item.EventName
+                        </td>
+                        <td>
+                            @item.StartTime
+                        </td>
+                        <td>
+                            @item.EndTime
+                        </td>
+                        <td>
+                            @item.EffectiveTime
+                        </td>
+                        <td>
+                            @item.PlanTime
+                        </td>
+                        <td>
+                            @item.Status
+                        </td>
+                        <td>
+                            @item.Remark
+                        </td>
+                    </tr>
+                }
                 <tr>
                     <td>
-                        @item.Date
-                    </td>
-                    <td style="width:700px">
-                        @item.EventName
+                        @ondayDataModel.Date
                     </td>
                     <td>
-                        @item.StartTime
+                        <div class="clip_button" data-clipboard-text="@copyText" title="Click to copy">复制</div>
                     </td>
+                    <td></td>
+                    <td></td>
                     <td>
-                        @item.EndTime
+                        @ondayDataModel.TotalEffectiveTime
                     </td>
-                    <td>
-                        @item.EffectiveTime
-                    </td>
-                    <td>
-                        @item.PlanTime
-                    </td>
-                    <td>
-                        @item.Status
-                    </td>
-                    <td>
-                        @item.Remark
-                    </td>
+                    <td></td>
+                    <td></td>
                 </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
             }
-            <tr>
-                <td>
-                    @ondayDataModel.Date
-                </td>
-                <td>
-                    <div class="clip_button" data-clipboard-text="@copyText" title="Click to copy">复制</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td>
-                    @ondayDataModel.TotalEffectiveTime
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-        }
-        <pager source="(IPagedList)ViewBag.OnePageOfHistoryList" />
-    </table>
-</div>
-<div id="onComplete"></div>
+            <pager source="(IPagedList)ViewBag.OnePageOfHistoryList" />
+        </table>
+    </div>
+    <div id="onComplete"></div>
+</body>
+</html>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/js/site.js"></script>
+<script src="~/js/bundle.js"></script>*@
+<script src="~/lib/zeroclipboard/dist/ZeroClipboard.Core.js"></script>
+<script src="~/lib/zeroclipboard/dist/ZeroClipboard.min.js"></script>
+<script src="~/js/zeroclip.js"></script>
 <script src="~/lib/pikaday/pikaday.js"></script>
 <script>
     $(function () {
