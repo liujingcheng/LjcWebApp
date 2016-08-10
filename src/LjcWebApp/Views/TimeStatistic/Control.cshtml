@@ -3,128 +3,142 @@
 @{
     ViewBag.Title = "Control";
 }
-<h2>Control</h2>
-<div>
-    <a asp-controller="TimeStatistic" asp-action="Control" target="_blank">control</a>
-    <a asp-controller="TimeStatistic" asp-action="Index" target="_blank">index</a>
-    <a asp-controller="TimeStatistic" asp-action="FourQuadrant" target="_blank">quadrant</a>
-    <a asp-controller="Default" asp-action="Index" target="_blank">words</a>
-    <a asp-controller="TimeStatistic" asp-action="QuickAdd" target="_blank">add</a>
-</div>
-<table>
-    <tr id="headLine">
-        <th></th>
-        <th>
-            EventName
-        </th>
-        <th>
-            Start/Pause
-        </th>
-        <th>
-            Stop
-        </th>
-        <th>
-            TotalTime
-        </th>
-        <th></th>
-        <th>
-            PlanMinutes
-        </th>
-        <th></th>
-        <th>Status</th>
-        <th></th>
-        <th>LastEndTime</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <td>
-            <input type="button" class="btnInsertAfter" value="Insert" />
-        </td>
-        <th></th>
-    </tr>
-    @foreach (var item in ViewBag.EventList)
-    {
-        //控制正在进行中的事件在另一个页面打开时也还在进行，并且总时间不差
-        if (item.Status == "Started")
-        {
-            item.EffectiveTime += Convert.ToInt32((DateTime.Now - item.ModifiedOn).TotalSeconds);
-        }
-        <tr>
-            <td></td>
-            <td>
-                <input type="text" class="txtEventName controlTxtEventName" value="@item.EventName" title="@item.EventName" />
-            </td>
-            <td>
-                <input type="button" class="btnStart" value="Start" />
-            </td>
-            <td>
-                <input type="button" class="btnStop" disabled="disabled" value="Stop" />
-            </td>
-            <td>
-                <label class="lblTotalTime">@(EventModel.TransferToDateTime(item.EffectiveTime))</label>
-            </td>
-            <td>
-                <input type="hidden" class="hddTotalTime" value="@(item.EffectiveTime ?? 0)" />
-            </td>
-            <td>
-                <input type="text" class="txtPlanMinutes onlyInt" maxlength="8" value="@(item.PlanTime != null ? item.PlanTime / 60 : "")" />
-            </td>
-            <td>
-                <input type="hidden" class="hddEventId" value="@item.EventId" />
-            </td>
-            <td>
-                <label class="lblStatus">@item.Status</label>
-            </td>
-            <td>
-                <input type="hidden" class="hddlastticks" value="@item.ModifiedOn.Ticks" />
-            </td>
-            <td>
-                <label class="lblEndTime">@(item.EndTime != null ? item.EndTime.Day + ":" + item.EndTime.Hour + ":" + item.EndTime.Minute + ":" + item.EndTime.Second : "")</label>
-            </td>
-            <td>
-                <input type="button" class="btnUp" value="Up" />
-            </td>
-            <td>
-                <input type="button" class="btnDown" value="Down" />
-            </td>
-            <td>
-                <input type="button" class="btnDelete" value="Delete" />
-            </td>
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/TimeStatistic.css" />
+</head>
+<body>
+    <h2>Control</h2>
+    <div>
+        <a asp-controller="TimeStatistic" asp-action="Control" target="_blank">control</a>
+        <a asp-controller="TimeStatistic" asp-action="Index" target="_blank">index</a>
+        <a asp-controller="TimeStatistic" asp-action="FourQuadrant" target="_blank">quadrant</a>
+        <a asp-controller="Default" asp-action="Index" target="_blank">words</a>
+        <a asp-controller="TimeStatistic" asp-action="QuickAdd" target="_blank">add</a>
+    </div>
+    <table>
+        <tr id="headLine">
+            <th></th>
+            <th>
+                EventName
+            </th>
+            <th>
+                Start/Pause
+            </th>
+            <th>
+                Stop
+            </th>
+            <th>
+                TotalTime
+            </th>
+            <th></th>
+            <th>
+                PlanMinutes
+            </th>
+            <th></th>
+            <th>Status</th>
+            <th></th>
+            <th>LastEndTime</th>
+            <th></th>
+            <th></th>
+            <th></th>
             <td>
                 <input type="button" class="btnInsertAfter" value="Insert" />
             </td>
+            <th></th>
+        </tr>
+        @foreach (var item in ViewBag.EventList)
+        {
+            //控制正在进行中的事件在另一个页面打开时也还在进行，并且总时间不差
+            if (item.Status == "Started")
+            {
+                item.EffectiveTime += Convert.ToInt32((DateTime.Now - item.ModifiedOn).TotalSeconds);
+            }
+            <tr>
+                <td></td>
+                <td>
+                    <input type="text" class="txtEventName controlTxtEventName" value="@item.EventName" title="@item.EventName" />
+                </td>
+                <td>
+                    <input type="button" class="btnStart" value="Start" />
+                </td>
+                <td>
+                    <input type="button" class="btnStop" disabled="disabled" value="Stop" />
+                </td>
+                <td>
+                    <label class="lblTotalTime">@(EventModel.TransferToDateTime(item.EffectiveTime))</label>
+                </td>
+                <td>
+                    <input type="hidden" class="hddTotalTime" value="@(item.EffectiveTime ?? 0)" />
+                </td>
+                <td>
+                    <input type="text" class="txtPlanMinutes onlyInt" maxlength="8" value="@(item.PlanTime != null ? item.PlanTime / 60 : "")" />
+                </td>
+                <td>
+                    <input type="hidden" class="hddEventId" value="@item.EventId" />
+                </td>
+                <td>
+                    <label class="lblStatus">@item.Status</label>
+                </td>
+                <td>
+                    <input type="hidden" class="hddlastticks" value="@item.ModifiedOn.Ticks" />
+                </td>
+                <td>
+                    <label class="lblEndTime">@(item.EndTime != null ? item.EndTime.Day + ":" + item.EndTime.Hour + ":" + item.EndTime.Minute + ":" + item.EndTime.Second : "")</label>
+                </td>
+                <td>
+                    <input type="button" class="btnUp" value="Up" />
+                </td>
+                <td>
+                    <input type="button" class="btnDown" value="Down" />
+                </td>
+                <td>
+                    <input type="button" class="btnDelete" value="Delete" />
+                </td>
+                <td>
+                    <input type="button" class="btnInsertAfter" value="Insert" />
+                </td>
+                <td>
+                    <input type="button" class="btnToQuadrant" value="Back" />
+                </td>
+                <td>
+                    <input type="hidden" class="hddRemark" value="@item.Remark" />
+                </td>
+                <td>
+                    <input type="button" class="btnRemark" value="注" />
+                </td>
+            </tr>
+        }
+        <tr>
             <td>
-                <input type="button" class="btnToQuadrant" value="Back" />
+                <input type="button" id="btnNew" value="New" />
             </td>
             <td>
-                <input type="hidden" class="hddRemark" value="@item.Remark" />
-            </td>
-            <td>
-                <input type="button" class="btnRemark" value="注" />
+                <input type="text" id="txtNewEventName" />
             </td>
         </tr>
-    }
-    <tr>
-        <td>
-            <input type="button" id="btnNew" value="New" />
-        </td>
-        <td>
-            <input type="text" id="txtNewEventName" />
-        </td>
-    </tr>
-    <tr id="remarkLine" class="hide">
-        <td></td>
-        <td>
-            <input type="text" id="txtRemark" />
-        </td>
-        <td>
-            <input type="button" id="btnSaveRemark" value="Save" />
-        </td>
-    </tr>
-</table>
-<div id="divAlarm" class="hide">
-</div>
-
+        <tr id="remarkLine" class="hide">
+            <td></td>
+            <td>
+                <input type="text" id="txtRemark" />
+            </td>
+            <td>
+                <input type="button" id="btnSaveRemark" value="Save" />
+            </td>
+        </tr>
+    </table>
+    <div id="divAlarm" class="hide">
+    </div>
+</body>
+</html>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/common.js"></script>
 <script type="text/javascript">
     $(function () {
 
@@ -477,7 +491,7 @@
             async: false,
             type: 'Post',
             data: { beforNewLingeEventId: beforNewLingeEventId, insertedEventId: insertedEventId },
-            
+
             success: function (data, status, xhr) {
                 if (data != "true") {
                     alert(data);
@@ -530,7 +544,7 @@
                     async: false,
                     type: 'Post',
                     data: { eventId: $(hddEventId).val() },
-                    
+
                     success: function (data, status, xhr) {
                         ajaxResult = data;
                     },
@@ -567,7 +581,7 @@
             async: false,
             type: 'Post',
             data: { eventId1: eventId1, eventId2: eventId2 },
-            
+
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },
@@ -590,7 +604,7 @@
             async: false,
             type: 'Post',
             data: { eventId: $(hddEventId).val(), inQuadrant: 1 },
-            
+
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },
@@ -639,7 +653,7 @@
             async: false,
             type: 'Post',
             data: { eventId: $(hddEventId).val(), remark: remark },
-            
+
             success: function (data, status, xhr) {
                 ajaxResult = data;
             },
