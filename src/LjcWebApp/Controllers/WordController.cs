@@ -85,7 +85,7 @@ namespace LjcWebApp.Controllers
             {
                 if (_service.UpdateWord(word))
                 {
-                    return RedirectToAction("Index", "Default");
+                    return RedirectToAction("Index", "Word");
                 }
             }
             return View();
