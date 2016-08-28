@@ -123,6 +123,10 @@
         }, 100);
 
         $("#areaSpelling").change(function () {
+            var paraphrase = $("#areaParaphrase").val();
+            if (paraphrase != "") {
+                return;
+            }
             var spelling = $("#areaSpelling").val();
             if (spelling == null || spelling == "" || spelling.length < 2) {
                 return;
