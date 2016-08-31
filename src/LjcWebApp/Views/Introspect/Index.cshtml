@@ -1,10 +1,7 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Index";
 }
-@section head{
-    @Styles.Render("~/Content/Introspect.css")
-}
+<link rel="stylesheet" href="~/css/site.css" />
 <div class="maininfo">
     <div>
         <label id="lblSingleInfo"></label>
@@ -39,11 +36,8 @@
     <input type="button" class="BtnMiddle" value="前一个待答" onclick="getPreviousUnhandledQuestion()" />
     <input type="button" class="BtnRight" score="0" value="0" onclick="saveIntorspect(this)" />
 </div>
-
-
-@Scripts.Render("~/Scripts/jquery.json.js")
+<script src="~/js/jquery.json.min.js"></script>
 <script type="text/javascript">
-    $.ajaxSetup({ contentType: 'application/json' });
     var currentQuestion = null;
 
     $(document).ready(function () {
@@ -57,7 +51,7 @@
             $("#lblLastScore").text("上一个得分：" + score);
         }
 
-        $.post("/Introspect/SaveIntorspect", $.toJSON({ question: currentQuestion, score: score }), function (data) {
+        $.post("/Introspect/SaveIntorspect", { question: currentQuestion, score: score }, function (data) {
             if (data == "false") {
                 alert("操作失败");
                 return;
@@ -66,8 +60,36 @@
         });
     }
 
+
+    //function getNextQuestion(score) {
+    //    $.ajax({
+    //        url: '/Introspect/GetNextQuestion',
+    //        cache: false,
+    //        type: 'Post',
+    //        async: false,
+    //        data: {currentQuestionStr:$.toJSON(currentQuestion)} ,
+    //        contentType: 'application/json;charset=utf-8',
+    //        success: function (data, status, xhr) {
+    //            if (data == "end") {
+    //                if (score != null && currentQuestion != null && currentQuestion.Score == null) {
+    //                    //如果已经选了分数的，要将分数显示出来
+    //                    currentQuestion.Score = score;
+    //                    refresh();
+    //                }
+    //                alert("亲，已经是最后一个了~");
+    //                return;
+    //            }
+    //            currentQuestion = $.evalJSON(data);
+    //            refresh();
+    //        },
+    //        error: function (data, status, e) {
+    //            alert("ajax error");
+    //        }
+    //    });
+    //}
+
     function getNextQuestion(score) {
-        $.post("/Introspect/GetNextQuestion", $.toJSON(currentQuestion), function (data) {
+        $.post("/Introspect/GetNextQuestion", currentQuestion, function (data) {
             if (data == "end") {
                 if (score != null && currentQuestion != null && currentQuestion.Score == null) {
                     //如果已经选了分数的，要将分数显示出来
@@ -83,7 +105,7 @@
     }
 
     function getPreviousQuestion() {
-        $.post("/Introspect/GetPreviousQuestion", $.toJSON(currentQuestion), function (data) {
+        $.post("/Introspect/GetPreviousQuestion", currentQuestion, function (data) {
             if (data == "end") {
                 alert("亲，没有上一个了~");
                 return;
@@ -110,7 +132,7 @@
     }
 
     function getPreviousUnhandledQuestion() {
-        $.post("/Introspect/GetPreviousUnhandledQuestion", $.toJSON(currentQuestion), function (data) {
+        $.post("/Introspect/GetPreviousUnhandledQuestion", currentQuestion, function (data) {
             if (data == "end") {
                 alert("亲，没有你想要的结果哦~");
                 return;
