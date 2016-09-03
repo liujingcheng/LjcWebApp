@@ -19,7 +19,7 @@ namespace LjcWebApp.Services.Account
             {
                 using (var context = new LjcDbContext())
                 {
-                    words = context.myuser.OrderBy(p => p.CreatedOn).ToList();
+                    words = context.myuser.Where(p => p.IsDeleted != 1).ToList();
                 }
             }
             catch (Exception ex)
@@ -41,7 +41,7 @@ namespace LjcWebApp.Services.Account
             {
                 using (var context = new LjcDbContext())
                 {
-                    words = context.myuser.Where(p => p.UserName.Contains(likeStr)).ToList();
+                    words = context.myuser.Where(p => p.UserName.Contains(likeStr) && p.IsDeleted != 1).ToList();
                 }
             }
             catch (Exception ex)
@@ -134,7 +134,7 @@ namespace LjcWebApp.Services.Account
             {
                 using (var context = new LjcDbContext())
                 {
-                    entity = context.myuser.FirstOrDefault(p => p.UserName == userName);
+                    entity = context.myuser.FirstOrDefault(p => p.UserName == userName && p.IsDeleted != 1);
                 }
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace LjcWebApp.Services.Account
         {
             using (var context = new LjcDbContext())
             {
-                return context.myuser.Any(p => p.UserName == userName && p.Password == password);
+                return context.myuser.Any(p => p.UserName == userName && p.Password == password && p.IsDeleted != 1);
             }
         }
 
@@ -167,7 +167,7 @@ namespace LjcWebApp.Services.Account
         {
             using (var context = new LjcDbContext())
             {
-                return context.myuser.Any(p => p.UserName == userName);
+                return context.myuser.Any(p => p.UserName == userName && p.IsDeleted != 1);
             }
         }
 

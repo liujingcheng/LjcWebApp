@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using LjcWebApp.Helper;
 using LjcWebApp.Models.entity;
 using LjcWebApp.Models.ViewModels;
 using LjcWebApp.Services.Account;
@@ -36,18 +37,20 @@ namespace LjcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                if (_service.IsPasswordCorrect(model.UserName.Trim(), model.Password.Trim()))
+                var userNameStr = model.UserName.Trim();
+                var passwordStr = model.Password.Trim();
+                if (_service.IsPasswordCorrect(userNameStr, model.Password))
                 {
-                    var userNameStr = model.UserName;
-                    var passwordStr = model.Password;
+                    var currentUser = _service.GetByUserName(userNameStr);
                     var claims = new List<Claim>()
                     {
                         new Claim( ClaimTypes.Name, userNameStr),
-                        new Claim( ClaimTypes.UserData, userNameStr + passwordStr)
+                        new Claim( ClaimTypes.UserData, currentUser.UserId)
                     };
                     var identity = new ClaimsIdentity(claims, "MyClaimsLogin");
                     var principal = new ClaimsPrincipal(identity);
                     HttpContext.Authentication.SignInAsync("MyCookieMiddlewareInstance", principal);
+                    BaseService.CurrentUser = currentUser;
                     return RedirectToLocal(returnUrl);
                 }
                 ModelState.AddModelError("Password", "用户名或密码错误");
