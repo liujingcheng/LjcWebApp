@@ -20,6 +20,13 @@ namespace LjcWebApp.Controllers
     [Authorize]
     public class DefaultController : Controller
     {
+        public DefaultController()
+        {
+            if (BaseService.CurrentUser.UserName != "ljcwyc")
+            {
+                throw new Exception();
+            }
+        }
         public const int MAX_PROCESS = 20;
         WordLoadImpl _wordLoadImpl = new WordLoadImpl();
         WordStorageImpl _wordStorageImpl = new WordStorageImpl();

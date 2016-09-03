@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using LjcWebApp.Helper;
 using Microsoft.AspNetCore.Mvc;
 using LjcWebApp.Services.Word;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +11,13 @@ namespace LjcWebApp.Controllers
     [Authorize]
     public class WordController : Controller
     {
+        public WordController()
+        {
+            if (BaseService.CurrentUser.UserName != "ljcwyc")
+            {
+                throw new Exception();
+            }
+        }
         //
         // GET: /Word/
         WordService _service = new WordService();

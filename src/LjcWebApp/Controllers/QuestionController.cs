@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LjcWebApp.Helper;
 using Microsoft.AspNetCore.Mvc;
 using  LjcWebApp.Services.Introspection;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,13 @@ namespace LjcWebApp.Controllers
     [Authorize]
     public class QuestionController : Controller
     {
+        public QuestionController()
+        {
+            if (BaseService.CurrentUser.UserName != "ljcwyc")
+            {
+                throw new Exception();
+            }
+        }
         //
         // GET: /question/
         QuestionService _service = new QuestionService();

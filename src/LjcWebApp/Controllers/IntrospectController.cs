@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using LjcWebApp.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using  LjcWebApp.Services.ConfigStatic;
@@ -11,6 +12,13 @@ namespace LjcWebApp.Controllers
     [Authorize]
     public class IntrospectController : Controller
     {
+        public IntrospectController()
+        {
+            if (BaseService.CurrentUser.UserName != "ljcwyc")
+            {
+                throw new Exception();
+            }
+        }
         //
         // GET: /introspect/
         QuestionService _questionService = new QuestionService();
