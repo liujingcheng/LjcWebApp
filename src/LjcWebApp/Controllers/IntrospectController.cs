@@ -12,13 +12,6 @@ namespace LjcWebApp.Controllers
     [Authorize]
     public class IntrospectController : Controller
     {
-        public IntrospectController()
-        {
-            if (BaseService.CurrentUser.UserName != "ljcwyc")
-            {
-                throw new Exception();
-            }
-        }
         //
         // GET: /introspect/
         QuestionService _questionService = new QuestionService();

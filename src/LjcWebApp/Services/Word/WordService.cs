@@ -6,7 +6,7 @@ using LjcWebApp.Helper;
 
 namespace LjcWebApp.Services.Word
 {
-    public class WordService
+    public class WordService : BaseService
     {
         /// <summary>
         /// 模糊查找（拼写或解释）
@@ -42,7 +42,7 @@ namespace LjcWebApp.Services.Word
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.word_tb.First(p=>p.WordId==word.WordId);
+                    var entity = context.word_tb.First(p => p.WordId == word.WordId);
                     entity.Spelling = word.Spelling;
                     entity.Paraphrase = word.Paraphrase;
                     entity.Phonetic = word.Phonetic;

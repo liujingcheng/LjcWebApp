@@ -9,6 +9,6 @@ namespace LjcWebApp.Helper
 {
     public class BaseService
     {
-        public static MyUser CurrentUser { get; set; }
+        public MyUser CurrentUser { get; set; }
     }
 }

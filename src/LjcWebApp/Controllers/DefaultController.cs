@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LjcWebApp.Helper;
 using LjcWebApp.Models.ViewModels;
+using LjcWebApp.Services.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using LjcWebApp.Services.DataCRUD;
@@ -20,17 +21,64 @@ namespace LjcWebApp.Controllers
     [Authorize]
     public class DefaultController : Controller
     {
-        public DefaultController()
+        public const int MAX_PROCESS = 20;
+        WordLoadImpl _wordLoadImpl;
+        public WordLoadImpl WordLoadImpl
         {
-            if (BaseService.CurrentUser.UserName != "ljcwyc")
+            get
             {
-                throw new Exception();
+                if (HttpContext.User.Identity.Name != "ljcwyc")
+                {
+                    throw new Exception();
+                }
+                if (_wordLoadImpl == null)
+                {
+                    return new WordLoadImpl()
+                    {
+                        CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
+                    };
+                }
+                return _wordLoadImpl;
             }
         }
-        public const int MAX_PROCESS = 20;
-        WordLoadImpl _wordLoadImpl = new WordLoadImpl();
-        WordStorageImpl _wordStorageImpl = new WordStorageImpl();
-        WordCRUDImpl _wordCRUDImpl = new WordCRUDImpl();
+        WordStorageImpl _wordStorageImpl;
+        public WordStorageImpl WordStorageImpl
+        {
+            get
+            {
+                if (HttpContext.User.Identity.Name != "ljcwyc")
+                {
+                    throw new Exception();
+                }
+                if (_wordStorageImpl == null)
+                {
+                    return new WordStorageImpl()
+                    {
+                        CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
+                    };
+                }
+                return _wordStorageImpl;
+            }
+        }
+        WordCRUDImpl _wordCRUDImpl;
+        public WordCRUDImpl WordCRUDImpl
+        {
+            get
+            {
+                if (HttpContext.User.Identity.Name != "ljcwyc")
+                {
+                    throw new Exception();
+                }
+                if (_wordCRUDImpl == null)
+                {
+                    return new WordCRUDImpl()
+                    {
+                        CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
+                    };
+                }
+                return _wordCRUDImpl;
+            }
+        }
 
         public ActionResult Index()
         {
@@ -63,7 +111,7 @@ namespace LjcWebApp.Controllers
                     listWordTb = new WordsXmlParse(fileUrl).DoParse(priority);
                 }
 
-                importResult = _wordStorageImpl.AddWordsList(listWordTb);
+                importResult = WordStorageImpl.AddWordsList(listWordTb);
                 EnableBtn();
 
                 LoadAllReviewWords();//每次导入生词后要重新加载所有要复习的单词
@@ -87,7 +135,7 @@ namespace LjcWebApp.Controllers
         /// <returns></returns>
         private List<word_tb> GetWordsToLearn()
         {
-            var allWordsToReview = _wordLoadImpl.TrLoadAllLearnWords(DateTime.Now);
+            var allWordsToReview = WordLoadImpl.TrLoadAllLearnWords(DateTime.Now);
 
             //计算每个单词的过期时间
             allWordsToReview.ForEach(p =>
@@ -540,7 +588,7 @@ namespace LjcWebApp.Controllers
 
                     wordTb.LastForget = null;//清空状态（上面会根据LastForget来决定该隐藏Spelling还是Paraphrase
 
-                    _wordStorageImpl.UpdateWordsList(new List<word_tb>() { wordTb });
+                    WordStorageImpl.UpdateWordsList(new List<word_tb>() { wordTb });
                     wordTb.ModifiedOn = lastTime == null ? DateTime.MinValue : (DateTime)lastTime;//这一句是为了下面点击No按钮时发现该单词之前被点了Yes然后回滚用的
                 }
 
@@ -606,7 +654,7 @@ namespace LjcWebApp.Controllers
                     {
                         common.CurrentNode.Value.LastForget = 1;
                     }
-                    _wordStorageImpl.UpdateWordsList(new List<word_tb>() { common.CurrentNode.Value });//这里是为了将LastForget存入数据库
+                    WordStorageImpl.UpdateWordsList(new List<word_tb>() { common.CurrentNode.Value });//这里是为了将LastForget存入数据库
 
                     common.IsFirstNo = true;
                     common.lblSpellingText = common.CurrentNode.Value.Spelling;
@@ -658,7 +706,7 @@ namespace LjcWebApp.Controllers
 
                 common.CurrentNode.Value.ModifiedOn = nowTime;
 
-                _wordStorageImpl.UpdateWordsList(new List<word_tb>() { common.CurrentNode.Value });
+                WordStorageImpl.UpdateWordsList(new List<word_tb>() { common.CurrentNode.Value });
 
                 //common.CurrentNode.Value.FirstLearn = DateTime.Now;
                 if (common.CurrentNode.Value.FirstLearn == null) common.CurrentNode.Value.FirstLearn = nowTime;//为了使记过一次的单词不再把单词、发音和词义都显示出来
@@ -841,7 +889,7 @@ namespace LjcWebApp.Controllers
             //默认进度为0
             wordTb.Process = 0;
 
-            return _wordStorageImpl.AddWord(wordTb);
+            return WordStorageImpl.AddWord(wordTb);
         }
 
         public ActionResult WordsIndex(int? page)

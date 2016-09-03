@@ -13,13 +13,6 @@ namespace LjcWebApp.Controllers
     [Authorize]
     public class QuestionController : Controller
     {
-        public QuestionController()
-        {
-            if (BaseService.CurrentUser.UserName != "ljcwyc")
-            {
-                throw new Exception();
-            }
-        }
         //
         // GET: /question/
         QuestionService _service = new QuestionService();

@@ -7,7 +7,7 @@ using LjcWebApp.Helper;
 
 namespace LjcWebApp.Services.DataStorage
 {
-    public class WordStorageImpl
+    public class WordStorageImpl : BaseService
     {
 
         /// <summary>

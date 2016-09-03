@@ -39,7 +39,7 @@ namespace LjcWebApp.Controllers
             {
                 var userNameStr = model.UserName.Trim();
                 var passwordStr = model.Password.Trim();
-                if (_service.IsPasswordCorrect(userNameStr, model.Password))
+                if (_service.IsPasswordCorrect(userNameStr, passwordStr))
                 {
                     var currentUser = _service.GetByUserName(userNameStr);
                     var claims = new List<Claim>()
@@ -50,7 +50,6 @@ namespace LjcWebApp.Controllers
                     var identity = new ClaimsIdentity(claims, "MyClaimsLogin");
                     var principal = new ClaimsPrincipal(identity);
                     HttpContext.Authentication.SignInAsync("MyCookieMiddlewareInstance", principal);
-                    BaseService.CurrentUser = currentUser;
                     return RedirectToLocal(returnUrl);
                 }
                 ModelState.AddModelError("Password", "用户名或密码错误");
