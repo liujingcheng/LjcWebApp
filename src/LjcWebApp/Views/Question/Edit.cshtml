@@ -6,9 +6,7 @@
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
+<form role="form" asp-controller="Question" asp-action="Edit" enctype="multipart/form-data" method="post" asp-route-id="@Model.Id">
 
     <fieldset>
         <legend>Question</legend>
@@ -105,12 +103,10 @@
             <input type="submit" value="Save" />
         </p>
     </fieldset>
-}
+    }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+</form>

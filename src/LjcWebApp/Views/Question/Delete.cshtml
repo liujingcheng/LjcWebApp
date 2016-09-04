@@ -3,10 +3,10 @@
 @{
     ViewBag.Title = "Delete";
 }
-
 <h2>Delete</h2>
 
 <h3>Are you sure you want to delete this?</h3>
+<form role="form" asp-controller="Question" asp-action="Delete" enctype="multipart/form-data" method="post"  asp-route-id="@Model.Id">
 <fieldset>
     <legend>Question</legend>
 
@@ -80,10 +80,8 @@
         @Html.DisplayFor(model => model.ModifiedOn)
     </div>
 </fieldset>
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
     <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
+        <input type="submit" value="Delete"/> |
+        <a asp-action="Index">Back to List</a>
     </p>
-}
+</form>

@@ -178,11 +178,9 @@ namespace LjcWebApp.Controllers
         {
             try
             {
-                var word = new word_tb();
-
                 if (QuestionService.Delete(id))
                 {
-                    return RedirectToAction("Index", new { likeStr = word.Spelling });
+                    return RedirectToAction("Index");
                 }
                 return View();
             }

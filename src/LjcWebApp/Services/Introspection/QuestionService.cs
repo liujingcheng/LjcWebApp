@@ -98,8 +98,8 @@ namespace LjcWebApp.Services.Introspection
                     entity.Weight = question.Weight;
                     entity.IsYes = question.IsYes;
                     entity.IsPositive = question.IsPositive;
+                    entity.Sort = question.Sort;
                     entity.ModifiedOn = DateTime.Now;
-
 
                     context.SaveChanges();
                     UpdateCache();
