@@ -1,0 +1,30 @@
+﻿@model LjcWebApp.question
+@{
+    ViewData["Title"] = "QuickAddQuestion";
+}
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <form asp-controller="Question" role="form" asp-action="QuickAdd" enctype="multipart/form-data" method="post">
+        <div class="editor-field">
+            <div style="display: inline-block">
+                <textarea asp-for="QuestionMember" style="width: 240px; height: 400px;margin: 0 auto;"></textarea>
+            </div>
+            <div style="display: inline-block; vertical-align: top">
+                <div>
+                    <button type="submit" style="width: 60px; height: 30px" class="btn btn-default">确定</button>
+                </div>
+                <div style="margin-top: 20px">
+                    <a asp-controller="Question" asp-action="Index" target="_blank">index</a>
+                </div>
+            </div>
+    </form>
+</body>
+</html>

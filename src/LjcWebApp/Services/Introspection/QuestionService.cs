@@ -66,7 +66,8 @@ namespace LjcWebApp.Services.Introspection
                 {
                     question.Id = Guid.NewGuid().ToString().Replace("-", "");
                     question.ModifiedOn = question.CreatedOn = DateTime.Now;
-
+                    var maxSort = context.question.Max(p => p.Sort);
+                    question.Sort = maxSort + 1;
                     context.question.Add(question);
                     context.SaveChanges();
                     UpdateCache();
@@ -186,5 +187,21 @@ namespace LjcWebApp.Services.Introspection
             }
             return true;
         }
+
+
+
+        /// <summary>
+        /// 问题是否已存在
+        /// </summary>
+        /// <param name="questionMember"></param>
+        /// <returns></returns>
+        public bool IsQuestionExist(string questionMember)
+        {
+            using (var context = new LjcDbContext())
+            {
+                return context.question.Any(p => p.QuestionMember == questionMember);
+            }
+        }
+
     }
 }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using LjcWebApp.Helper;
 using LjcWebApp.Services.Account;
 using Microsoft.AspNetCore.Mvc;
 using LjcWebApp.Services.Introspection;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace LjcWebApp.Controllers
@@ -217,5 +217,35 @@ namespace LjcWebApp.Controllers
             }
 
         }
+
+        public IActionResult QuickAdd(question model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult QuickAdd([FromServices]IHostingEnvironment env, question questionModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(questionModel.QuestionMember))
+                {
+                    return View();
+                }
+                if (QuestionService.IsQuestionExist(questionModel.QuestionMember.Trim()))
+                {
+                    return RedirectToAction(nameof(QuickAdd), new question() {QuestionMember = "问题已存在"});
+                }
+                questionModel.FullScore = 10;
+                if (QuestionService.Add(questionModel))
+                {
+                    return RedirectToAction(nameof(QuickAdd), new question());
+                }
+                return RedirectToAction(nameof(QuickAdd), new question() { QuestionMember = "新增失败" });
+            }
+            return View();
+        }
+
+
     }
 }
