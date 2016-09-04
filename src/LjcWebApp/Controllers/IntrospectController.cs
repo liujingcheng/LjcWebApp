@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using LjcWebApp.Helper;
+using LjcWebApp.Services.Account;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using  LjcWebApp.Services.ConfigStatic;
@@ -14,8 +15,25 @@ namespace LjcWebApp.Controllers
     {
         //
         // GET: /introspect/
-        QuestionService _questionService = new QuestionService();
-        IntrospectService _introspectService = new IntrospectService();
+        private IntrospectService _introspectService;
+        IntrospectService IntrospectService
+        {
+            get
+            {
+                if (HttpContext.User.Identity.Name != "ljcwyc")
+                {
+                    throw new Exception();
+                }
+                if (_introspectService == null)
+                {
+                    return _introspectService = new IntrospectService
+                    {
+                        CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
+                    };
+                }
+                return _introspectService;
+            }
+        }
 
         public ActionResult Index()
         {
@@ -36,15 +54,15 @@ namespace LjcWebApp.Controllers
             introspect.Date = DateTime.Now.Date;
 
             var success = false;
-            if (_introspectService.IsExist(introspect))
+            if (IntrospectService.IsExist(introspect))
             {
-                var entity = _introspectService.GetByQuestionAndDate(introspect.question, introspect.Date.Value);
+                var entity = IntrospectService.GetByQuestionAndDate(introspect.question, introspect.Date.Value);
                 introspect.Id = entity.Id;
-                success = _introspectService.Update(introspect);
+                success = IntrospectService.Update(introspect);
             }
             else
             {
-                success = _introspectService.Add(introspect);
+                success = IntrospectService.Add(introspect);
             }
             if (success)
             {
@@ -64,7 +82,7 @@ namespace LjcWebApp.Controllers
 
             string result = null;
 
-            var nextQuestion = _introspectService.GetNextQuestion(currentQuestion);
+            var nextQuestion = IntrospectService.GetNextQuestion(currentQuestion);
             result = nextQuestion != null ? JsonConvert.SerializeObject(nextQuestion) : "end";
 
             return result;
@@ -83,7 +101,7 @@ namespace LjcWebApp.Controllers
 
             string result = null;
 
-            var previousQuestion = _introspectService.GetPreviousQuestion(currentQuestion);
+            var previousQuestion = IntrospectService.GetPreviousQuestion(currentQuestion);
             result = previousQuestion != null ? JsonConvert.SerializeObject(previousQuestion) : "end";
 
             return result;
@@ -96,8 +114,8 @@ namespace LjcWebApp.Controllers
         [HttpPost]
         public string GetStatisticInfo()
         {
-            var yesterdayList = _introspectService.GetListByDate(DateTime.Now.AddDays(-1).Date);
-            var todayList = _introspectService.GetListByDate(DateTime.Now.Date);
+            var yesterdayList = IntrospectService.GetListByDate(DateTime.Now.AddDays(-1).Date);
+            var todayList = IntrospectService.GetListByDate(DateTime.Now.Date);
 
             double yesterdayTotalScore = yesterdayList.Sum(p => p.Score) ?? 0;
             var yesterdayAverageScore = yesterdayList.Count == 0 ? 0 : Math.Round(yesterdayTotalScore / yesterdayList.Count, 2);
@@ -128,7 +146,7 @@ namespace LjcWebApp.Controllers
 
             string result = null;
 
-            var question = _introspectService.GetPreviousUnhandledQuestion(currentQuestion);
+            var question = IntrospectService.GetPreviousUnhandledQuestion(currentQuestion);
             result = question != null ? JsonConvert.SerializeObject(question) : "end";
 
             return result;

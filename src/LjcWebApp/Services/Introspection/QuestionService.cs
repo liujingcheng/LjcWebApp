@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using LjcWebApp;
 using LjcWebApp.Helper;
-using  LjcWebApp.Services.ConfigStatic;
+using LjcWebApp.Services.ConfigStatic;
 
 namespace LjcWebApp.Services.Introspection
 {
-    public class QuestionService
+    public class QuestionService : BaseService
     {
         /// <summary>
         /// 获取所有列表
@@ -20,7 +20,7 @@ namespace LjcWebApp.Services.Introspection
             {
                 using (var context = new LjcDbContext())
                 {
-                    words = context.question.OrderBy(p=>p.Sort).ToList();
+                    words = context.question.OrderBy(p => p.Sort).ToList();
                 }
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace LjcWebApp.Services.Introspection
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.question.First(p=>p.Id==question.Id);
+                    var entity = context.question.First(p => p.Id == question.Id);
                     entity.QuestionMember = question.QuestionMember;
                     entity.FullScore = question.FullScore;
                     entity.Weight = question.Weight;
@@ -124,7 +124,7 @@ namespace LjcWebApp.Services.Introspection
             {
                 using (var context = new LjcDbContext())
                 {
-                    entity = context.question.First(p=>p.Id==id);
+                    entity = context.question.First(p => p.Id == id);
                 }
             }
             catch (Exception ex)
@@ -145,7 +145,7 @@ namespace LjcWebApp.Services.Introspection
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.question.First(p=>p.Id==id);
+                    var entity = context.question.First(p => p.Id == id);
                     context.question.Remove(entity);
                     context.SaveChanges();
                     UpdateCache();

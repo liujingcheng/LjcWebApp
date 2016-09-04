@@ -7,7 +7,7 @@ using LjcWebApp.Services.ConfigStatic;
 
 namespace LjcWebApp.Services.Introspection
 {
-    public class IntrospectService
+    public class IntrospectService : BaseService
     {
         /// <summary>
         /// 返回今天下一个需要反省的问题
