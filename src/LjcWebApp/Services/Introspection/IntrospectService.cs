@@ -66,7 +66,7 @@ namespace LjcWebApp.Services.Introspection
         /// 返回昨天的当前问题的Introspect对象
         /// </summary>
         /// <returns></returns>
-        public introspect GetYesterdayCurrentQuestion(question currentQuestion)
+        public introspect GetYesterdayCurrentIntrospect(question currentQuestion)
         {
             if (currentQuestion == null) return null;
             using (var context = new LjcDbContext())

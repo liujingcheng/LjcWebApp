@@ -84,16 +84,22 @@ namespace LjcWebApp.Controllers
 
             var nextQuestion = IntrospectService.GetNextQuestion(currentQuestion);
             result = nextQuestion != null ? JsonConvert.SerializeObject(nextQuestion) : "end";
-            if (nextQuestion != null)
-            {
-                var yesterdayIntrospect = IntrospectService.GetYesterdayCurrentQuestion(nextQuestion);
-                ViewBag.YesterdayIntrospectScore = yesterdayIntrospect != null ? yesterdayIntrospect.Score.ToString() : "null";
-            }
-
+            SetYesterdayCurrentIntrospect(nextQuestion);
             return result + "|" + ViewBag.YesterdayIntrospectScore;
         }
 
-
+        /// <summary>
+        /// 设置指定问题昨天的分数
+        /// </summary>
+        /// <param name="question"></param>
+        private void SetYesterdayCurrentIntrospect(question question)
+        {
+            if (question != null)
+            {
+                var yesterdayIntrospect = IntrospectService.GetYesterdayCurrentIntrospect(question);
+                ViewBag.YesterdayIntrospectScore = yesterdayIntrospect != null ? yesterdayIntrospect.Score.ToString() : "null";
+            }
+        }
 
         [HttpPost]
         public string GetPreviousQuestion(question currentQuestion)
@@ -109,7 +115,8 @@ namespace LjcWebApp.Controllers
             var previousQuestion = IntrospectService.GetPreviousQuestion(currentQuestion);
             result = previousQuestion != null ? JsonConvert.SerializeObject(previousQuestion) : "end";
 
-            return result;
+            SetYesterdayCurrentIntrospect(previousQuestion);
+            return result + "|" + ViewBag.YesterdayIntrospectScore;
         }
 
         /// <summary>
@@ -154,7 +161,8 @@ namespace LjcWebApp.Controllers
             var question = IntrospectService.GetPreviousUnhandledQuestion(currentQuestion);
             result = question != null ? JsonConvert.SerializeObject(question) : "end";
 
-            return result;
+            SetYesterdayCurrentIntrospect(question);
+            return result + "|" + ViewBag.YesterdayIntrospectScore;
         }
 
     }

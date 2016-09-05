@@ -6,7 +6,7 @@
     <div>
         <label id="lblSingleInfo"></label>
         <label id="lblStaticInfo">/@(ViewBag.QuestionCount)；</label>
-        <label id="lblYesterDayInfo">昨天：@(ViewBag.YesterdayIntrospectScore)；</label>
+        <label id="lblYesterDayInfo"></label>
         <label id="lblLastScore"></label>
     </div>
     <div id="lblSummaryInfo"></div>
@@ -61,37 +61,10 @@
         });
     }
 
-
-    //function getNextQuestion(score) {
-    //    $.ajax({
-    //        url: '/Introspect/GetNextQuestion',
-    //        cache: false,
-    //        type: 'Post',
-    //        async: false,
-    //        data: {currentQuestionStr:$.toJSON(currentQuestion)} ,
-    //        contentType: 'application/json;charset=utf-8',
-    //        success: function (data, status, xhr) {
-    //            if (data == "end") {
-    //                if (score != null && currentQuestion != null && currentQuestion.Score == null) {
-    //                    //如果已经选了分数的，要将分数显示出来
-    //                    currentQuestion.Score = score;
-    //                    refresh();
-    //                }
-    //                alert("亲，已经是最后一个了~");
-    //                return;
-    //            }
-    //            currentQuestion = $.evalJSON(data);
-    //            refresh();
-    //        },
-    //        error: function (data, status, e) {
-    //            alert("ajax error");
-    //        }
-    //    });
-    //}
     var yesterdayScore;
     function getNextQuestion(score) {
         $.post("/Introspect/GetNextQuestion", currentQuestion, function (data) {
-            if (data == "end") {
+            if (data.indexOf("end") != -1) {
                 if (score != null && currentQuestion != null && currentQuestion.Score == null) {
                     //如果已经选了分数的，要将分数显示出来
                     currentQuestion.Score = score;
@@ -109,11 +82,13 @@
 
     function getPreviousQuestion() {
         $.post("/Introspect/GetPreviousQuestion", currentQuestion, function (data) {
-            if (data == "end") {
+            if (data.indexOf("end") != -1) {
                 alert("亲，没有上一个了~");
                 return;
             }
-            currentQuestion = $.evalJSON(data);
+            var result = data.split("|")[0];
+            yesterdayScore = data.split("|")[1];
+            currentQuestion = $.evalJSON(result);
             refresh();
         });
     }
@@ -137,11 +112,13 @@
 
     function getPreviousUnhandledQuestion() {
         $.post("/Introspect/GetPreviousUnhandledQuestion", currentQuestion, function (data) {
-            if (data == "end") {
+            if (data.indexOf("end") != -1) {
                 alert("亲，没有你想要的结果哦~");
                 return;
             }
-            currentQuestion = $.evalJSON(data);
+            var result = data.split("|")[0];
+            yesterdayScore = data.split("|")[1];
+            currentQuestion = $.evalJSON(result);
             refresh();
         });
     }
