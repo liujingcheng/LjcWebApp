@@ -63,6 +63,21 @@ namespace LjcWebApp.Services.Introspection
         }
 
         /// <summary>
+        /// 返回昨天的当前问题的Introspect对象
+        /// </summary>
+        /// <returns></returns>
+        public introspect GetYesterdayCurrentQuestion(question currentQuestion)
+        {
+            if (currentQuestion == null) return null;
+            using (var context = new LjcDbContext())
+            {
+                var yesterdayIntrospect =
+                    context.introspect.FirstOrDefault(p => p.QuestionId == currentQuestion.Id && p.Date == DateTime.Now.Date.AddDays(-1));
+                return yesterdayIntrospect;
+            }
+        }
+
+        /// <summary>
         /// 新增
         /// </summary>
         /// <param name="entity"></param>
@@ -185,6 +200,7 @@ namespace LjcWebApp.Services.Introspection
         /// <returns></returns>
         public question GetPreviousQuestion(question currentQuestion)
         {
+            if (currentQuestion == null) return null;
             using (var context = new LjcDbContext())
             {
                 var previousQuestion = context.question.FirstOrDefault(p => p.Sort == currentQuestion.Sort - 1);

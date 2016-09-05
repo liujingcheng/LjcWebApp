@@ -6,6 +6,7 @@
     <div>
         <label id="lblSingleInfo"></label>
         <label id="lblStaticInfo">/@(ViewBag.QuestionCount)；</label>
+        <label id="lblYesterDayInfo">昨天：@(ViewBag.YesterdayIntrospectScore)；</label>
         <label id="lblLastScore"></label>
     </div>
     <div id="lblSummaryInfo"></div>
@@ -48,7 +49,7 @@
     function saveIntorspect(obj) {
         var score = $(obj).attr("score");
         if (score != null) {
-            $("#lblLastScore").text("上一个得分：" + score);
+            $("#lblLastScore").text("上一个：" + score);
         }
 
         $.post("/Introspect/SaveIntorspect", { question: currentQuestion, score: score }, function (data) {
@@ -87,7 +88,7 @@
     //        }
     //    });
     //}
-
+    var yesterdayScore;
     function getNextQuestion(score) {
         $.post("/Introspect/GetNextQuestion", currentQuestion, function (data) {
             if (data == "end") {
@@ -99,7 +100,9 @@
                 alert("亲，已经是最后一个了~");
                 return;
             }
-            currentQuestion = $.evalJSON(data);
+            var result = data.split("|")[0];
+            yesterdayScore = data.split("|")[1];
+            currentQuestion = $.evalJSON(result);
             refresh();
         });
     }
@@ -118,6 +121,7 @@
     function refresh() {
         if (currentQuestion != null) {
             $("#lblQuestion").text(currentQuestion.QuestionMember);
+            $("#lblYesterDayInfo").text("昨天：" + yesterdayScore + "；");
             $("#lblSingleInfo").text(currentQuestion.Score + "/" + currentQuestion.Sort);
         } else {
             alert("操作失败");

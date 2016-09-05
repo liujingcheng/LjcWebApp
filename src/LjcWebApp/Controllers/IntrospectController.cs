@@ -4,8 +4,8 @@ using LjcWebApp.Helper;
 using LjcWebApp.Services.Account;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using  LjcWebApp.Services.ConfigStatic;
-using  LjcWebApp.Services.Introspection;
+using LjcWebApp.Services.ConfigStatic;
+using LjcWebApp.Services.Introspection;
 using Microsoft.AspNetCore.Authorization;
 
 namespace LjcWebApp.Controllers
@@ -84,8 +84,13 @@ namespace LjcWebApp.Controllers
 
             var nextQuestion = IntrospectService.GetNextQuestion(currentQuestion);
             result = nextQuestion != null ? JsonConvert.SerializeObject(nextQuestion) : "end";
+            if (nextQuestion != null)
+            {
+                var yesterdayIntrospect = IntrospectService.GetYesterdayCurrentQuestion(nextQuestion);
+                ViewBag.YesterdayIntrospectScore = yesterdayIntrospect != null ? yesterdayIntrospect.Score.ToString() : "null";
+            }
 
-            return result;
+            return result + "|" + ViewBag.YesterdayIntrospectScore;
         }
 
 
