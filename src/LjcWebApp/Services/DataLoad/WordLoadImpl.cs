@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using LjcWebApp;
 using LjcWebApp.Helper;
-using  LjcWebApp.Services.ConfigStatic;
+using LjcWebApp.Services.ConfigStatic;
 
 namespace LjcWebApp.Services.DataLoad
 {
-    public class WordLoadImpl
+    public class WordLoadImpl : BaseService
     {
         /// <summary>
         /// 加载所有单词

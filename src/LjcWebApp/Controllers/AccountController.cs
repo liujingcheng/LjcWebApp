@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using LjcWebApp.Helper;
+using LjcWebApp.Models.entity;
 using LjcWebApp.Models.ViewModels;
+using LjcWebApp.Services.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -10,6 +14,7 @@ namespace LjcWebApp.Controllers
     public class AccountController : Controller
     {
         private readonly IOptions<AppSettings> _appSettings;
+        private MyUserService _service = new MyUserService();
 
         public AccountController(IOptions<AppSettings> settings)
         {
@@ -32,17 +37,18 @@ namespace LjcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var userNameStr = _appSettings.Value.UserName;
-                var passwordStr = _appSettings.Value.Password;
-                if (model.UserName == userNameStr && model.Password == passwordStr)
+                var userNameStr = model.UserName.Trim();
+                var passwordStr = model.Password.Trim();
+                if (_service.IsPasswordCorrect(userNameStr, passwordStr))
                 {
+                    var currentUser = _service.GetByUserName(userNameStr);
                     var claims = new List<Claim>()
                     {
                         new Claim( ClaimTypes.Name, userNameStr),
-                        new Claim( ClaimTypes.UserData, userNameStr + passwordStr)
+                        new Claim( ClaimTypes.UserData, currentUser.UserId)
                     };
-                    var identity=new ClaimsIdentity(claims,"MyClaimsLogin");
-                    var principal=new ClaimsPrincipal(identity);
+                    var identity = new ClaimsIdentity(claims, "MyClaimsLogin");
+                    var principal = new ClaimsPrincipal(identity);
                     HttpContext.Authentication.SignInAsync("MyCookieMiddlewareInstance", principal);
                     return RedirectToLocal(returnUrl);
                 }
@@ -63,6 +69,36 @@ namespace LjcWebApp.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(AccountModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var userNameStr = model.UserName;
+                var passwordStr = model.Password;
+                if (!_service.IsUserExist(userNameStr))
+                {
+                    _service.Add(new MyUser() { UserName = userNameStr, Password = passwordStr });
+                    return RedirectToAction("Login");
+                }
+                ModelState.AddModelError("UserName", "用户名已存在");
+                return View(model);
+            }
+
+            return View(model);
         }
 
     }

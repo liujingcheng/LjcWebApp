@@ -1,4 +1,5 @@
 ﻿using LjcWebApp.Helper;
+using LjcWebApp.Models.entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LjcWebApp
@@ -16,6 +17,7 @@ namespace LjcWebApp
             modelBuilder.Entity<question>();
             modelBuilder.Entity<timestatistic>();
             modelBuilder.Entity<word_tb>();
+            modelBuilder.Entity<MyUser>();
         }
 
         public virtual DbSet<configmemorycurve_tb> configmemorycurve_tb { get; set; }
@@ -23,5 +25,6 @@ namespace LjcWebApp
         public virtual DbSet<question> question { get; set; }
         public virtual DbSet<timestatistic> timestatistic { get; set; }
         public virtual DbSet<word_tb> word_tb { get; set; }
+        public virtual DbSet<MyUser> myuser { get; set; }
     }
 }

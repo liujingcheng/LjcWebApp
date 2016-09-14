@@ -7,7 +7,7 @@ using LjcWebApp.Services.ConfigStatic;
 
 namespace LjcWebApp.Services.Introspection
 {
-    public class IntrospectService
+    public class IntrospectService : BaseService
     {
         /// <summary>
         /// 返回今天下一个需要反省的问题
@@ -59,6 +59,21 @@ namespace LjcWebApp.Services.Introspection
                     }
                 }
                 return nextQuestion;
+            }
+        }
+
+        /// <summary>
+        /// 返回昨天的当前问题的Introspect对象
+        /// </summary>
+        /// <returns></returns>
+        public introspect GetYesterdayCurrentIntrospect(question currentQuestion)
+        {
+            if (currentQuestion == null) return null;
+            using (var context = new LjcDbContext())
+            {
+                var yesterdayIntrospect =
+                    context.introspect.FirstOrDefault(p => p.QuestionId == currentQuestion.Id && p.Date == DateTime.Now.Date.AddDays(-1));
+                return yesterdayIntrospect;
             }
         }
 
@@ -185,6 +200,7 @@ namespace LjcWebApp.Services.Introspection
         /// <returns></returns>
         public question GetPreviousQuestion(question currentQuestion)
         {
+            if (currentQuestion == null) return null;
             using (var context = new LjcDbContext())
             {
                 var previousQuestion = context.question.FirstOrDefault(p => p.Sort == currentQuestion.Sort - 1);

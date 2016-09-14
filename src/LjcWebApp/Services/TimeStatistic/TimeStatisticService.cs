@@ -7,7 +7,7 @@ using LjcWebApp.Helper;
 
 namespace LjcWebApp.Services.DataCRUD
 {
-    public class TimeStatisticService
+    public class TimeStatisticService : BaseService
     {
         public string SaveEvent(string eventId, string eventName, int? effectiveTime, int? planTime, string status,
             string lastticks)
@@ -43,7 +43,7 @@ namespace LjcWebApp.Services.DataCRUD
                     }
                     else
                     {
-                        entity = context.timestatistic.First(p=>p.EventId==eventId);
+                        entity = context.timestatistic.First(p => p.EventId == eventId);
 
                         ////正在进行中的事件在新页面打开并操作后要刷新旧页面后才能在旧页面上操作
                         //if (entity.ModifiedOn.Ticks > Convert.ToInt64(lastticks))//由于存入数据库精度有损，故不能用==来判断
@@ -85,6 +85,7 @@ namespace LjcWebApp.Services.DataCRUD
                         entity.EventId = Guid.NewGuid().ToString();
                         result = entity.EventId + "|" + entity.ModifiedOn.Ticks;
                         context.timestatistic.Add(entity);
+                        entity.UserId = CurrentUser.UserId;
                     }
                     else
                     {
@@ -116,7 +117,7 @@ namespace LjcWebApp.Services.DataCRUD
                 {
                     if (startDate == null && endDate == null)
                     {
-                        return context.timestatistic.OrderByDescending(p => p.CreatedOn).ToList();
+                        return context.timestatistic.Where(p => p.UserId == CurrentUser.UserId).OrderByDescending(p => p.CreatedOn).ToList();
                     }
                     if (startDate == null)
                     {
@@ -128,7 +129,7 @@ namespace LjcWebApp.Services.DataCRUD
                     }
                     return context.timestatistic.Where(p =>
                        p.Status != "New" && p.StartTime.Value.Date >= startDate.Value.Date && p.StartTime.Value.Date <= endDate.Value.Date
-                       && p.InQuadrant != 1 && p.Quadrant != 0)
+                       && p.InQuadrant != 1 && p.Quadrant != 0 && p.UserId == CurrentUser.UserId)
                         .OrderBy(p => p.StartTime).ToList();
                 }
             }
@@ -149,7 +150,7 @@ namespace LjcWebApp.Services.DataCRUD
             {
                 using (var context = new LjcDbContext())
                 {
-                    return context.timestatistic.Where(p => p.Status != "Stopped" && p.InQuadrant != 1).OrderBy(p => p.OrderValue).ToList();
+                    return context.timestatistic.Where(p => p.Status != "Stopped" && p.InQuadrant != 1 && p.UserId == CurrentUser.UserId).OrderBy(p => p.OrderValue).ToList();
                 }
             }
             catch (Exception ex)
@@ -173,7 +174,7 @@ namespace LjcWebApp.Services.DataCRUD
             {
                 using (var context = new LjcDbContext())
                 {
-                    var unfinishedList = context.timestatistic.Where(p => p.Status != "Stopped" && p.InQuadrant != 1).OrderBy(p => p.OrderValue).ToList();
+                    var unfinishedList = context.timestatistic.Where(p => p.Status != "Stopped" && p.InQuadrant != 1 && p.UserId == CurrentUser.UserId).OrderBy(p => p.OrderValue).ToList();
                     if (unfinishedList.Count == 0) return true;
 
                     long tempOrderValue;
@@ -217,7 +218,7 @@ namespace LjcWebApp.Services.DataCRUD
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.timestatistic.First(p=>p.EventId==eventId);
+                    var entity = context.timestatistic.First(p => p.EventId == eventId);
                     context.timestatistic.Remove(entity);
                     context.SaveChanges();
                     return 0;
@@ -242,8 +243,8 @@ namespace LjcWebApp.Services.DataCRUD
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity1 = context.timestatistic.First(p=>p.EventId==eventId1);
-                    var entity2 = context.timestatistic.First(p=>p.EventId==eventId2);
+                    var entity1 = context.timestatistic.First(p => p.EventId == eventId1);
+                    var entity2 = context.timestatistic.First(p => p.EventId == eventId2);
                     var tempOrderValue = entity1.OrderValue;
                     entity1.OrderValue = entity2.OrderValue;
                     entity2.OrderValue = tempOrderValue;
@@ -271,7 +272,7 @@ namespace LjcWebApp.Services.DataCRUD
                 using (var context = new LjcDbContext())
                 {
                     return context.timestatistic.
-                        Where(p => p.InQuadrant == 1 && p.Quadrant == quadrant).
+                        Where(p => p.InQuadrant == 1 && p.Quadrant == quadrant && p.UserId == CurrentUser.UserId).
                         OrderBy(p => p.OrderValue).ToList();
                 }
             }
@@ -292,7 +293,7 @@ namespace LjcWebApp.Services.DataCRUD
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.timestatistic.First(p=>p.EventId==eventId);
+                    var entity = context.timestatistic.First(p => p.EventId == eventId);
                     entity.Quadrant = newQuadrant;
                     context.SaveChanges();
                     return 0;
@@ -315,7 +316,7 @@ namespace LjcWebApp.Services.DataCRUD
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.timestatistic.First(p=>p.EventId==eventId);
+                    var entity = context.timestatistic.First(p => p.EventId == eventId);
                     entity.InQuadrant = inQuadrant;
                     context.SaveChanges();
                     return 0;
@@ -340,7 +341,7 @@ namespace LjcWebApp.Services.DataCRUD
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.timestatistic.First(p=>p.EventId==eventId);
+                    var entity = context.timestatistic.First(p => p.EventId == eventId);
                     entity.Remark = remark;
                     context.SaveChanges();
                     return 0;

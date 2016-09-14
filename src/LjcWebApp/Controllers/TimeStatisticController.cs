@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LjcWebApp.Helper;
 using LjcWebApp.Models.ViewModels;
+using LjcWebApp.Services.Account;
 using Microsoft.AspNetCore.Mvc;
 using LjcWebApp.Services.DataCRUD;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,22 @@ namespace LjcWebApp.Controllers
         private readonly IOptions<AppSettings> _appSettings;
         //
         // GET: /TimeStatistic/
-        TimeStatisticService _timeStatisticService = new TimeStatisticService();
+        TimeStatisticService _timeStatisticService;
+
+        private TimeStatisticService TimeStatisticService
+        {
+            get
+            {
+                if (_timeStatisticService == null)
+                {
+                    return _timeStatisticService = new TimeStatisticService
+                    {
+                        CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
+                    };
+                }
+                return _timeStatisticService;
+            }
+        }
 
         public TimeStatisticController(IOptions<AppSettings> settings)
         {
@@ -36,7 +52,7 @@ namespace LjcWebApp.Controllers
 
             try
             {
-                ViewBag.EventList = _timeStatisticService.GetUnFinishedList();
+                ViewBag.EventList = TimeStatisticService.GetUnFinishedList();
             }
             catch (Exception ex)
             {
@@ -52,7 +68,7 @@ namespace LjcWebApp.Controllers
             try
             {
                 var planTime = planMinutes == null ? null : planMinutes * 60;
-                return _timeStatisticService.SaveEvent(eventId, eventName.Trim(), effectiveTime, planTime, status, lastticks);
+                return TimeStatisticService.SaveEvent(eventId, eventName.Trim(), effectiveTime, planTime, status, lastticks);
             }
             catch (Exception ex)
             {
@@ -66,7 +82,7 @@ namespace LjcWebApp.Controllers
         {
             try
             {
-                return _timeStatisticService.SaveEvent(eventId, eventName.Trim(), null, null, status, lastticks, quadrant, 1);
+                return TimeStatisticService.SaveEvent(eventId, eventName.Trim(), null, null, status, lastticks, quadrant, 1);
             }
             catch (Exception ex)
             {
@@ -102,7 +118,7 @@ namespace LjcWebApp.Controllers
                 ViewBag.StartDateStr = startDateStr;
                 ViewBag.EndDateStr = endDateStr;
 
-                var list = _timeStatisticService.GetFinishedList(startDate, endDate);
+                var list = TimeStatisticService.GetFinishedList(startDate, endDate);
                 var days = list.Select(p => p.StartTime.Value.Date).Distinct();
                 var ondayDataModelList = new List<OneDayDataModel>();
                 foreach (var day in days)
@@ -161,13 +177,13 @@ namespace LjcWebApp.Controllers
         [HttpPost]
         public int Delete(string eventId)
         {
-            return _timeStatisticService.Delete(eventId);
+            return TimeStatisticService.Delete(eventId);
         }
 
         [HttpPost]
         public int UpdateOrder(string eventId1, string eventId2)
         {
-            return _timeStatisticService.UpdateOrder(eventId1, eventId2);
+            return TimeStatisticService.UpdateOrder(eventId1, eventId2);
         }
 
         [HttpPost]
@@ -175,7 +191,7 @@ namespace LjcWebApp.Controllers
         {
             if (string.IsNullOrEmpty(beforNewLingeEventId)) return "true";//说明要最后一行新增，没有点Insert
             if (string.IsNullOrEmpty(insertedEventId)) return "更新排序失败！参数insertedEventId为空！";
-            return _timeStatisticService.UpdateOrderAfterInsert(beforNewLingeEventId, insertedEventId) ? "true" : "更新排序失败！";
+            return TimeStatisticService.UpdateOrderAfterInsert(beforNewLingeEventId, insertedEventId) ? "true" : "更新排序失败！";
         }
 
         /// <summary>
@@ -214,7 +230,7 @@ namespace LjcWebApp.Controllers
             {
                 var pageNumber = page ?? 1;
 
-                var list = _timeStatisticService.GetQuadrantList(quadrant);
+                var list = TimeStatisticService.GetQuadrantList(quadrant);
 
                 //注意，这里的查询方式使用的是假分页，若要使用真分页得看具体使用的ORM而定
                 var pagedList = list.ToPagedList(pageNumber, pageSize.Value);
@@ -251,19 +267,19 @@ namespace LjcWebApp.Controllers
         [HttpPost]
         public int ChangeInQuadrant(string eventId, short inQuadrant)
         {
-            return _timeStatisticService.ChangeInQuadrant(eventId, inQuadrant);
+            return TimeStatisticService.ChangeInQuadrant(eventId, inQuadrant);
         }
 
         [HttpPost]
         public int ChangeQuadrant(string eventId, short quadrant)
         {
-            return _timeStatisticService.ChangeQuadrant(eventId, quadrant);
+            return TimeStatisticService.ChangeQuadrant(eventId, quadrant);
         }
 
         [HttpPost]
         public int UpdateRemark(string eventId, string remark)
         {
-            return _timeStatisticService.UpdateRemark(eventId, remark);
+            return TimeStatisticService.UpdateRemark(eventId, remark);
         }
 
         public IActionResult QuickAdd(EventModel model)

@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LjcWebApp;
 using LjcWebApp.Helper;
-using LjcWebApp.Services.ConfigStatic;
+using LjcWebApp.Models.entity;
 
-namespace LjcWebApp.Services.Introspection
+namespace LjcWebApp.Services.Account
 {
-    public class QuestionService : BaseService
+    public class MyUserService
     {
         /// <summary>
         /// 获取所有列表
         /// </summary>
         /// <returns></returns>
-        public List<question> GetList()
+        public List<MyUser> GetList()
         {
-            var words = new List<question>();
+            var words = new List<MyUser>();
             try
             {
                 using (var context = new LjcDbContext())
                 {
-                    words = context.question.OrderBy(p => p.Sort).ToList();
+                    words = context.myuser.Where(p => p.IsDeleted != 1).ToList();
                 }
             }
             catch (Exception ex)
@@ -35,14 +34,14 @@ namespace LjcWebApp.Services.Introspection
         /// 模糊查找
         /// </summary>
         /// <returns></returns>
-        public List<question> Search(string likeStr)
+        public List<MyUser> Search(string likeStr)
         {
-            var words = new List<question>();
+            var words = new List<MyUser>();
             try
             {
                 using (var context = new LjcDbContext())
                 {
-                    words = context.question.Where(p => p.QuestionMember.Contains(likeStr)).ToList();
+                    words = context.myuser.Where(p => p.UserName.Contains(likeStr) && p.IsDeleted != 1).ToList();
                 }
             }
             catch (Exception ex)
@@ -56,21 +55,20 @@ namespace LjcWebApp.Services.Introspection
         /// <summary>
         /// 新增
         /// </summary>
-        /// <param name="question"></param>
+        /// <param name="myUser"></param>
         /// <returns></returns>
-        public bool Add(question question)
+        public bool Add(MyUser myUser)
         {
             try
             {
                 using (var context = new LjcDbContext())
                 {
-                    question.Id = Guid.NewGuid().ToString().Replace("-", "");
-                    question.ModifiedOn = question.CreatedOn = DateTime.Now;
-                    var maxSort = context.question.Max(p => p.Sort);
-                    question.Sort = maxSort + 1;
-                    context.question.Add(question);
+                    myUser.UserId = Guid.NewGuid().ToString().Replace("-", "");
+                    myUser.IsDeleted = 0;
+                    myUser.ModifiedOn = myUser.CreatedOn = DateTime.Now;
+
+                    context.myuser.Add(myUser);
                     context.SaveChanges();
-                    UpdateCache();
                 }
             }
             catch (Exception ex)
@@ -84,25 +82,15 @@ namespace LjcWebApp.Services.Introspection
         /// <summary>
         /// 更新
         /// </summary>
-        /// <param name="question"></param>
+        /// <param name="myUser"></param>
         /// <returns></returns>
-        public bool Update(question question)
+        public bool Update(MyUser myUser)
         {
             try
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.question.First(p => p.Id == question.Id);
-                    entity.QuestionMember = question.QuestionMember;
-                    entity.FullScore = question.FullScore;
-                    entity.Weight = question.Weight;
-                    entity.IsYes = question.IsYes;
-                    entity.IsPositive = question.IsPositive;
-                    entity.Sort = question.Sort;
-                    entity.ModifiedOn = DateTime.Now;
-
                     context.SaveChanges();
-                    UpdateCache();
                 }
             }
             catch (Exception ex)
@@ -118,14 +106,14 @@ namespace LjcWebApp.Services.Introspection
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public question Get(string id)
+        public MyUser Get(string id)
         {
-            question entity = null;
+            MyUser entity = null;
             try
             {
                 using (var context = new LjcDbContext())
                 {
-                    entity = context.question.First(p => p.Id == id);
+                    entity = context.myuser.First(p => p.UserId == id);
                 }
             }
             catch (Exception ex)
@@ -133,6 +121,54 @@ namespace LjcWebApp.Services.Introspection
                 LogHelper.WriteLog(ex.Message, ex);
             }
             return entity;
+        }
+        /// <summary>
+        /// 根据用户名查找单个实体
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public MyUser GetByUserName(string userName)
+        {
+            MyUser entity = null;
+            try
+            {
+                using (var context = new LjcDbContext())
+                {
+                    entity = context.myuser.FirstOrDefault(p => p.UserName == userName && p.IsDeleted != 1);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+            }
+            return entity;
+        }
+
+        /// <summary>
+        /// 用户名密码是否正确
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool IsPasswordCorrect(string userName, string password)
+        {
+            using (var context = new LjcDbContext())
+            {
+                return context.myuser.Any(p => p.UserName == userName && p.Password == password && p.IsDeleted != 1);
+            }
+        }
+
+        /// <summary>
+        /// 用户是否存在
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public bool IsUserExist(string userName)
+        {
+            using (var context = new LjcDbContext())
+            {
+                return context.myuser.Any(p => p.UserName == userName && p.IsDeleted != 1);
+            }
         }
 
         /// <summary>
@@ -146,10 +182,9 @@ namespace LjcWebApp.Services.Introspection
             {
                 using (var context = new LjcDbContext())
                 {
-                    var entity = context.question.First(p => p.Id == id);
-                    context.question.Remove(entity);
+                    var entity = context.myuser.First(p => p.UserId == id);
+                    entity.IsDeleted = 1;
                     context.SaveChanges();
-                    UpdateCache();
                 }
             }
             catch (Exception ex)
@@ -158,49 +193,6 @@ namespace LjcWebApp.Services.Introspection
                 return false;
             }
             return true;
-        }
-
-        /// <summary>
-        /// 更新缓存
-        /// </summary>
-        public void UpdateCache()
-        {
-            IntrospectStaticData.QuestionCount = null;
-        }
-
-        public bool DeleteAll()
-        {
-            try
-            {
-                using (var context = new LjcDbContext())
-                {
-                    var all = context.question.ToList();
-                    context.question.RemoveRange(all);
-                    context.SaveChanges();
-                    UpdateCache();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(ex.Message, ex);
-                return false;
-            }
-            return true;
-        }
-
-
-
-        /// <summary>
-        /// 问题是否已存在
-        /// </summary>
-        /// <param name="questionMember"></param>
-        /// <returns></returns>
-        public bool IsQuestionExist(string questionMember)
-        {
-            using (var context = new LjcDbContext())
-            {
-                return context.question.Any(p => p.QuestionMember == questionMember);
-            }
         }
 
     }

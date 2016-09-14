@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LjcWebApp.Services.Account;
 using Microsoft.AspNetCore.Mvc;
-using  LjcWebApp.Services.Introspection;
+using LjcWebApp.Services.Introspection;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace LjcWebApp.Controllers
@@ -13,12 +15,30 @@ namespace LjcWebApp.Controllers
     public class QuestionController : Controller
     {
         //
-        // GET: /question/
-        QuestionService _service = new QuestionService();
+        // GET: /introspect/
+        private QuestionService _questionService;
+        QuestionService QuestionService
+        {
+            get
+            {
+                if (HttpContext.User.Identity.Name != "ljcwyc")
+                {
+                    throw new Exception();
+                }
+                if (_questionService == null)
+                {
+                    return _questionService = new QuestionService
+                    {
+                        CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
+                    };
+                }
+                return _questionService;
+            }
+        }
 
         public ActionResult Index()
         {
-            var list = _service.GetList();
+            var list = QuestionService.GetList();
             return View(list);
         }
 
@@ -27,7 +47,7 @@ namespace LjcWebApp.Controllers
             var list = new List<question>();
             if (!string.IsNullOrWhiteSpace(likeStr))
             {
-                list = _service.Search(likeStr);
+                list = QuestionService.Search(likeStr);
             }
             return View(list);
         }
@@ -37,7 +57,7 @@ namespace LjcWebApp.Controllers
 
         public ActionResult Details(string id)
         {
-            var entity = _service.Get(id);
+            var entity = QuestionService.Get(id);
             if (entity != null)
             {
                 return View(entity);
@@ -65,7 +85,7 @@ namespace LjcWebApp.Controllers
                 {
                     var entity = new question();
                     TryUpdateModelAsync(entity);
-                    if (_service.Add(entity))
+                    if (QuestionService.Add(entity))
                     {
                         return RedirectToAction("Index", new { likeStr = entity.QuestionMember });
                     }
@@ -87,7 +107,7 @@ namespace LjcWebApp.Controllers
                 {
                     throw new ArgumentNullException("filePath");
                 }
-                if (!_service.DeleteAll()) return "清空所有问题失败！";
+                if (!QuestionService.DeleteAll()) return "清空所有问题失败！";
 
                 ImportFromFile(filePath);
 
@@ -104,7 +124,7 @@ namespace LjcWebApp.Controllers
 
         public ActionResult Edit(string id)
         {
-            var entity = _service.Get(id);
+            var entity = QuestionService.Get(id);
             if (entity != null)
             {
                 return View(entity);
@@ -124,7 +144,7 @@ namespace LjcWebApp.Controllers
                 {
                     var entity = new question();
                     TryUpdateModelAsync(entity);
-                    if (_service.Update(entity))
+                    if (QuestionService.Update(entity))
                     {
                         return RedirectToAction("Index");
                     }
@@ -142,7 +162,7 @@ namespace LjcWebApp.Controllers
 
         public ActionResult Delete(string id)
         {
-            var word = _service.Get(id);
+            var word = QuestionService.Get(id);
             if (word != null)
             {
                 return View(word);
@@ -158,11 +178,9 @@ namespace LjcWebApp.Controllers
         {
             try
             {
-                var word = new word_tb();
-
-                if (_service.Delete(id))
+                if (QuestionService.Delete(id))
                 {
-                    return RedirectToAction("Index", new { likeStr = word.Spelling });
+                    return RedirectToAction("Index");
                 }
                 return View();
             }
@@ -193,9 +211,39 @@ namespace LjcWebApp.Controllers
                 entity.QuestionMember = lineStr;
                 entity.FullScore = 10;
                 entity.Sort = sort++;
-                _service.Add(entity);
+                QuestionService.Add(entity);
             }
 
         }
+
+        public IActionResult QuickAdd(question model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult QuickAdd([FromServices]IHostingEnvironment env, question questionModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(questionModel.QuestionMember))
+                {
+                    return View();
+                }
+                if (QuestionService.IsQuestionExist(questionModel.QuestionMember.Trim()))
+                {
+                    return RedirectToAction(nameof(QuickAdd), new question() {QuestionMember = "问题已存在"});
+                }
+                questionModel.FullScore = 10;
+                if (QuestionService.Add(questionModel))
+                {
+                    return RedirectToAction(nameof(QuickAdd), new question());
+                }
+                return RedirectToAction(nameof(QuickAdd), new question() { QuestionMember = "新增失败" });
+            }
+            return View();
+        }
+
+
     }
 }

@@ -7,7 +7,7 @@ using LjcWebApp.Helper;
 
 namespace LjcWebApp.Services.DataCRUD
 {
-    public class WordCRUDImpl 
+    public class WordCRUDImpl : BaseService
     {
         /// <summary>
         /// 

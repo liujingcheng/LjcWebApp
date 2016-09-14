@@ -1,6 +1,6 @@
-﻿@model LjcWebApp.Models.ViewModels.EventModel
+﻿@model LjcWebApp.question
 @{
-    ViewData["Title"] = "Quick Add";
+    ViewData["Title"] = "QuickAddQuestion";
 }
 @{
     Layout = null;
@@ -12,18 +12,17 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <form asp-controller="TimeStatistic" role="form" asp-action="QuickAdd" enctype="multipart/form-data" method="post">
+    <form asp-controller="Question" role="form" asp-action="QuickAdd" enctype="multipart/form-data" method="post">
         <div class="editor-field">
             <div style="display: inline-block">
-                <textarea asp-for="EventName" style="width: 200px; height: 400px;margin: 0 auto;"></textarea>
-                @*<span asp-validation-for="EventName" class="text-danger"></span>*@
+                <textarea asp-for="QuestionMember" style="width: 200px; height: 400px;margin: 0 auto;"></textarea>
             </div>
             <div style="display: inline-block; vertical-align: top">
                 <div>
                     <button type="submit" style="width: 60px; height: 30px" class="btn btn-default">确定</button>
                 </div>
                 <div style="margin-top: 20px">
-                    <a asp-controller="TimeStatistic" asp-action="Control" target="_blank">control</a>
+                    <a asp-controller="Question" asp-action="Index" target="_blank">index</a>
                 </div>
             </div>
     </form>

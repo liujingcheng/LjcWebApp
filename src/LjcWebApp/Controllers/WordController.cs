@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using LjcWebApp.Helper;
+using LjcWebApp.Services.Account;
+using LjcWebApp.Services.DataLoad;
 using Microsoft.AspNetCore.Mvc;
 using LjcWebApp.Services.Word;
 using Microsoft.AspNetCore.Authorization;
@@ -11,14 +15,32 @@ namespace LjcWebApp.Controllers
     {
         //
         // GET: /Word/
-        WordService _service = new WordService();
+        WordService _service;
+        public WordService WordService
+        {
+            get
+            {
+                if (HttpContext.User.Identity.Name != "ljcwyc")
+                {
+                    throw new Exception();
+                }
+                if (_service == null)
+                {
+                    return new WordService()
+                    {
+                        CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
+                    };
+                }
+                return _service;
+            }
+        }
 
         public ActionResult Index(string likeStr = null)
         {
             var list = new List<word_tb>();
             if (!string.IsNullOrWhiteSpace(likeStr))
             {
-                list = _service.SearchWords(likeStr);
+                list = WordService.SearchWords(likeStr);
             }
             return View(list);
         }
@@ -28,7 +50,7 @@ namespace LjcWebApp.Controllers
 
         public ActionResult Details(int id)
         {
-            var word = _service.GetWord(id);
+            var word = WordService.GetWord(id);
             if (word != null)
             {
                 return View(word);
@@ -67,7 +89,7 @@ namespace LjcWebApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            var word = _service.GetWord(id);
+            var word = WordService.GetWord(id);
             if (word != null)
             {
                 return View(word);
@@ -83,7 +105,7 @@ namespace LjcWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_service.UpdateWord(word))
+                if (WordService.UpdateWord(word))
                 {
                     return RedirectToAction("Index", "Word");
                 }
@@ -96,7 +118,7 @@ namespace LjcWebApp.Controllers
 
         public ActionResult Delete(int id)
         {
-            var word = _service.GetWord(id);
+            var word = WordService.GetWord(id);
             if (word != null)
             {
                 return View(word);
@@ -114,7 +136,7 @@ namespace LjcWebApp.Controllers
             {
                 var word = new word_tb();
 
-                if (_service.DeleteWord(id))
+                if (WordService.DeleteWord(id))
                 {
                     return RedirectToAction("Index", new { likeStr = word.Spelling });
                 }
