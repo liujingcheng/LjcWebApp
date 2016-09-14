@@ -188,6 +188,36 @@
         }
         autoPause(obj);
     }
+
+    var oneTomatoMinutes =25;
+    var totalTomatoMinutes = 0;
+    var monitTomatoInterval = undefined;
+    var changeTitleInterval = undefined;
+
+    function monitTomatoTime() {
+        totalTomatoMinutes++;
+        if (totalTomatoMinutes == oneTomatoMinutes) {
+            changeTitleInterval=setInterval(changeTitle, 1000, "蕃茄时间已经到了~");
+        }
+    }
+    function changeTitle(newtitle) {
+        var oldTitle = document.title;
+        if (newtitle == oldTitle) {
+            document.title = "Control-ToDoList";
+        } else {
+            document.title = newtitle;
+        }
+    }
+
+    function clearIntervals() {
+        clearInterval(showTime);
+        showTime = undefined;
+        clearInterval(monitTomatoInterval);
+        monitTomatoInterval = undefined;
+        clearInterval(changeTitleInterval);
+        changeTitleInterval = undefined;
+    }
+
     //11:50和17:50都是快下班的时候，正在进行的任务自动暂停
     function autoPause(obj) {
         var children = $(obj).parent().parent().children();
@@ -288,6 +318,7 @@
             //    return;
             //}
             showTime = setInterval(show, 1000, this);
+            monitTomatoInterval = setInterval(monitTomatoTime, 60000);
             $(lblStatus).text(status);
             $(hddlastticks).val(ajaxResult);
 
@@ -308,13 +339,11 @@
             //    alert("data has modified by other page,please refresh this page first!");
             //    return;
             //}
-            clearInterval(showTime);
-            showTime = undefined;
+            clearIntervals();
             $(lblStatus).text(status);
             $(hddlastticks).val(ajaxResult);
             $(this).val("Start");
             $(".btnStart").attr("disabled", false);
-
             var now = new Date();
             var day = now.getDate();
             var hour = now.getHours();
@@ -339,8 +368,7 @@
         //    return;
         //}
 
-        clearInterval(showTime);
-        showTime = undefined;
+        clearIntervals();
         $(lblStatus).text(status);
         $(hddlastticks).val(ajaxResult);
 
