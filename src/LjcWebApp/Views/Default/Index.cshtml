@@ -121,6 +121,28 @@
                 $(window).on("scroll", learnWhenScroll);
             }
         }, 100);
+
+        $("#areaSpelling").change(function () {
+            var paraphrase = $("#areaParaphrase").val();
+            if (paraphrase != "") {
+                return;
+            }
+            var spelling = $("#areaSpelling").val();
+            if (spelling == null || spelling == "" || spelling.length < 2) {
+                return;
+            }
+            var newSpelling = spelling.toUpperCase();
+            var i = spelling.length;
+            for (; ; i--) {
+                if (newSpelling.charCodeAt(i) >= 65 && newSpelling.charCodeAt(i) <= 90) {
+                    break;
+                }
+            }
+            if (i < spelling.length) {
+                $("#areaSpelling").val(spelling.substring(0, i + 2));
+                $("#areaParaphrase").val(spelling.substring(i + 2, spelling.length));
+            }
+        });
     });
 
     var requestCompleted = false;
@@ -364,6 +386,7 @@
     function clearAddFields() {
         $("#addModal input[type='text']").val("");
         $("#addModal textarea").val("");
+        $("#areaSpelling").focus();
     }
 
     function addWord() {
