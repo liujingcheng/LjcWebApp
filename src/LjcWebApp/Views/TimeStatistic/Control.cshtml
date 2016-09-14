@@ -213,6 +213,7 @@
         monitTomatoInterval = undefined;
         clearInterval(changeTitleInterval);
         changeTitleInterval = undefined;
+        document.title = originTitle;
     }
 
     //11:50和17:50都是快下班的时候，正在进行的任务自动暂停
@@ -497,6 +498,7 @@
         $("#divAlarm").removeClass("hide");
         $("#divAlarm").empty();
         $("#divAlarm").append(alarm);
+        changeTitleInterval = setInterval(changeTitle, 1000, "计划时间已经到了~");
     }
 
     //更新排序
