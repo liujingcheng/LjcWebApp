@@ -1,9 +1,6 @@
 ﻿@using System
 @using LjcWebApp.Models.ViewModels
 @{
-    ViewBag.Title = "Control";
-}
-@{
     Layout = null;
 }
 <html>
@@ -189,21 +186,21 @@
         autoPause(obj);
     }
 
-    var oneTomatoMinutes =25;
+    var oneTomatoMinutes = 25;
     var totalTomatoMinutes = 0;
     var monitTomatoInterval = undefined;
     var changeTitleInterval = undefined;
+    var originTitle = document.title = "Control-ToDoList"
 
     function monitTomatoTime() {
         totalTomatoMinutes++;
         if (totalTomatoMinutes == oneTomatoMinutes) {
-            changeTitleInterval=setInterval(changeTitle, 1000, "蕃茄时间已经到了~");
+            changeTitleInterval = setInterval(changeTitle, 1000, "蕃茄时间已经到了~");
         }
     }
     function changeTitle(newtitle) {
-        var oldTitle = document.title;
-        if (newtitle == oldTitle) {
-            document.title = "Control-ToDoList";
+        if (document.title == newtitle) {
+            document.title = originTitle;
         } else {
             document.title = newtitle;
         }
