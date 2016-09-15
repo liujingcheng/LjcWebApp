@@ -119,7 +119,42 @@ namespace LjcWebApp.Services.XMLParse
             //默认进度为0
             wordTb.Process = 0;
 
+            OptimizeWord(wordTb, "ing形式");
+            OptimizeWord(wordTb, "的过去式");
+            OptimizeWord(wordTb, "的复数");
+            OptimizeWord(wordTb, "的现在分词");
+            OptimizeWord(wordTb, "的第三人称");
+
             return wordTb;
+        }
+
+        /// <summary>
+        /// 把一些有关单词的附属信息提示挪到Spelling里去，防止记忆时看到答案
+        /// </summary>
+        /// <param name="word"></param>
+        /// <param name="matchStr"></param>
+        private void OptimizeWord(word_tb word, string matchStr)
+        {
+            if (string.IsNullOrEmpty(matchStr) || word?.Spelling == null || word.Paraphrase == null)
+            {
+                return;
+            }
+            var paraphrase = word.Paraphrase;
+            var matchIndex = paraphrase.IndexOf(matchStr);
+            if (matchIndex == -1)
+            {
+                return;
+            }
+
+            var leftParenthesisIndex = paraphrase.Substring(0, matchIndex).LastIndexOf('（');
+            var rightParenthesisIndex = paraphrase.IndexOf('）', matchIndex);
+            if (leftParenthesisIndex == -1 || rightParenthesisIndex == -1)
+            {
+                return;
+            }
+            var truncateStr = paraphrase.Substring(leftParenthesisIndex, rightParenthesisIndex - leftParenthesisIndex + 1);
+            word.Spelling += truncateStr;
+            word.Paraphrase = paraphrase.Replace(truncateStr, "");
         }
     }
 }
