@@ -526,12 +526,14 @@ namespace LjcWebApp.Controllers
             var highPriorityWordList = common.WordsNotRemember.Where(p => p.Priority > 1 && WordCanBeLearn(p)).ToList();
             if (highPriorityWordList.Count > 0)
             {
+                /* 由于新加的词太多，耽误了已记过单词的复习，所以先去掉此功能
                 var lateMonthList = highPriorityWordList.Where(p => p.Process == 0 && p.Import > DateTime.Now.AddMonths(-1)).ToList();
                 if (lateMonthList.Count > 0)//一个月内新添加且从未记忆过的高优先级单词优先记忆
                 {
                     result = GetNextHardToLearnWord(lateMonthList);
                     if (result != null) return result;
                 }
+                */
                 result = GetNextHardToLearnWord(highPriorityWordList);
                 if (result != null) return result;
             }
