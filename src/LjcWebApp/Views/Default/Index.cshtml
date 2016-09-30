@@ -141,6 +141,7 @@
             if (i < spelling.length) {
                 $("#areaSpelling").val(spelling.substring(0, i + 2));
                 $("#areaParaphrase").val(spelling.substring(i + 2, spelling.length));
+                setTimeout(addWord,1000);
             }
         });
     });
