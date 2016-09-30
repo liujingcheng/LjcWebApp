@@ -10,7 +10,7 @@ namespace LjcWebApp.Models.ViewModels
         public string EventId { get; set; }
         public string Date { get; set; }
         [Required]
-        [StringLength(255, ErrorMessage = "请输入1-255个字符内！", MinimumLength = 1)]
+        [StringLength(1000, ErrorMessage = "请输入1-255个字符内！", MinimumLength = 1)]
         [Display(Name = "事件名")]
         public string EventName { get; set; }
         public string StartTime { get; set; }
