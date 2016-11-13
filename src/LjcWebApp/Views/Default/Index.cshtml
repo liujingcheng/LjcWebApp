@@ -26,17 +26,14 @@
                     </div>
                     <div class="modal-body">
                         <div>
-                            <label for="areaSpelling">Spelling:</label>
                             <textarea id="areaSpelling" maxlength="5000"></textarea>
                         </div>
 
                         <div>
-                            <label for="txtPonetic">Phonetic:</label>
                             <input type="text" id="txtPhonetic" maxlength="50" />
                         </div>
 
                         <div>
-                            <label for="areaParaphrase">Paraphrase:</label>
                             <textarea id="areaParaphrase" maxlength="5000"></textarea>
                         </div>
 
@@ -122,7 +119,9 @@
             }
         }, 100);
 
-        $("#areaSpelling").change(function () {
+        var autoAddInterval = setInterval(autoAddWord, 1000);
+
+        function autoAddWord() {
             var paraphrase = $("#areaParaphrase").val();
             if (paraphrase != "") {
                 return;
@@ -141,9 +140,13 @@
             if (i < spelling.length) {
                 $("#areaSpelling").val(spelling.substring(0, i + 2));
                 $("#areaParaphrase").val(spelling.substring(i + 2, spelling.length));
+                if ($("#areaSpelling").val() == null || $("#areaSpelling").val() == "" || $("#areaSpelling").val().length < 2
+                    || $("#areaParaphrase").val() == null || $("#areaParaphrase").val() == "") {
+                    return;
+                }
                 setTimeout(addWord,1000);
             }
-        });
+        }
     });
 
     var requestCompleted = false;
