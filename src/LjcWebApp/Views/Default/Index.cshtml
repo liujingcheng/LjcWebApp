@@ -38,7 +38,7 @@
                         </div>
 
                         <div>
-                            <input type="radio" name="addPriority" value="2"/>
+                            <input type="radio" name="addPriority" value="2" />
                             <label>High</label>
                             <input type="radio" name="addPriority" value="1" checked="checked" />
                             <label>Middle</label>
@@ -106,8 +106,10 @@
 <script type="text/javascript">
     $(document).ready(function () {
         if (navigator.userAgent.match(/mobile/i)) {
-            $(".BtnYES,.BtnNO").addClass("hide");
             $("#divImport").addClass("hide");
+            if (document.body.clientWidth > document.body.clientHeight) {
+                $(".BtnYES,.BtnNO").addClass("hide");
+            }
         }
         $("body").css("text-align:center", "center");
         refreshWord();//为了首次页面加载能显示单词信息
@@ -144,7 +146,7 @@
                     || $("#areaParaphrase").val() == null || $("#areaParaphrase").val() == "") {
                     return;
                 }
-                setTimeout(addWord,1000);
+                setTimeout(addWord, 1000);
             }
         }
     });
