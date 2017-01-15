@@ -522,49 +522,84 @@ namespace LjcWebApp.Controllers
             result = GetNextHardToLearnWord(lastModifiedList);
             if (result != null) return result;
 
-            //从高优先级里面选
-            var highPriorityWordList = common.WordsNotRemember.Where(p => p.Priority > 1 && WordCanBeLearn(p)).ToList();
-            if (highPriorityWordList.Count > 0)
+            try
             {
-                /* 由于新加的词太多，耽误了已记过单词的复习，所以先去掉此功能
-                var lateMonthList = highPriorityWordList.Where(p => p.Process == 0 && p.Import > DateTime.Now.AddMonths(-1)).ToList();
-                if (lateMonthList.Count > 0)//一个月内新添加且从未记忆过的高优先级单词优先记忆
+                //从高优先级里面选
+                var highPriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority > 1 && WordCanBeLearn(p)).ToList();
+                if (highPriorityWordList.Count > 0)
                 {
-                    result = GetNextHardToLearnWord(lateMonthList);
+                    /* 由于新加的词太多，耽误了已记过单词的复习，所以先去掉此功能
+                    var lateMonthList = highPriorityWordList.Where(p => p.Process == 0 && p.Import > DateTime.Now.AddMonths(-1)).ToList();
+                    if (lateMonthList.Count > 0)//一个月内新添加且从未记忆过的高优先级单词优先记忆
+                    {
+                        result = GetNextHardToLearnWord(lateMonthList);
+                        if (result != null) return result;
+                    }
+                    */
+                    result = GetNextHardToLearnWord(highPriorityWordList);
                     if (result != null) return result;
                 }
-                */
-                result = GetNextHardToLearnWord(highPriorityWordList);
-                if (result != null) return result;
             }
-
-            //再从中优先级里面选
-            var middlePriorityWordList = common.WordsNotRemember.Where(p => p.Priority == 1 && WordCanBeLearn(p)).ToList();
-            if (middlePriorityWordList.Count > 0)
+            catch (Exception ex)
             {
-                result = GetNextHardToLearnWord(middlePriorityWordList);
-                if (result != null) return result;
+                LogHelper.WriteLog(ex.Message, ex);
             }
 
-            //再从低优先级里面选
-            var lowPriorityWordList = common.WordsNotRemember.Where(p => p.Priority < 1 && p.Process > 0 && WordCanBeLearn(p)).ToList();
-            if (lowPriorityWordList.Count > 0)
+            try
             {
-                result = GetNextHardToLearnWord(lowPriorityWordList);
-                if (result != null) return result;
+                //再从中优先级里面选
+                var middlePriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority == 1 && WordCanBeLearn(p)).ToList();
+                if (middlePriorityWordList.Count > 0)
+                {
+                    result = GetNextHardToLearnWord(middlePriorityWordList);
+                    if (result != null) return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
             }
 
-            //上次属首次记但没记住的
-            var lastModifiedFirstLearnList = common.WordsNotRemember
+            try
+            {
+                //再从低优先级里面选
+                var lowPriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority < 1 && p.Process > 0 && WordCanBeLearn(p)).ToList();
+                if (lowPriorityWordList.Count > 0)
+                {
+                    result = GetNextHardToLearnWord(lowPriorityWordList);
+                    if (result != null) return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+            }
+
+            try
+            {
+                //上次属首次记但没记住的
+                var lastModifiedFirstLearnList = common.WordsNotRemember
                 .Where(p => p.FirstLearn != null && p.Process == 0
                     && WordCanBeLearn(p)).ToList();
-            result = GetNextHardToLearnWord(lastModifiedFirstLearnList);
-            if (result != null) return result;
+                result = GetNextHardToLearnWord(lastModifiedFirstLearnList);
+                if (result != null) return result;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+            }
 
-            //直接随机了
-            var randomIndex = GetRandomIndex(common.WordsNotRemember.Count);
-            return common.WordsNotRemember[randomIndex];
-
+            try
+            {
+                //直接随机了
+                var randomIndex = GetRandomIndex(common.WordsNotRemember.Count);
+                return common.WordsNotRemember[randomIndex];
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+            }
+            return result;
         }
 
         [HttpPost]
