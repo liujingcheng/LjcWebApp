@@ -513,11 +513,10 @@ namespace LjcWebApp.Controllers
         {
             word_tb result;
 
-            //上次刚记但没记住的（首次记但没记住的除外）
             var lastModifiedList = common.WordsNotRemember
-                .Where(p => p.Process > 0
-                    && (p.ModifiedOn > p.LastLearn)
-                    && WordCanBeLearn(p)).ToList();//去掉上一行两天内的限制，使上次记忆但没记住的单词优先记忆 modify 2015-08-16
+                .Where(p => (p.Process > 0 && p.ModifiedOn > p.LastLearn  //曾被记住过但上次记没记住的
+                    || p.Process == 0 && p.FirstLearn != null)//首次记但没记住的
+                    && WordCanBeLearn(p)).ToList();
 
             result = GetNextHardToLearnWord(lastModifiedList);
             if (result != null) return result;
@@ -563,26 +562,12 @@ namespace LjcWebApp.Controllers
             try
             {
                 //再从低优先级里面选
-                var lowPriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority < 1 && p.Process > 0 && WordCanBeLearn(p)).ToList();
+                var lowPriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority < 1 && WordCanBeLearn(p)).ToList();
                 if (lowPriorityWordList.Count > 0)
                 {
                     result = GetNextHardToLearnWord(lowPriorityWordList);
                     if (result != null) return result;
                 }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog(ex.Message, ex);
-            }
-
-            try
-            {
-                //上次属首次记但没记住的
-                var lastModifiedFirstLearnList = common.WordsNotRemember
-                .Where(p => p.FirstLearn != null && p.Process == 0
-                    && WordCanBeLearn(p)).ToList();
-                result = GetNextHardToLearnWord(lastModifiedFirstLearnList);
-                if (result != null) return result;
             }
             catch (Exception ex)
             {
