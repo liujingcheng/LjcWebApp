@@ -546,12 +546,12 @@ namespace LjcWebApp.Controllers
 
             try
             {
-            var lastModifiedList = common.WordsNotRemember
-                .Where(p => (p.Process == 0 && p.FirstLearn != null)//首次记但没记住的
-                    && WordCanBeLearn(p)).ToList();
+                var firstNotRememberList = common.WordsNotRemember
+                    .Where(p => (p.Process == 0 && p.FirstLearn != null)//首次记但没记住的
+                        && WordCanBeLearn(p)).ToList();
 
-            result = GetNextHardToLearnWord(lastModifiedList);
-            if (result != null) return result;
+                result = GetNextHardToLearnWord(firstNotRememberList);
+                if (result != null) return result;
             }
             catch (Exception ex)
             {

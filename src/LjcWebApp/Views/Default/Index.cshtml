@@ -78,16 +78,21 @@
         <textarea id="lblParaphrase" readonly style="width: 550px; height: 95px; background-color:MintCream"></textarea>
     </div>
     <div>
-        <input id="btnYes11" type="button" class="BtnYES" value="YES" style="width: 114px;" onclick="BtnYesClick(this)" />
-        <input id="btnNo11" type="button" class="BtnNO" value="NO" style="width: 114px;float: right;"
+        @*<input id="btnYes11" type="button" class="BtnYES" value="YES"  onclick="BtnYesClick(this)" />
+        <input id="btnNo11" type="button" class="BtnNO" value="NO" style="float: right;"
                onclick="BtnNoClick(this)" />
-        <input type="button" class="BtnYES" value="YES" style="width: 120px;" onclick="BtnYesClick(this)" />
-        <input type="button" class="BtnNO" value="NO" style="width: 114px;" onclick="BtnNoClick(this)" />
-        <input type="button" class="BtnYES" value="YES" style="width: 114px;float: right;" onclick="BtnYesClick(this)" />
-        <input type="button" class="BtnNO" value="NO" style="width: 120px;" onclick="BtnNoClick(this)" />
-        <input type="button" class="BtnYES" value="YES" style="width: 114px;" onclick="BtnYesClick(this)" />
-        <input type="button" class="BtnNO" value="NO" style="width: 114px;float: right;" onclick="BtnNoClick(this)" />
-        <input type="button" class="BtnYES" value="YES" style="width: 120px;" onclick="BtnYesClick(this)" />
+        <input type="button" class="BtnYES" value="YES" onclick="BtnYesClick(this)" />
+        <input type="button" class="BtnNO" value="NO" onclick="BtnNoClick(this)" />
+        <input type="button" class="BtnYES" value="YES" style="float: right;" onclick="BtnYesClick(this)" />
+        <input type="button" class="BtnNO" value="NO" onclick="BtnNoClick(this)" />
+        <input type="button" class="BtnYES" value="YES" onclick="BtnYesClick(this)" />
+        <input type="button" class="BtnNO" value="NO" style="float: right;" onclick="BtnNoClick(this)" />
+        <input type="button" class="BtnYES" value="YES" onclick="BtnYesClick(this)" />*@
+
+        <input id="btnYes11" class="BtnYES" value="YES" onclick="BtnYesClick(this)" type="button">
+        <input id="btnNo11" class="BtnNO" value="NO" style="float: right;" onclick="BtnNoClick(this)" type="button">
+        @*<input class="BtnYES" value="YES" onclick="BtnYesClick(this)" type="button">
+        <input class="BtnNO" value="NO" style="float: right;" onclick="BtnNoClick(this)" type="button">*@
     </div>
     <div style="display: none">
         <input type="radio" id="rbHideRandom" name="hideWhat" value="0" checked="checked" />HideRandom

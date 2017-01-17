@@ -88,10 +88,16 @@ textarea
 	height: 150px;
 }
 
-.BtnNO, .BtnYES, .BtnPrevious, .BtnNext, #BtnDelete
+.BtnPrevious, .BtnNext, #BtnDelete
 {
 	width: 100px;
 	height: 60px;
+	margin:1px 1px 1px 1px;
+}
+.BtnNO, .BtnYES
+{
+	width: 250px;
+	height: 300px;
 	margin:1px 1px 1px 1px;
 }
 
