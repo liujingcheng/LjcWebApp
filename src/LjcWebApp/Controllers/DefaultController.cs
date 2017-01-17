@@ -515,7 +515,7 @@ namespace LjcWebApp.Controllers
 
             var lastModifiedList = common.WordsNotRemember
                 .Where(p => (p.Process > 0 && p.ModifiedOn > p.LastLearn  //曾被记住过但上次记没记住的
-                    || p.Process == 0 && p.FirstLearn != null)//首次记但没记住的
+                    )
                     && WordCanBeLearn(p)).ToList();
 
             result = GetNextHardToLearnWord(lastModifiedList);
@@ -538,6 +538,20 @@ namespace LjcWebApp.Controllers
                     result = GetNextHardToLearnWord(highPriorityWordList);
                     if (result != null) return result;
                 }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+            }
+
+            try
+            {
+            var lastModifiedList = common.WordsNotRemember
+                .Where(p => (p.Process == 0 && p.FirstLearn != null)//首次记但没记住的
+                    && WordCanBeLearn(p)).ToList();
+
+            result = GetNextHardToLearnWord(lastModifiedList);
+            if (result != null) return result;
             }
             catch (Exception ex)
             {
