@@ -399,8 +399,14 @@ namespace LjcWebApp.Controllers
                     GetNextMaxProcessRandomWord(
                         yesTotalCountGT0List.Where(p => ((double)p.NoTotalCount / p.YesTotalCount) == hardWeight).ToList());
             }
-            return GetNextMaxProcessRandomWord(wordsToSelect);
 
+            //首次记但没记住的,按没记住的次数从高到低的顺序记忆
+            var firstNotRememberList=wordsToSelect.Where(p => p.Process > 0).OrderBy(q=>q.NoTotalCount).ToList();
+            if(firstNotRememberList.Count > 0){
+                return firstNotRememberList.Last();
+            }
+            
+            return GetNextMaxProcessRandomWord(wordsToSelect);
         }
 
         private word_tb GetNextMaxProcessRandomWord(List<word_tb> wordsToSelect)
