@@ -214,7 +214,8 @@ namespace LjcWebApp.Controllers
                 //与当前单词同一进度的等记忆单词还剩多少
                 string processRemain =
                     common.WordsNotRemember.Count(p => p.Priority == common.CurrentNode.Value.Priority && p.Process == common.CurrentNode.Value.Process
-                    && (p.ModifiedOn <= p.LastLearn || (p.FirstLearn != null && p.LastLearn == null))).ToString();
+                    //&& (p.ModifiedOn <= p.LastLearn || (p.FirstLearn != null && p.LastLearn == null))//commented by ljc 2017-01-21 感觉这句不应该要
+                    ).ToString();
                 //显示过期时间   
                 var expireDays = expire.Days;
                 var sameExpireDays = common.WordsNotRemember.Count(p => p.Priority == common.CurrentNode.Value.Priority && new TimeSpan(p.ExpireSpanTicks.GetValueOrDefault()).Days == expireDays);//与它同一过期时间的单词数
@@ -313,7 +314,7 @@ namespace LjcWebApp.Controllers
             string FirstLearn = common.CurrentNode.Value.FirstLearn == null ? "" : common.CurrentNode.Value.FirstLearn.Value.ToString("yyyy-MM-dd HH:mm");
             string ModifiedOn = common.CurrentNode.Value.ModifiedOn.ToString("yyyy-MM-dd HH:mm");
             //剩余ModifiedOn大于LastLearn的单词个数
-            string modifyGTlast = common.WordsNotRemember.Count(p => p.Process != 0 && (p.ModifiedOn > p.LastLearn || (p.FirstLearn != null && p.LastLearn == null))).ToString();
+            string modifyGTlast = common.WordsNotRemember.Count(p => (p.Process != 0 && p.ModifiedOn > p.LastLearn) || p.FirstLearn != null && p.LastLearn == null).ToString();
             int notUniqueTimeWords =//上次未记住但又不允许在某段时间内重复出现的单词数
                 GetMinutesUniqueWordCount(common.WordsNotRemember);
             common.lblWordInfoText = "R:" + remainCount + " F:" + FirstLearn + " L:" + LastLearn
@@ -401,11 +402,12 @@ namespace LjcWebApp.Controllers
             }
 
             //首次记但没记住的,按没记住的次数从高到低的顺序记忆
-            var firstNotRememberList=wordsToSelect.Where(p => p.Process == 0).OrderBy(q=>q.NoTotalCount).ToList();
-            if(firstNotRememberList.Count > 0){
+            var firstNotRememberList = wordsToSelect.Where(p => p.Process == 0).OrderBy(q => q.NoTotalCount).ToList();
+            if (firstNotRememberList.Count > 0)
+            {
                 return firstNotRememberList.Last();
             }
-            
+
             return GetNextMaxProcessRandomWord(wordsToSelect);
         }
 
@@ -509,7 +511,7 @@ namespace LjcWebApp.Controllers
         {
             return wordsToSelect.Count(p =>
                 p.FirstLearn != null
-                && (p.ModifiedOn > p.LastLearn || p.LastLearn == null)
+                && (p.Process > 0 && p.ModifiedOn > p.LastLearn || p.LastLearn == null)
                 && p.ModifiedOn.AddMinutes(GetUniqueMinutesByProcess(p.Process)) >= DateTime.Now);
         }
 
