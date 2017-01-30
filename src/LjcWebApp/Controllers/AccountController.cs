@@ -98,6 +98,7 @@ namespace LjcWebApp.Controllers
                 return View(model);
             }
 
+            ModelState.AddModelError("UserName", "服务器端验证未通过！请联系管理员！");
             return View(model);
         }
 
