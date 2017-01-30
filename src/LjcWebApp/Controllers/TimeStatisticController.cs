@@ -45,7 +45,7 @@ namespace LjcWebApp.Controllers
         {
             //HttpContext.Response.Buffer = true;
             //HttpContext.Response.Expires = 0;
-            //HttpContext.Response.ExpiresAbsolute = DateTime.Now.AddDays(-1);
+            //HttpContext.Response.ExpiresAbsolute = DateTime.UtcNow.AddHours(8).AddDays(-1);
             //HttpContext.Response.AddHeader("pragma", "no-cache");
             //HttpContext.Response.AddHeader("cache-control", "private");
             //HttpContext.Response.CacheControl = "no-cache";
@@ -96,7 +96,7 @@ namespace LjcWebApp.Controllers
             try
             {
                 var pageNumber = page ?? 1;
-                var today = DateTime.Now;
+                var today = DateTime.UtcNow.AddHours(8);
                 if (string.IsNullOrEmpty(startDateStr))
                 //若起始日期为空则默认为本周一
                 {
@@ -133,7 +133,7 @@ namespace LjcWebApp.Controllers
                             {
                                 item.EndTime = item.StartTime;
                             }
-                            var span = DateTime.Now - item.EndTime.Value;
+                            var span = DateTime.UtcNow.AddHours(8) - item.EndTime.Value;
                             var seconds = (int)Math.Ceiling(span.TotalSeconds);
                             item.EffectiveTime += seconds;
                         }

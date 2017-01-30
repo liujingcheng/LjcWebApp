@@ -55,7 +55,7 @@
             //控制正在进行中的事件在另一个页面打开时也还在进行，并且总时间不差
             if (item.Status == "Started")
             {
-                item.EffectiveTime += Convert.ToInt32((DateTime.Now - item.ModifiedOn).TotalSeconds);
+                item.EffectiveTime += Convert.ToInt32((DateTime.UtcNow.AddHours(8) - item.ModifiedOn).TotalSeconds);
             }
             <tr>
                 <td></td>

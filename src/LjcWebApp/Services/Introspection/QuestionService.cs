@@ -65,7 +65,7 @@ namespace LjcWebApp.Services.Introspection
                 using (var context = new LjcDbContext())
                 {
                     question.Id = Guid.NewGuid().ToString().Replace("-", "");
-                    question.ModifiedOn = question.CreatedOn = DateTime.Now;
+                    question.ModifiedOn = question.CreatedOn = DateTime.UtcNow.AddHours(8);
                     var maxSort = context.question.Max(p => p.Sort);
                     question.Sort = maxSort + 1;
                     context.question.Add(question);
@@ -99,7 +99,7 @@ namespace LjcWebApp.Services.Introspection
                     entity.IsYes = question.IsYes;
                     entity.IsPositive = question.IsPositive;
                     entity.Sort = question.Sort;
-                    entity.ModifiedOn = DateTime.Now;
+                    entity.ModifiedOn = DateTime.UtcNow.AddHours(8);
 
                     context.SaveChanges();
                     UpdateCache();

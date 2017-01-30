@@ -135,12 +135,12 @@ namespace LjcWebApp.Controllers
         /// <returns></returns>
         private List<word_tb> GetWordsToLearn()
         {
-            var allWordsToReview = WordLoadImpl.TrLoadAllLearnWords(DateTime.Now);
+            var allWordsToReview = WordLoadImpl.TrLoadAllLearnWords(DateTime.UtcNow.AddHours(8));
 
             //计算每个单词的过期时间
             allWordsToReview.ForEach(p =>
             {
-                var t1 = DateTime.Now.Ticks;
+                var t1 = DateTime.UtcNow.AddHours(8).Ticks;
                 var t2 = p.Deadline.GetValueOrDefault().Ticks;
 
                 p.ExpireSpanTicks = t1 - t2;
@@ -490,7 +490,7 @@ namespace LjcWebApp.Controllers
 
         private bool WordCanBeLearn(word_tb word)
         {
-            return word.ModifiedOn.AddMinutes(GetUniqueMinutesByProcess(word.Process)) < DateTime.Now;
+            return word.ModifiedOn.AddMinutes(GetUniqueMinutesByProcess(word.Process)) < DateTime.UtcNow.AddHours(8);
         }
 
         private int GetUniqueMinutesByProcess(int process)
@@ -512,7 +512,7 @@ namespace LjcWebApp.Controllers
             return wordsToSelect.Count(p =>
                 p.FirstLearn != null
                 && (p.Process > 0 && p.ModifiedOn > p.LastLearn || p.LastLearn == null)
-                && p.ModifiedOn.AddMinutes(GetUniqueMinutesByProcess(p.Process)) >= DateTime.Now);
+                && p.ModifiedOn.AddMinutes(GetUniqueMinutesByProcess(p.Process)) >= DateTime.UtcNow.AddHours(8));
         }
 
         //返回下一个需要记忆的单词
@@ -536,7 +536,7 @@ namespace LjcWebApp.Controllers
                 if (highPriorityWordList.Count > 0)
                 {
                     /* 由于新加的词太多，耽误了已记过单词的复习，所以先去掉此功能
-                    var lateMonthList = highPriorityWordList.Where(p => p.Process == 0 && p.Import > DateTime.Now.AddMonths(-1)).ToList();
+                    var lateMonthList = highPriorityWordList.Where(p => p.Process == 0 && p.Import > DateTime.UtcNow.AddHours(8).AddMonths(-1)).ToList();
                     if (lateMonthList.Count > 0)//一个月内新添加且从未记忆过的高优先级单词优先记忆
                     {
                         result = GetNextHardToLearnWord(lateMonthList);
@@ -614,7 +614,7 @@ namespace LjcWebApp.Controllers
         {
             try
             {
-                var nowTime = DateTime.Now;
+                var nowTime = DateTime.UtcNow.AddHours(8);
                 if (common.CurrentNode.Value.IsRemembered != true)
                 {
                     var wordTb = common.CurrentNode.Value;
@@ -638,7 +638,7 @@ namespace LjcWebApp.Controllers
 
                 //EnableBtn();
 
-                //common.CurrentNode.Value.FirstLearn = DateTime.Now;
+                //common.CurrentNode.Value.FirstLearn = DateTime.UtcNow.AddHours(8);
                 if (common.CurrentNode.Value.FirstLearn == null) common.CurrentNode.Value.FirstLearn = nowTime;
 
                 if (common.CurrentNode.Next != null)
@@ -685,7 +685,7 @@ namespace LjcWebApp.Controllers
         {
             try
             {
-                var nowTime = DateTime.Now;
+                var nowTime = DateTime.UtcNow.AddHours(8);
                 //EnableBtn();
                 if (common.lblSpellingText == "" || common.lblParaphraseText == "")
                 {
@@ -752,7 +752,7 @@ namespace LjcWebApp.Controllers
 
                 WordStorageImpl.UpdateWordsList(new List<word_tb>() { common.CurrentNode.Value });
 
-                //common.CurrentNode.Value.FirstLearn = DateTime.Now;
+                //common.CurrentNode.Value.FirstLearn = DateTime.UtcNow.AddHours(8);
                 if (common.CurrentNode.Value.FirstLearn == null) common.CurrentNode.Value.FirstLearn = nowTime;//为了使记过一次的单词不再把单词、发音和词义都显示出来
                 if (common.CurrentNode.Next != null)
                 {
@@ -925,7 +925,7 @@ namespace LjcWebApp.Controllers
 
             wordTb.Classs = string.IsNullOrEmpty(classs) ? "未分类" : classs;//如果分类为空的话就赋值为“未分类”
 
-            wordTb.Import = DateTime.Now;
+            wordTb.Import = DateTime.UtcNow.AddHours(8);
             wordTb.CreatedOn = wordTb.Import;
             wordTb.ModifiedOn = DateTime.MinValue;//导入单词时ModifiedOn设为最小值，防止跟记忆时ModifiedOn的作用发生混淆
 
@@ -984,7 +984,7 @@ namespace LjcWebApp.Controllers
         [HttpPost]
         public IActionResult Upload([FromServices]IHostingEnvironment env, UploadModel uploadModel)
         {
-            var fileName = DateTime.Now.ToString("MMddHHmmss") + ".xml";
+            var fileName = DateTime.UtcNow.AddHours(8).ToString("MMddHHmmss") + ".xml";
             var filePath = Path.Combine(env.WebRootPath + "/upload", fileName);
             try
             {

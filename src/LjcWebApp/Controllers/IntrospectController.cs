@@ -51,7 +51,7 @@ namespace LjcWebApp.Controllers
             introspect.Weight = question.Weight;
             introspect.IsYes = question.IsYes;
             introspect.IsPositive = question.IsPositive;
-            introspect.Date = DateTime.Now.Date;
+            introspect.Date = DateTime.UtcNow.AddHours(8).Date;
 
             var success = false;
             if (IntrospectService.IsExist(introspect))
@@ -126,8 +126,8 @@ namespace LjcWebApp.Controllers
         [HttpPost]
         public string GetStatisticInfo()
         {
-            var yesterdayList = IntrospectService.GetListByDate(DateTime.Now.AddDays(-1).Date);
-            var todayList = IntrospectService.GetListByDate(DateTime.Now.Date);
+            var yesterdayList = IntrospectService.GetListByDate(DateTime.UtcNow.AddHours(8).AddDays(-1).Date);
+            var todayList = IntrospectService.GetListByDate(DateTime.UtcNow.AddHours(8).Date);
 
             double yesterdayTotalScore = yesterdayList.Sum(p => p.Score) ?? 0;
             var yesterdayAverageScore = yesterdayList.Count == 0 ? 0 : Math.Round(yesterdayTotalScore / yesterdayList.Count, 2);

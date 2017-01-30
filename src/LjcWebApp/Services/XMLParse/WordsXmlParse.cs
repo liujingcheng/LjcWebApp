@@ -111,7 +111,7 @@ namespace LjcWebApp.Services.XMLParse
             XElement tags = item.Element("tags");
             wordTb.Classs = tags != null ? tags.Value : "未分类";//如果分类为空的话就赋值为“未分类”
 
-            wordTb.Import = DateTime.Now;
+            wordTb.Import = DateTime.UtcNow.AddHours(8);
             wordTb.CreatedOn = wordTb.Import;
             wordTb.ModifiedOn = DateTime.MinValue;//导入单词时ModifiedOn设为最小值，防止跟记忆时ModifiedOn的作用发生混淆
 

@@ -65,7 +65,7 @@ namespace LjcWebApp.Services.Account
                 {
                     myUser.UserId = Guid.NewGuid().ToString().Replace("-", "");
                     myUser.IsDeleted = 0;
-                    myUser.ModifiedOn = myUser.CreatedOn = DateTime.Now;
+                    myUser.ModifiedOn = myUser.CreatedOn = DateTime.UtcNow.AddHours(8);
 
                     context.myuser.Add(myUser);
                     context.SaveChanges();

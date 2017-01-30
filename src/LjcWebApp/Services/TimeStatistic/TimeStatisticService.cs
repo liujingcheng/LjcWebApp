@@ -32,8 +32,8 @@ namespace LjcWebApp.Services.DataCRUD
                     if (status == "New" && eventId == null)
                     {
                         entity = new timestatistic();
-                        entity.CreatedOn = DateTime.Now;
-                        entity.ModifiedOn = DateTime.Now;
+                        entity.CreatedOn = DateTime.UtcNow.AddHours(8);
+                        entity.ModifiedOn = DateTime.UtcNow.AddHours(8);
                         entity.EventName = eventName;
                         entity.EffectiveTime = effectiveTime;
                         entity.PlanTime = planTime;
@@ -50,7 +50,7 @@ namespace LjcWebApp.Services.DataCRUD
                         //{
                         //    return "need refresh";
                         //}
-                        entity.ModifiedOn = DateTime.Now;
+                        entity.ModifiedOn = DateTime.UtcNow.AddHours(8);
                         entity.InQuadrant = inQuadrant;
                         if (quadrant != null) entity.Quadrant = quadrant;
                         result = entity.ModifiedOn.Ticks.ToString();
@@ -60,7 +60,7 @@ namespace LjcWebApp.Services.DataCRUD
                     {
                         if (entity.StartTime == null)
                         {
-                            entity.StartTime = DateTime.Now;
+                            entity.StartTime = DateTime.UtcNow.AddHours(8);
                         }
                         entity.EventName = eventName;
                         entity.EffectiveTime = effectiveTime;
@@ -69,7 +69,7 @@ namespace LjcWebApp.Services.DataCRUD
                     }
                     else if (status == "Paused" || status == "Stopped")
                     {
-                        entity.EndTime = DateTime.Now;
+                        entity.EndTime = DateTime.UtcNow.AddHours(8);
                         entity.EventName = eventName;
                         entity.EffectiveTime = effectiveTime;
                         entity.PlanTime = planTime;

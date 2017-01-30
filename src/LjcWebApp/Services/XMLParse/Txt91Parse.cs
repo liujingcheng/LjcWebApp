@@ -67,7 +67,7 @@ namespace LjcWebApp.Services.XMLParse
 
                 wordTb.Classs = classs;
 
-                wordTb.Import = DateTime.Now;
+                wordTb.Import = DateTime.UtcNow.AddHours(8);
                 wordTb.CreatedOn = wordTb.Import;
                 wordTb.ModifiedOn = DateTime.MinValue;//导入单词时ModifiedOn设为最小值，防止跟记忆时ModifiedOn的作用发生混淆
 

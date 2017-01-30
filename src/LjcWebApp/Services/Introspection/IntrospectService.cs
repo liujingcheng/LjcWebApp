@@ -26,7 +26,7 @@ namespace LjcWebApp.Services.Introspection
                 //当当前问题currentQuestion为空时(比如首次加载页面或刷新页面时)，就紧接上次回答的问题继续往下
                 {
                     var lastCreatedIntrospect =
-                        context.introspect.Where(p => p.Date == DateTime.Now.Date)
+                        context.introspect.Where(p => p.Date == DateTime.UtcNow.AddHours(8).Date)
                             .OrderByDescending(p => p.CreatedOn)
                             .FirstOrDefault();
                     if (lastCreatedIntrospect != null)
@@ -52,7 +52,7 @@ namespace LjcWebApp.Services.Introspection
                 {
                     var introspect =
                         context.introspect.FirstOrDefault(
-                            p => p.Date == DateTime.Now.Date && p.question == nextQuestion.QuestionMember);
+                            p => p.Date == DateTime.UtcNow.AddHours(8).Date && p.question == nextQuestion.QuestionMember);
                     if (introspect != null)
                     {
                         nextQuestion.Score = introspect.Score;
@@ -72,7 +72,7 @@ namespace LjcWebApp.Services.Introspection
             using (var context = new LjcDbContext())
             {
                 var yesterdayIntrospect =
-                    context.introspect.FirstOrDefault(p => p.QuestionId == currentQuestion.Id && p.Date == DateTime.Now.Date.AddDays(-1));
+                    context.introspect.FirstOrDefault(p => p.QuestionId == currentQuestion.Id && p.Date == DateTime.UtcNow.AddHours(8).Date.AddDays(-1));
                 return yesterdayIntrospect;
             }
         }
@@ -89,7 +89,7 @@ namespace LjcWebApp.Services.Introspection
                 using (var context = new LjcDbContext())
                 {
                     entity.Id = Guid.NewGuid().ToString().Replace("-", "");
-                    entity.ModifiedOn = entity.CreatedOn = DateTime.Now;
+                    entity.ModifiedOn = entity.CreatedOn = DateTime.UtcNow.AddHours(8);
 
                     context.introspect.Add(entity);
                     context.SaveChanges();
@@ -122,7 +122,7 @@ namespace LjcWebApp.Services.Introspection
                     entity.IsYes = pEntity.IsYes;
                     entity.IsPositive = pEntity.IsPositive;
                     entity.Date = pEntity.Date;
-                    entity.ModifiedOn = DateTime.Now;
+                    entity.ModifiedOn = DateTime.UtcNow.AddHours(8);
 
                     context.SaveChanges();
                 }
@@ -210,7 +210,7 @@ namespace LjcWebApp.Services.Introspection
                 {
                     var introspect =
                         context.introspect.FirstOrDefault(
-                            p => p.Date == DateTime.Now.Date && p.question == previousQuestion.QuestionMember);
+                            p => p.Date == DateTime.UtcNow.AddHours(8).Date && p.question == previousQuestion.QuestionMember);
                     if (introspect != null)
                     {
                         previousQuestion.Score = introspect.Score;
@@ -248,7 +248,7 @@ namespace LjcWebApp.Services.Introspection
                 for (int i = currentQuestion.Sort.Value - 1; i > 0; i--)
                 {
                     var question = context.question.First(p => p.Sort == i);
-                    var date = DateTime.Now.Date;
+                    var date = DateTime.UtcNow.AddHours(8).Date;
                     if (
                         context.introspect.Any(
                             p => (p.Date == date && p.question == question.QuestionMember)))
