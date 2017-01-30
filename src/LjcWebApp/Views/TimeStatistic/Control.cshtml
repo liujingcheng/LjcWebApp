@@ -178,8 +178,10 @@
     function show(obj) {
         seconds = parseInt($(hddTotalTime).val());
         seconds++;
+        var totalTimeStr = transferToDateTime(seconds);
         $(hddTotalTime).val(seconds);
-        $(lblTotalTime).text(transferToDateTime(seconds));
+        $(lblTotalTime).text(totalTimeStr);
+        document.title = "进行中 " + totalTimeStr;
         if ($(txtPlanMinutes).val() != "" && parseInt($(txtPlanMinutes).val()) * 60 == seconds) {
             playAlarm();
         }
@@ -190,7 +192,7 @@
     var totalTomatoMinutes = 0;
     var monitTomatoInterval = undefined;
     var changeTitleInterval = undefined;
-    var originTitle = document.title = "Control-ToDoList"
+    var originTitle = document.title = "Control-ToDoList";
 
     function monitTomatoTime() {
         totalTomatoMinutes++;
