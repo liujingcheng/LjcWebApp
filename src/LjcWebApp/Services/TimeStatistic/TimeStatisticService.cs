@@ -69,9 +69,13 @@ namespace LjcWebApp.Services.DataCRUD
                     }
                     else if (status == "Paused" || status == "Stopped")
                     {
-                        entity.EndTime = DateTime.UtcNow.AddHours(8);
                         entity.EventName = eventName;
-                        entity.EffectiveTime = effectiveTime;
+                        if (status != "Stopped" || effectiveTime - entity.EffectiveTime > 5)
+                        //点Start后5秒内又点Stop的，把EndTime记为上一次的EndTime（这是由于非上一次 暂停的任务无法点击Stop按钮造成的,此时若确实想结束这个任务,只能先Start再Stop,此时的时间间隔应该不会大于5秒）
+                        {
+                            entity.EndTime = DateTime.UtcNow.AddHours(8);
+                            entity.EffectiveTime = effectiveTime;
+                        }
                         entity.PlanTime = planTime;
                         entity.Status = status;
                     }
