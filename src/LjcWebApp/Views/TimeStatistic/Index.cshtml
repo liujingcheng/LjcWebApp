@@ -20,7 +20,7 @@
 <input id="txtStartDate" class="datepicker" value="@ViewBag.StartDateStr"/>--<input id="txtEndDate" class="datepicker" value="@ViewBag.EndDateStr"/>
 <input id="btnSearch" type="button" value="go" placeholder="请输入搜索关键字"/>
 <div>
-    <input id="txtSearch"  style="width: 350px" value="@ViewBag.SearchText" />
+    <input id="txtSearch"  style="width: 350px;margin-top: 2px" value="@ViewBag.SearchText" />
 </div>
     <div id="unobtrusive-historylist">
         <table>
@@ -138,20 +138,21 @@
 <script src="~/lib/zeroclipboard/dist/ZeroClipboard.Core.js"></script>
 <script src="~/lib/zeroclipboard/dist/ZeroClipboard.min.js"></script>
 <script src="~/js/zeroclip.js"></script>
+<script src="~/lib/moment/moment.js"></script>
 <script src="~/lib/pikaday/pikaday.js"></script>
 <script src="~/js/common.js"></script>
 <script>
     $(function () {
         var picker1 = new Pikaday({
             field: document.getElementById('txtStartDate'),
-            format: 'yyyy-MM-dd',
+            format: 'YYYY-MM-DD',
             onSelect: function () {
                 this.hide();
             }
         });
         var picker2 = new Pikaday({
             field: document.getElementById('txtEndDate'),
-            format: 'yyyy-MM-dd',
+            format: 'YYYY-MM-DD',
             onSelect: function () {
                 this.hide();
             }

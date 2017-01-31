@@ -105,12 +105,12 @@ namespace LjcWebApp.Controllers
                         // i值 > = 0 ，因为枚举原因，Sunday排在最前，此时Sunday-Monday=-1，必须+7=6。 
                         i = 6;
                     var ts = new TimeSpan(i, 0, 0, 0);
-                    startDateStr = today.Subtract(ts).ToString();
+                    startDateStr = today.Subtract(ts).ToString("yyyy-MM-dd");
                 }
                 if (string.IsNullOrEmpty(endDateStr))
                 //若结束日期为空则默认为今天
                 {
-                    endDateStr = today.ToString();
+                    endDateStr = today.ToString("yyyy-MM-dd");
                 }
                 var startDate = Convert.ToDateTime(startDateStr);
                 var endDate = Convert.ToDateTime(endDateStr);
