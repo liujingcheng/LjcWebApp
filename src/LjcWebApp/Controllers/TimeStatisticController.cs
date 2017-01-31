@@ -91,7 +91,7 @@ namespace LjcWebApp.Controllers
             }
         }
 
-        public ActionResult Index(int? page, string startDateStr, string endDateStr)
+        public ActionResult Index(int? page, string startDateStr, string endDateStr, string searchText)
         {
             try
             {
@@ -117,8 +117,13 @@ namespace LjcWebApp.Controllers
 
                 ViewBag.StartDateStr = startDateStr;
                 ViewBag.EndDateStr = endDateStr;
+                ViewBag.SearchText = searchText;
 
                 var list = TimeStatisticService.GetFinishedList(startDate, endDate);
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    list = list.Where(p => p.EventName.Contains(searchText)).ToList();
+                }
                 var days = list.Select(p => p.StartTime.Value.Date).Distinct();
                 var ondayDataModelList = new List<OneDayDataModel>();
                 foreach (var day in days)

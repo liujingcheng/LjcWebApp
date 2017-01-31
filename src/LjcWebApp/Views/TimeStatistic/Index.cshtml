@@ -17,8 +17,11 @@
 </head>
 <body>
     <h2>Index</h2>
-    <input id="txtStartDate" class="datepicker" value="@ViewBag.StartDateStr" />--<input id="txtEndDate" class="datepicker" value="@ViewBag.EndDateStr" />
-    <input id="btnSearch" type="button" value="go" />
+<input id="txtStartDate" class="datepicker" value="@ViewBag.StartDateStr"/>--<input id="txtEndDate" class="datepicker" value="@ViewBag.EndDateStr"/>
+<input id="btnSearch" type="button" value="go" placeholder="请输入搜索关键字"/>
+<div>
+    <input id="txtSearch"  style="width: 350px" value="@ViewBag.SearchText" />
+</div>
     <div id="unobtrusive-historylist">
         <table>
             <tr>
@@ -157,9 +160,10 @@
         $('#btnSearch').click(function () {
             var startDate = $('#txtStartDate').val();
             var endDate = $('#txtEndDate').val();
+            var searchText = $("#txtSearch").val();
             picker1.destroy();
             picker2.destroy();
-            window.location.href = "/TimeStatistic/Index?startDateStr=" + startDate + "&endDateStr=" + endDate;
+            window.location.href = "/TimeStatistic/Index?startDateStr=" + startDate + "&endDateStr=" + endDate + "&searchText=" + searchText;
         });
     });
 </script>
