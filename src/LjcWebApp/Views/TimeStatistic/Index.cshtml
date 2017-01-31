@@ -165,5 +165,14 @@
             picker2.destroy();
             window.location.href = "/TimeStatistic/Index?startDateStr=" + startDate + "&endDateStr=" + endDate + "&searchText=" + searchText;
         });
+        //搜索框回车时点搜索按钮
+        $(document).on("keypress", "#txtSearch", function (evt) {
+            evt = evt || window.event;
+            var keyCode = evt.keyCode || evt.which;
+
+            if (keyCode == 13 && document.activeElement == this) {
+                $("#btnSearch").click();
+            }
+        });
     });
 </script>
