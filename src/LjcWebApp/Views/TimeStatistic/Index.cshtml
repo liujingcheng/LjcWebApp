@@ -83,6 +83,15 @@
                         <td>
                             @item.Remark
                         </td>
+                        <td>
+                            <input type="hidden" class="hddEventId" value="@item.EventId" />
+                        </td>
+                        <td>
+                            <input type="hidden" class="hddRemark" value="@item.Remark" />
+                        </td>
+                        <td>
+                            <input type="button" class="btnRemark" value="注" />
+                        </td>
                     </tr>
                 }
                 <tr>
@@ -104,6 +113,15 @@
                 <tr></tr>
                 <tr></tr>
                 <tr></tr>
+                <tr id="remarkLine" class="hide">
+                    <td></td>
+                    <td>
+                        <input type="text" id="txtRemark" />
+                    </td>
+                    <td>
+                        <input type="button" id="btnSaveRemark" value="Save" />
+                    </td>
+                </tr>
             }
             <pager source="(IPagedList)ViewBag.OnePageOfHistoryList" />
         </table>
@@ -119,6 +137,7 @@
 <script src="~/lib/zeroclipboard/dist/ZeroClipboard.min.js"></script>
 <script src="~/js/zeroclip.js"></script>
 <script src="~/lib/pikaday/pikaday.js"></script>
+<script src="~/js/common.js"></script>
 <script>
     $(function () {
         var picker1 = new Pikaday({
