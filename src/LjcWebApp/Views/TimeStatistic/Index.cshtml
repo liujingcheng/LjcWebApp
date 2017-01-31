@@ -50,7 +50,15 @@
                     Remark
                 </th>
             </tr>
-
+            <tr id="remarkLine" class="hide">
+                <td></td>
+                <td>
+                    <input type="text" id="txtRemark" />
+                </td>
+                <td>
+                    <input type="button" id="btnSaveRemark" value="Save" />
+                </td>
+            </tr>
             @foreach (var ondayDataModel in ViewBag.OnePageOfHistoryList)
             {
                 var copyText = "";
@@ -116,15 +124,6 @@
                 <tr></tr>
                 <tr></tr>
                 <tr></tr>
-                <tr id="remarkLine" class="hide">
-                    <td></td>
-                    <td>
-                        <input type="text" id="txtRemark" />
-                    </td>
-                    <td>
-                        <input type="button" id="btnSaveRemark" value="Save" />
-                    </td>
-                </tr>
             }
             <pager source="(IPagedList)ViewBag.OnePageOfHistoryList" />
         </table>
