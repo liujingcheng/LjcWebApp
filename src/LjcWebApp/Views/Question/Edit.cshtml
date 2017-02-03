@@ -107,5 +107,11 @@
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (!navigator.userAgent.match(/mobile/i)) {
+                $(".text-box").css("width", "1500px");
+            }
+        });
+    </script>
 </form>
