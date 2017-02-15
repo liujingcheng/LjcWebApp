@@ -321,7 +321,7 @@
             //    return;
             //}
             showTime = setInterval(show, 1000, this);
-            monitTomatoInterval = setInterval(monitTomatoTime, 60000);
+            //monitTomatoInterval = setInterval(monitTomatoTime, 60000);//番茄时间的提醒不放在web端了（不合适，因为任务常会暂停，导致提示不准）
             $(lblStatus).text(status);
             $(hddlastticks).val(ajaxResult);
 
