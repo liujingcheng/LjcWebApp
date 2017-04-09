@@ -130,8 +130,6 @@
             </td>
         </tr>
     </table>
-    <div id="divAlarm" class="hide">
-    </div>
 </body>
 </html>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -500,10 +498,6 @@
     });
 
     function playAlarm() {
-        var alarm = '<embed type="audio/mp3" src="/Content/alarm.mp3" />';
-        $("#divAlarm").removeClass("hide");
-        $("#divAlarm").empty();
-        $("#divAlarm").append(alarm);
 		clearInterval(changeTitleInterval);//防止蕃茄时间与计划时间都到了后产生两个定时器
         changeTitleInterval = setInterval(changeTitle, 1000, "已经到计划时间了~");
     }
