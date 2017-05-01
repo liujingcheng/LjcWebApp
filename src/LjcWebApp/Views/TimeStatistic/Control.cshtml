@@ -195,7 +195,7 @@
     function monitTomatoTime() {
         totalTomatoMinutes++;
         if (totalTomatoMinutes == oneTomatoMinutes) {
-			clearInterval(changeTitleInterval);//防止蕃茄时间与计划时间都到了后产生两个定时器
+            clearInterval(changeTitleInterval);//防止蕃茄时间与计划时间都到了后产生两个定时器
             changeTitleInterval = setInterval(changeTitle, 1000, "蕃茄时间已经到了~");
         }
     }
@@ -308,7 +308,7 @@
             //}
 
             status = "Started";
-			document.title = "TODO-任务进行中..."
+            document.title = "TODO-任务进行中..."
             var ajaxResult = saveEvent($(hddEventId).val(), $(txtEventName).val(), $(hddTotalTime).val(), $(txtPlanMinutes).val(), status, $(hddlastticks).val());
             if (ajaxResult == -1) {
                 alert("保存数据库失败");
@@ -331,7 +331,7 @@
             $(txtPlanMinutes).attr('disabled', false);
         } else {
             status = "Paused";
-			document.title = "TODO-任务暂停中..."
+            document.title = "TODO-任务暂停中..."
             var ajaxResult = saveEvent($(hddEventId).val(), $(txtEventName).val(), $(hddTotalTime).val(), $(txtPlanMinutes).val(), status, $(hddlastticks).val());
             if (ajaxResult == -1) {
                 alert("保存数据库失败");
@@ -423,6 +423,7 @@
 
 
     function saveEvent(eventId, eventName, effectiveTime, planMinutes, status, lastticks) {
+
         var ajaxResult;
         $.ajax({
             url: '/TimeStatistic/SaveEvent',
@@ -469,7 +470,16 @@
         $(txtEventName).attr("title", $(txtEventName).val());//增加浮动显示文本
         $("#txtNewEventName").val("");
 
-        var ajaxResult = saveEvent(null, $(txtEventName).val(), null, null, "New", null);
+        var planMinutes = null;
+        var eventName = $(txtEventName).val();
+        if (eventName.lastIndexOf("\t") != -1 && planMinutes == null) {
+            planMinutes = parseInt(eventName.substring(eventName.lastIndexOf("\t") + 1));
+            eventName = eventName.substring(0, eventName.lastIndexOf("\t")).trim();
+            $(txtEventName).val(eventName);
+            $(this).parent().parent().find(".txtPlanMinutes").first().val(planMinutes);
+        }
+
+        var ajaxResult = saveEvent(null, eventName, null, planMinutes, "New", null);
         if (ajaxResult == -1) {
             alert("保存数据库失败");
             return;
@@ -498,7 +508,7 @@
     });
 
     function playAlarm() {
-		clearInterval(changeTitleInterval);//防止蕃茄时间与计划时间都到了后产生两个定时器
+        clearInterval(changeTitleInterval);//防止蕃茄时间与计划时间都到了后产生两个定时器
         changeTitleInterval = setInterval(changeTitle, 1000, "已经到计划时间了~");
     }
 
