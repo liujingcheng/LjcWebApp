@@ -33,7 +33,7 @@ namespace LjcWebApp.Controllers
                 }
                 if (_wordLoadImpl == null)
                 {
-                    return new WordLoadImpl()
+                    return _wordLoadImpl = new WordLoadImpl()
                     {
                         CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
                     };
@@ -52,7 +52,7 @@ namespace LjcWebApp.Controllers
                 }
                 if (_wordStorageImpl == null)
                 {
-                    return new WordStorageImpl()
+                    return _wordStorageImpl = new WordStorageImpl()
                     {
                         CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
                     };
@@ -71,7 +71,7 @@ namespace LjcWebApp.Controllers
                 }
                 if (_wordCRUDImpl == null)
                 {
-                    return new WordCRUDImpl()
+                    return _wordCRUDImpl = new WordCRUDImpl()
                     {
                         CurrentUser = new MyUserService().GetByUserName(HttpContext.User.Identity.Name)
                     };
@@ -1007,5 +1007,40 @@ namespace LjcWebApp.Controllers
             return RedirectToAction("Edit", "Word", new { id = common.CurrentNode.Value.WordId });
         }
 
+        /// <summary>
+        /// 提升优先级
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public bool UpgradePriority()
+        {
+            try
+            {
+                return WordCRUDImpl.SetPriority(common.CurrentNode.Value.WordId, ++common.CurrentNode.Value.Priority);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 降低优先级
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public bool DegradePriority()
+        {
+            try
+            {
+                return WordCRUDImpl.SetPriority(common.CurrentNode.Value.WordId, --common.CurrentNode.Value.Priority);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+                return false;
+            }
+        }
     }
 }

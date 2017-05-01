@@ -33,5 +33,32 @@ namespace LjcWebApp.Services.DataCRUD
 
             return 0;
         }
+
+        /// <summary>
+        /// 设置优先级
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <param name="priority">优先级</param>
+        /// <returns></returns>
+        public bool SetPriority(long id, int priority)
+        {
+            try
+            {
+                using (var context = new LjcDbContext())
+                {
+                    var entity = context.word_tb.First(p => p.WordId == id);
+                    entity.Priority = priority;
+                    context.word_tb.Update(entity);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+                return false;
+            }
+            return true;
+        }
+
     }
 }

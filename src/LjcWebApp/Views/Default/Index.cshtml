@@ -101,10 +101,14 @@
     </div>
     <div>
         <input type="button" class="BtnPrevious" value="Previous" style="width: 80px;" onclick="BtnPreviousClick(this)" />
-        <input type="button" class="BtnNext" value="Next" style="width: 80px;" onclick="BtnNextClick(this)" />
+        <input type="button" class="BtnNext" value="→" style="width: 40px;" onclick="BtnNextClick(this)" />
         <input type="button" class="Reset" value="Reset" style="width: 80px;height: 60px" onclick="resetScrollToMid();" />
+        <input type="button" class="BtnDegrade" value="↓" style="width: 80px;height: 60px" onclick="BtnDegradeClick();" />
+        <input type="button" class="BtnUpgrade" value="↑" style="width: 40px;height: 60px" onclick="BtnUpgradeClick();" />
+        <input type="button" class="BtnHideParaphrase" value="А" style="width: 40px;height: 60px" onclick="resetScrollToMid();" />
+        <input type="button" class="BtnHideSpelling" value="飠" style="width: 40px;height: 60px" onclick="resetScrollToMid();" />
         <a asp-controller="Default" asp-action="EditCurrentWord" style="width: 80px; margin-left: 50px;">Edit</a>
-        <input type="button" id="BtnDelete" value="Delete" style="width: 80px;float: right;" onclick="BtnDeleteClick(this)" />
+        <input type="button" id="BtnDelete" value="✘" style="width: 40px;float: right;" onclick="BtnDeleteClick(this)" />
     </div>
 </div>
 
@@ -498,3 +502,61 @@
 
 </script>
 <!--End-->
+
+<script type="text/javascript">
+    function BtnUpgradeClick(thisObj) {
+        var result;
+        $(thisObj).attr("disabled", true);
+        var sure = confirm("upgrade sure?");
+        if (!sure) {
+            return;
+        }
+
+        $.ajax({
+            url: '/Default/UpgradePriority',
+            cache: false,
+            type: 'Post',
+            async: false,
+
+            success: function (data, status, xhr) {
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                alert(result);
+            }
+        });
+        if (result == "ajax error") {
+            $(thisObj).attr("disabled", false);
+            return false;
+        }
+        refreshWord();
+    }
+
+    function BtnDegradeClick(thisObj) {
+        var result;
+        $(thisObj).attr("disabled", true);
+        var sure = confirm("degrade sure?");
+        if (!sure) {
+            return;
+        }
+
+        $.ajax({
+            url: '/Default/DegradePriority',
+            cache: false,
+            type: 'Post',
+            async: false,
+
+            success: function (data, status, xhr) {
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                alert(result);
+            }
+        });
+        if (result == "ajax error") {
+            $(thisObj).attr("disabled", false);
+            return false;
+        }
+        refreshWord();
+    }
+</script>
