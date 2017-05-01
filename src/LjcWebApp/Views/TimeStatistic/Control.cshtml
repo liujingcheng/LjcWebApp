@@ -470,6 +470,7 @@
         $(txtEventName).attr("title", $(txtEventName).val());//增加浮动显示文本
         $("#txtNewEventName").val("");
 
+        //新建任务时，如果任务名后面由\t隔开了一个分钟数，则自动将其分离并填到后面的分钟数文本框内
         var planMinutes = null;
         var eventName = $(txtEventName).val();
         if (eventName.lastIndexOf("\t") != -1 && planMinutes == null) {
