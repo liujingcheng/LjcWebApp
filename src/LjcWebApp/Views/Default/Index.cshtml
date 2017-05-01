@@ -105,8 +105,8 @@
         <input type="button" class="Reset" value="Reset" style="width: 80px;height: 60px" onclick="resetScrollToMid();" />
         <input type="button" class="BtnDegrade" value="↓" style="width: 80px;height: 60px" onclick="BtnDegradeClick();" />
         <input type="button" class="BtnUpgrade" value="↑" style="width: 40px;height: 60px" onclick="BtnUpgradeClick();" />
-        <input type="button" class="BtnHideParaphrase" value="А" style="width: 40px;height: 60px" onclick="resetScrollToMid();" />
-        <input type="button" class="BtnHideSpelling" value="飠" style="width: 40px;height: 60px" onclick="resetScrollToMid();" />
+        <input type="button" class="BtnHideParaphrase" value="А" style="width: 40px;height: 60px" onclick="BtnHideParaphraseClick();" />
+        <input type="button" class="BtnHideSpelling" value="飠" style="width: 40px;height: 60px" onclick="BtnHideSpellingClick();" />
         <a asp-controller="Default" asp-action="EditCurrentWord" style="width: 80px; margin-left: 50px;">Edit</a>
         <input type="button" id="BtnDelete" value="✘" style="width: 40px;float: right;" onclick="BtnDeleteClick(this)" />
     </div>
@@ -438,18 +438,18 @@
             }
         });
         switch (ajaxResult) {
-            case 0:
-                //$("#addModal").modal("hide");
-                clearAddFields();
-                break;
-            case 1:
-                alert("Exceptions happened,contact admin!");
-                break;
-            case 2:
-                alert("this spelling is already exist");
-                break;
-            case 3:
-                alert("spelling is null");
+        case 0:
+            //$("#addModal").modal("hide");
+            clearAddFields();
+            break;
+        case 1:
+            alert("Exceptions happened,contact admin!");
+            break;
+        case 2:
+            alert("this spelling is already exist");
+            break;
+        case 3:
+            alert("spelling is null");
         }
     }
 </script>
@@ -504,9 +504,10 @@
 <!--End-->
 
 <script type="text/javascript">
-    function BtnUpgradeClick(thisObj) {
+    
+    //提高优先级
+    function BtnUpgradeClick() {
         var result;
-        $(thisObj).attr("disabled", true);
         var sure = confirm("upgrade sure?");
         if (!sure) {
             return;
@@ -526,15 +527,14 @@
             }
         });
         if (result == "ajax error") {
-            $(thisObj).attr("disabled", false);
             return false;
         }
         refreshWord();
     }
 
-    function BtnDegradeClick(thisObj) {
+    //降低优先级
+    function BtnDegradeClick() {
         var result;
-        $(thisObj).attr("disabled", true);
         var sure = confirm("degrade sure?");
         if (!sure) {
             return;
@@ -554,7 +554,60 @@
             }
         });
         if (result == "ajax error") {
-            $(thisObj).attr("disabled", false);
+            return false;
+        }
+        refreshWord();
+    }
+
+    //固定隐藏项(拼写)
+    function BtnHideSpellingClick() {
+        var result;
+        var sure = confirm("Hide Spelling sure?");
+        if (!sure) {
+            return true;
+        }
+
+        $.ajax({
+            url: '/Default/HideSpelling',
+            cache: false,
+            type: 'Post',
+            async: false,
+
+            success: function (data, status, xhr) {
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                alert(result);
+            }
+        });
+        if (result == "ajax error") {
+            return false;
+        }
+        refreshWord();
+    }
+
+    //固定隐藏项(释义)
+    function BtnHideParaphraseClick() {
+        var result;
+        var sure = confirm("Hide Paraphrase sure?");
+        if (!sure) {
+            return true;
+        }
+
+        $.ajax({
+            url: '/Default/HideParaphrase',
+            cache: false,
+            type: 'Post',
+            async: false,
+
+            success: function (data, status, xhr) {
+            },
+            error: function (data, status, e) {
+                result = "ajax error";
+                alert(result);
+            }
+        });
+        if (result == "ajax error") {
             return false;
         }
         refreshWord();

@@ -189,9 +189,34 @@ namespace LjcWebApp.Controllers
             var strList = new List<string>();
             try
             {
-                common.rbHideRandomChecked = pCheckedRadioValue == "0";
-                common.rbHideSpellingChecked = pCheckedRadioValue == "1";
-                common.rbHideParaphraseChecked = pCheckedRadioValue == "2";
+                if (pCheckedRadioValue != "0")
+                {
+                    common.rbHideRandomChecked = false;
+                    common.rbHideSpellingChecked = pCheckedRadioValue == "1";
+                    common.rbHideParaphraseChecked = pCheckedRadioValue == "2";
+                }
+                else
+                {
+                    if (common.CurrentNode.Value.HideItem == 0)
+                    {
+                        common.rbHideRandomChecked = true;
+                        common.rbHideSpellingChecked = false;
+                        common.rbHideParaphraseChecked = false;
+                    }
+                    if (common.CurrentNode.Value.HideItem == 1)
+                    {
+                        common.rbHideRandomChecked = false;
+                        common.rbHideSpellingChecked = false;
+                        common.rbHideParaphraseChecked = true;
+                    }
+                    if (common.CurrentNode.Value.HideItem == 2)
+                    {
+                        common.rbHideRandomChecked = false;
+                        common.rbHideSpellingChecked = true;
+                        common.rbHideParaphraseChecked = false;
+                    }
+                }
+
                 ShowCurrentWord();
                 strList.Add(common.lblWordInfoText);
                 strList.Add(common.lblRemainText);
@@ -278,13 +303,13 @@ namespace LjcWebApp.Controllers
                     }
                     //}
                 }
-                if (common.rbHideSpellingChecked)
+                else if (common.rbHideSpellingChecked)
                 {
                     common.lblSpellingText = "";
                     common.lblPhoneticText = "";
                     common.lblParaphraseText = common.CurrentNode.Value.Paraphrase;
                 }
-                if (common.rbHideParaphraseChecked)
+                else if (common.rbHideParaphraseChecked)
                 {
                     common.lblSpellingText = common.CurrentNode.Value.Spelling;
                     common.lblPhoneticText = "";
@@ -1042,5 +1067,44 @@ namespace LjcWebApp.Controllers
                 return false;
             }
         }
+
+        /// <summary>
+        /// 隐藏释义
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public bool HideParaphrase()
+        {
+            try
+            {
+                common.CurrentNode.Value.HideItem = 1;
+                return WordCRUDImpl.SetHideItem(common.CurrentNode.Value.WordId, common.CurrentNode.Value.HideItem);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 隐藏拼写
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public bool HideSpelling()
+        {
+            try
+            {
+                common.CurrentNode.Value.HideItem = 2;
+                return WordCRUDImpl.SetHideItem(common.CurrentNode.Value.WordId, common.CurrentNode.Value.HideItem);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+                return false;
+            }
+        }
+
     }
 }

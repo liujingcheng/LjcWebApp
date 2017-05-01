@@ -39,5 +39,9 @@ namespace LjcWebApp
         public int NoTotalCount { get; set; }
         public Nullable<System.DateTime> Deadline { get; set; }
         public Nullable<long> ExpireSpanTicks { get; set; }
+        /// <summary>
+        /// 隐藏项（0随机 1隐藏解释 2隐藏拼写）
+        /// </summary>
+        public int HideItem { get; set; }
     }
 }

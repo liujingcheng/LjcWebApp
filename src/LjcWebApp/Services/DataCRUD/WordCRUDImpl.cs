@@ -60,5 +60,31 @@ namespace LjcWebApp.Services.DataCRUD
             return true;
         }
 
+        /// <summary>
+        /// 设置隐藏项（0随机 1隐藏解释 2隐藏拼写）
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <param name="hideItem">隐藏项</param>
+        /// <returns></returns>
+        public bool SetHideItem(long id, int hideItem)
+        {
+            try
+            {
+                using (var context = new LjcDbContext())
+                {
+                    var entity = context.word_tb.First(p => p.WordId == id);
+                    entity.HideItem = hideItem;
+                    context.word_tb.Update(entity);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex.Message, ex);
+                return false;
+            }
+            return true;
+        }
+
     }
 }
