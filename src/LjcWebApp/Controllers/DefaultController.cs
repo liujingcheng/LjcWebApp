@@ -417,6 +417,13 @@ namespace LjcWebApp.Controllers
         {
             if (wordsToSelect == null || wordsToSelect.Count == 0) return null;
 
+            //首次记但没记住的,按没记住的次数从高到低的顺序记忆
+            var firstNotRememberList = wordsToSelect.Where(p => p.Process == 0).OrderBy(q => q.NoTotalCount).ToList();
+            if (firstNotRememberList.Count > 0)
+            {
+                return firstNotRememberList.Last();
+            }
+
             var yesTotalCountGT0List = wordsToSelect.Where(p => p.YesTotalCount > 0).ToList();//先找出分母大于0的单词
             if (yesTotalCountGT0List.Count > 0)//分母不为0的才能进行下面的运算
             {
@@ -426,12 +433,6 @@ namespace LjcWebApp.Controllers
                         yesTotalCountGT0List.Where(p => ((double)p.NoTotalCount / p.YesTotalCount) == hardWeight).ToList());
             }
 
-            //首次记但没记住的,按没记住的次数从高到低的顺序记忆
-            var firstNotRememberList = wordsToSelect.Where(p => p.Process == 0).OrderBy(q => q.NoTotalCount).ToList();
-            if (firstNotRememberList.Count > 0)
-            {
-                return firstNotRememberList.Last();
-            }
 
             return GetNextMaxProcessRandomWord(wordsToSelect);
         }
@@ -547,7 +548,7 @@ namespace LjcWebApp.Controllers
             word_tb result;
 
             var lastModifiedList = common.WordsNotRemember
-                .Where(p => (p.Process > 0 && p.ModifiedOn > p.LastLearn  //曾被记住过但上次记没记住的
+                .Where(p => (p.Process >= 0 && p.ModifiedOn > p.LastLearn  //曾被记住过但上次记没记住的
                     )
                     && WordCanBeLearn(p)).ToList();
 
