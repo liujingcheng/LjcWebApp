@@ -548,9 +548,8 @@ namespace LjcWebApp.Controllers
             word_tb result;
 
             var lastModifiedList = common.WordsNotRemember
-                .Where(p => (p.Process >= 0 && p.ModifiedOn > p.LastLearn  //曾被记住过但上次记没记住的
-                    )
-                    && WordCanBeLearn(p)).ToList();
+                .Where(p => p.Process >= 0 && p.FirstLearn != null && (p.LastLearn == null || p.ModifiedOn > p.LastLearn) //曾被记住过但上次记没记住的
+                     && WordCanBeLearn(p)).ToList();
 
             result = GetNextHardToLearnWord(lastModifiedList);
             if (result != null) return result;
