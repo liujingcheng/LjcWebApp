@@ -557,7 +557,7 @@ namespace LjcWebApp.Controllers
             try
             {
                 //从高优先级里面选
-                var highPriorityWordList = common.WordsNotRemember.Where(p => p.Process >= 0 && p.Priority > 1 && WordCanBeLearn(p)).ToList();
+                var highPriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority > 1 && WordCanBeLearn(p)).ToList();
                 if (highPriorityWordList.Count > 0)
                 {
                     /* 由于新加的词太多，耽误了已记过单词的复习，所以先去掉此功能
@@ -594,7 +594,7 @@ namespace LjcWebApp.Controllers
             try
             {
                 //再从中优先级里面选
-                var middlePriorityWordList = common.WordsNotRemember.Where(p => p.Process >= 0 && p.Priority == 1 && WordCanBeLearn(p)).ToList();
+                var middlePriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority == 1 && WordCanBeLearn(p)).ToList();
                 if (middlePriorityWordList.Count > 0)
                 {
                     result = GetNextHardToLearnWord(middlePriorityWordList);
@@ -609,7 +609,7 @@ namespace LjcWebApp.Controllers
             try
             {
                 //再从低优先级里面选
-                var lowPriorityWordList = common.WordsNotRemember.Where(p => p.Process >= 0 && p.Priority < 1 && WordCanBeLearn(p)).ToList();
+                var lowPriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority < 1 && WordCanBeLearn(p)).ToList();
                 if (lowPriorityWordList.Count > 0)
                 {
                     result = GetNextHardToLearnWord(lowPriorityWordList);
