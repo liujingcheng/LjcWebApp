@@ -557,7 +557,7 @@ namespace LjcWebApp.Controllers
             try
             {
                 //从高优先级里面选
-                var highPriorityWordList = common.WordsNotRemember.Where(p => p.Process > 0 && p.Priority > 1 && WordCanBeLearn(p)).ToList();
+                var highPriorityWordList = common.WordsNotRemember.Where(p => p.Process >= 0 && p.Priority > 1 && WordCanBeLearn(p)).ToList();
                 if (highPriorityWordList.Count > 0)
                 {
                     /* 由于新加的词太多，耽误了已记过单词的复习，所以先去掉此功能
