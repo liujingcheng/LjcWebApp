@@ -418,7 +418,7 @@ namespace LjcWebApp.Controllers
             if (wordsToSelect == null || wordsToSelect.Count == 0) return null;
 
             //首次记但没记住的,按没记住的次数从高到低的顺序记忆
-            var firstNotRememberList = wordsToSelect.Where(p => p.Process == 0).OrderBy(q => q.NoTotalCount).ToList();
+            var firstNotRememberList = wordsToSelect.Where(p => p.Process == 0 && p.FirstLearn != null).OrderBy(q => q.NoTotalCount).ToList();
             if (firstNotRememberList.Count > 0)
             {
                 return firstNotRememberList.Last();
