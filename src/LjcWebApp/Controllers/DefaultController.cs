@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using LjcWebApp.Helper;
@@ -223,6 +224,7 @@ namespace LjcWebApp.Controllers
                 strList.Add(common.lblSpellingText);
                 strList.Add(common.lblPhoneticText);
                 strList.Add(common.lblParaphraseText);
+                strList.Add(common.lblOtherInfoText);
             }
             catch (Exception ex)
             {
@@ -255,6 +257,16 @@ namespace LjcWebApp.Controllers
                     + " O:" + priority + " E:" + expireDays + "(" + sameExpireDays + ") TY:" + totalYesCount + " TN:" + totalNoCount
                     + " SG:" + Math.Round(wordGap, 2) + " RG:" + Math.Round(wordGap * wordGapWeight, 2)
                     + " C:" + classs;
+
+                var hasLearnedList = common.WordsNotRemember.Where(p => p.Priority == priority && p.FirstLearn != null).ToList();
+                var processList = hasLearnedList.Select(p => p.Process).Distinct().OrderBy(p => p).ToList();
+                var otherInfo = string.Format("{0}:{1}{2}", "All", hasLearnedList.Count, ";");
+                foreach (var process in processList)
+                {
+                    otherInfo += string.Format("{0}:{1}{2}", process, hasLearnedList.Count(p => p.Process == process), ";");
+                }
+
+                common.lblOtherInfoText = otherInfo;
             }
 
             //显示单词的进度、上次记忆时间和过期时间

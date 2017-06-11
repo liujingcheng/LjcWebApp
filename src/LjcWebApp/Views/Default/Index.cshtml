@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Words";
 }
-<div style="width: 560px;margin: 0 auto;">
+<div style="width: 560px;margin: 0 auto;float: left">
     <div id="divImport">
         <div style="padding-left: 3px;">
             <div id="buttons-panel" style="float: left;">
@@ -112,6 +112,9 @@
     </div>
 </div>
 
+<div id="divOtherInfo" style="overflow: auto">
+</div>
+
 <script type="text/javascript">
     $(document).ready(function () {
         if (navigator.userAgent.match(/mobile/i)) {
@@ -195,6 +198,13 @@
         $("#lblPhonetic").text(list[4]);
         $("#nowTime").text(getNowTime());
         $("#lblParaphrase").text(list[5]);
+
+        var otherInfo = list[6];
+        var list2 = otherInfo.split(";");
+        $("#divOtherInfo").empty();
+        for (var i = 0; i < list2.length; i++) {
+            $("#divOtherInfo").append("<span>" + list2[i] + "</span><br />");
+        }
 
         enableBtn();
         requestCompleted = true;

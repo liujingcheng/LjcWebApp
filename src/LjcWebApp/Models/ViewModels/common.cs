@@ -14,6 +14,7 @@ namespace LjcWebApp.Models.ViewModels
         public static List<word_tb> WordsNotRemember;
 
         public static string lblRemainText;
+        public static string lblOtherInfoText;
         public static string lblSpellingText;
         public static string lblPhoneticText;
         public static string lblParaphraseText;
