@@ -258,9 +258,9 @@ namespace LjcWebApp.Controllers
                     + " SG:" + Math.Round(wordGap, 2) + " RG:" + Math.Round(wordGap * wordGapWeight, 2)
                     + " C:" + classs;
 
-                var hasLearnedList = common.WordsNotRemember.Where(p => p.Priority == priority && p.FirstLearn != null).ToList();
+                var hasLearnedList = common.WordsNotRemember.Where(p => p.Priority == priority && p.FirstLearn != null).ToList();//当前等级所有待记旧词
                 var processList = hasLearnedList.Select(p => p.Process).Distinct().OrderBy(p => p).ToList();
-                var otherInfo = string.Format("{0}:{1}{2}", "All", hasLearnedList.Count, ";");
+                var otherInfo = string.Format("{0}:{1}{2}", "AO", hasLearnedList.Count, ";");//当前等级所有待记旧词数
                 foreach (var process in processList)
                 {
                     otherInfo += string.Format("{0}:{1}{2}", process, hasLearnedList.Count(p => p.Process == process), ";");
