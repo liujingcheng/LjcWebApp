@@ -263,7 +263,22 @@ namespace LjcWebApp.Controllers
                 var otherInfo = string.Format("{0}:{1}{2}", "AO", hasLearnedList.Count, ";");//当前等级所有待记旧词数
                 foreach (var process in processList)
                 {
-                    otherInfo += string.Format("{0}:{1}{2}", process, hasLearnedList.Count(p => p.Process == process), ";");
+                    if (process >= 11)
+                    {
+                        if (process % 2 == 0)
+                        {
+                            continue;
+                        }
+                        otherInfo += string.Format("{0}:{1}{2}", process,
+                            hasLearnedList.Count(p => p.Process == process).ToString("00"), " ");
+                        otherInfo += string.Format("{0}:{1}{2}", process + 1,
+                            hasLearnedList.Count(p => p.Process == process + 1), ";");
+                    }
+                    else
+                    {
+                        otherInfo += string.Format("{0}:{1}{2}", process, hasLearnedList.Count(p => p.Process == process), ";");
+                    }
+
                 }
 
                 common.lblOtherInfoText = otherInfo;
