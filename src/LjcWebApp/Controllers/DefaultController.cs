@@ -261,11 +261,12 @@ namespace LjcWebApp.Controllers
                 var hasLearnedList = common.WordsNotRemember.Where(p => p.Priority == priority && p.FirstLearn != null).ToList();//当前等级所有待记旧词
                 var processList = hasLearnedList.Select(p => p.Process).Distinct().OrderBy(p => p).ToList();
                 var otherInfo = string.Format("{0}:{1}{2}", "AO", hasLearnedList.Count, ";");//当前等级所有待记旧词数
+                var processCount = processList.Count;
                 foreach (var process in processList)
                 {
-                    if (process >= 11)
+                    if (processCount >= 11 && process >= 11)
                     {
-                        if (process % 2 == 0)
+                        if (process % 2 == 0 && processList.Exists(p => p == process - 1))//有单有双的情况下双才不需要展示
                         {
                             continue;
                         }
