@@ -1,5 +1,5 @@
-﻿@using PagedList.Mvc;
-@using PagedList;
+﻿@using Sakura.AspNetCore
+
 <table>
     <tr quadrant="4">
         <th></th>
@@ -8,8 +8,4 @@
         </th>
     </tr>
     @Html.Partial("QuadrantPartial", (IPagedList)ViewBag.OnePageOfQuadrantList4)
-    @Html.PagedListPager((IPagedList)ViewBag.OnePageOfQuadrantList4, page => Url.Action("GetQuadrantList",
-                            new { page, quadrant = 4, ViewBag.PageSize }),
-    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
-    new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "unobtrusive-historylist4" }))
 </table>

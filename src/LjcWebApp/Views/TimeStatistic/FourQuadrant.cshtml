@@ -1,14 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Routing
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
     ViewBag.Title = "Quadrant";
-}
-@section head{
-    @Styles.Render("~/Content/PagedList.css")
-    @Styles.Render("~/Content/bootstrap.min.css")
-    @Scripts.Render("~/Scripts/bootstrap.min.js")
-    @Styles.Render("~/Content/TimeStatistic.css")
 }
 
 <div>
@@ -59,8 +54,7 @@
 
 <div id="onComplete"></div>
 
-<script type="text/javascript" src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-<script type="text/javascript" src="~/Scripts/bussiness/common.js"></script>
+<script src="~/js/common.js"></script>
 
 <script>
     $(document).ready(function () {
