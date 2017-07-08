@@ -276,8 +276,16 @@ namespace LjcWebApp.Controllers
         }
 
         [HttpPost]
-        public int ChangeQuadrant(string eventId, short quadrant)
+        public int ChangeQuadrant(string eventId, short quadrant, short? inQuadrant = null)
         {
+            if (inQuadrant.HasValue)
+            {
+                var result = TimeStatisticService.ChangeInQuadrant(eventId, inQuadrant.Value);
+                if (result != 0)
+                {
+                    return result;
+                }
+            }
             return TimeStatisticService.ChangeQuadrant(eventId, quadrant);
         }
 

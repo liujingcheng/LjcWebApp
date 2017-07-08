@@ -102,6 +102,9 @@
                     <input type="button" class="btnInsertAfter" value="Insert" />
                 </td>
                 <td>
+                    <input type="button" class="btnToFiveQuadrant" value="5" />
+                </td>
+                <td>
                     <input type="button" class="btnToQuadrant" value="Back" />
                 </td>
                 <td>
@@ -462,6 +465,7 @@
             '<td><input type="button" class="btnDelete" value="Delete" /></td>' +
             '<td><input type="button" class="btnInsertAfter" value="Insert" /></td>' +
             '<td><input type="button" class="btnToQuadrant" value="Back" /></td>' +
+            '<td><input type="button" class="btnToFiveQuadrant" value="5" /></td>' +
             '<td><input type="hidden" class="hddRemark" value="" /></td>' +
             '<td><input type="button" class="btnRemark" value="注" /></td>';
         $(insertTd).insertAfter($(this).parent());
@@ -643,6 +647,34 @@
             async: false,
             type: 'Post',
             data: { eventId: $(hddEventId).val(), inQuadrant: 1 },
+
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        if (ajaxResult == 0) {
+            $(currentLine).remove();
+        }
+        else {
+            alert("btnToQuadrant failed");
+        }
+    });
+
+    $(document).on('click', ".btnToFiveQuadrant", function () {
+        var currentLine = $(this).parent().parent();
+        var hddEventId = $(currentLine).find(".hddEventId").first();
+
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/ChangeQuadrant',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: { eventId: $(hddEventId).val(), quadrant: 5, inQuadrant: 1 },
 
             success: function (data, status, xhr) {
                 ajaxResult = data;
