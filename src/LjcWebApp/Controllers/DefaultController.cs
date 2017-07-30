@@ -264,7 +264,7 @@ namespace LjcWebApp.Controllers
                 var processCount = processList.Count;
                 foreach (var process in processList)
                 {
-                    if (processCount >= 11 && process >= 11)
+                    if (processCount >= 9 && process >= 9)
                     {
                         if (process % 2 == 0 && processList.Exists(p => p == process - 1))//有单有双的情况下双才不需要展示
                         {
