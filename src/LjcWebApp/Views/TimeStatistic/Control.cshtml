@@ -133,6 +133,9 @@
             </td>
         </tr>
     </table>
+    <div class="hide" id="divAlarm">
+        <embed id="alarmAudio" type="audio/mp3" src="~/sounds/plantimeout.mp3" />
+    </div>
 </body>
 </html>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -512,7 +515,16 @@
         $(tr).after(insertTr);
     });
 
+    //播放音频
+    function playAudio() {
+        var alarm = $("#alarmAudio");
+        $("#divAlarm").removeClass("hide");
+        $("#divAlarm").empty();
+        $("#divAlarm").append(alarm);
+    }
+
     function playAlarm() {
+        playAudio();
         clearInterval(changeTitleInterval);//防止蕃茄时间与计划时间都到了后产生两个定时器
         changeTitleInterval = setInterval(changeTitle, 1000, "已经到计划时间了~");
     }
