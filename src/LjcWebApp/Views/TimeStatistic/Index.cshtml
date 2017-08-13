@@ -17,11 +17,11 @@
 </head>
 <body>
     <h2>Index</h2>
-<input id="txtStartDate" class="datepicker" value="@ViewBag.StartDateStr"/>--<input id="txtEndDate" class="datepicker" value="@ViewBag.EndDateStr"/>
-<input id="btnSearch" type="button" value="go" placeholder="请输入搜索关键字"/>
-<div>
-    <input id="txtSearch"  style="width: 350px;margin-top: 2px" value="@ViewBag.SearchText" />
-</div>
+    <input id="txtStartDate" class="datepicker" value="@ViewBag.StartDateStr" />--<input id="txtEndDate" class="datepicker" value="@ViewBag.EndDateStr" />
+    <input id="btnSearch" type="button" value="go" placeholder="请输入搜索关键字" />
+    <div>
+        <input id="txtSearch" style="width: 350px;margin-top: 2px" value="@ViewBag.SearchText" />
+    </div>
     <div id="unobtrusive-historylist">
         <table>
             <tr>
@@ -51,13 +51,14 @@
                 </th>
             </tr>
             <tr id="remarkLine" class="hide">
-                <td></td>
+                <td> </td>
                 <td>
                     <input type="text" id="txtRemark" />
                 </td>
                 <td>
                     <input type="button" id="btnSaveRemark" value="Save" />
                 </td>
+                <td> </td>
             </tr>
             @foreach (var ondayDataModel in ViewBag.OnePageOfHistoryList)
             {
@@ -103,6 +104,9 @@
                         <td>
                             <input type="button" class="btnRemarkRead" value="注" />
                         </td>
+                        <td>
+                            <input type="button" class="backToPaused" value="Back" />
+                        </td>
                     </tr>
                 }
                 <tr>
@@ -133,8 +137,8 @@
 </html>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-<script src="~/js/site.js"></script>
-<script src="~/js/bundle.js"></script>*@
+    <script src="~/js/site.js"></script>
+    <script src="~/js/bundle.js"></script>*@
 <script src="~/lib/zeroclipboard/dist/ZeroClipboard.Core.js"></script>
 <script src="~/lib/zeroclipboard/dist/ZeroClipboard.min.js"></script>
 <script src="~/js/zeroclip.js"></script>
@@ -174,5 +178,34 @@
                 $("#btnSearch").click();
             }
         });
+    });
+
+    //加一个重新将Stopped任务恢复到Paused状态的功能
+    $(document).on('click', ".backToPaused", function () {
+        var currentLine = $(this).parent().parent();
+        var hddEventId = $(currentLine).find(".hddEventId").first();
+
+        var ajaxResult;
+        $.ajax({
+            url: '/TimeStatistic/ChangeInQuadrant',
+            cache: false,
+            async: false,
+            type: 'Post',
+            data: { eventId: $(hddEventId).val(), inQuadrant: 0, status: "Paused" },
+
+            success: function (data, status, xhr) {
+                ajaxResult = data;
+            },
+            error: function (data, status, e) {
+                alert("ajax error");
+            }
+        });
+
+        if (ajaxResult == 0) {
+            $(currentLine).remove();
+        }
+        else {
+            alert("BackToPaused failed");
+        }
     });
 </script>

@@ -269,10 +269,16 @@ namespace LjcWebApp.Controllers
             return partial;
         }
 
+        /// <summary>
+        /// 改变是否在象限里的状态
+        /// </summary>
+        /// <param name="eventId">Id</param>
+        /// <param name="inQuadrant">是否在象限里</param>
+        /// <param name="status">状态</param>
         [HttpPost]
-        public int ChangeInQuadrant(string eventId, short inQuadrant)
+        public int ChangeInQuadrant(string eventId, short inQuadrant, string status = null)
         {
-            return TimeStatisticService.ChangeInQuadrant(eventId, inQuadrant);
+            return TimeStatisticService.ChangeInQuadrant(eventId, inQuadrant, status);
         }
 
         [HttpPost]

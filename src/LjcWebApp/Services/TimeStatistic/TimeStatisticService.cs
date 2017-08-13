@@ -313,8 +313,11 @@ namespace LjcWebApp.Services.DataCRUD
         /// <summary>
         /// 改变是否在象限里的状态
         /// </summary>
+        /// <param name="eventId">Id</param>
+        /// <param name="inQuadrant">是否在象限里</param>
+        /// <param name="status">状态</param>
         /// <returns></returns>
-        public int ChangeInQuadrant(string eventId, short inQuadrant)
+        public int ChangeInQuadrant(string eventId, short inQuadrant, string status = null)
         {
             try
             {
@@ -322,6 +325,11 @@ namespace LjcWebApp.Services.DataCRUD
                 {
                     var entity = context.timestatistic.First(p => p.EventId == eventId);
                     entity.InQuadrant = inQuadrant;
+                    if (status != null)
+                    {
+                        entity.Status = status;
+                    }
+
                     context.SaveChanges();
                     return 0;
                 }
