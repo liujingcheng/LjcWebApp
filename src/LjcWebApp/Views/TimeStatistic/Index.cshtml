@@ -50,16 +50,6 @@
                     Remark
                 </th>
             </tr>
-            <tr id="remarkLine" class="hide">
-                <td> </td>
-                <td>
-                    <input type="text" id="txtRemark" />
-                </td>
-                <td>
-                    <input type="button" id="btnSaveRemark" value="Save" />
-                </td>
-                <td> </td>
-            </tr>
             @foreach (var ondayDataModel in ViewBag.OnePageOfHistoryList)
             {
                 var copyText = "";
@@ -208,4 +198,5 @@
             alert("BackToPaused failed");
         }
     });
+
 </script>

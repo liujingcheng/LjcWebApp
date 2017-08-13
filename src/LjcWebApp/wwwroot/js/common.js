@@ -86,14 +86,12 @@ function transferToDateTime(seconds) {
 //----------------------------------给任务添加备注----------------------------
 $(function () {
     $(document).on('click', ".btnRemark", function () {
-        if (!$("#remarkLine").hasClass("hide")) {
-            $("#remarkLine").addClass("hide");
-            return false;
+        if ($("#remarkLine") != null) {
+            $("#remarkLine").remove();
         }
-        $("#remarkLine").removeClass("hide");
+        var insertTr = '<tr id="remarkLine"><td> </td><td><input type="text" id="txtRemark" /></td><td><input type="button" id="btnSaveRemark" value="Save" /></td><td></td></tr>';
         var currentLine = $(this).parent().parent();
-        var remarkLine = $("#txtRemark").parent().parent();
-        $(currentLine).after(remarkLine);
+        $(currentLine).after(insertTr);
 
         var hddRemark = $(currentLine).find(".hddRemark").first().val();
         $("#txtRemark").val(hddRemark);
@@ -127,7 +125,7 @@ $(function () {
         });
 
         if (ajaxResult == 0) {
-            $("#remarkLine").addClass("hide");
+            $("#remarkLine").remove();
         }
         else {
             alert("UpdateRemark failed");
