@@ -85,7 +85,7 @@ function transferToDateTime(seconds) {
 
 //----------------------------------给任务添加备注----------------------------
 $(function () {
-    $(document).on('click', ".btnRemark", function () {
+    $(document).on('click', ".btnRemark,.btnRemarkRead", function () {
         if (!$("#remarkLine").hasClass("hide")) {
             $("#remarkLine").addClass("hide");
             return;
