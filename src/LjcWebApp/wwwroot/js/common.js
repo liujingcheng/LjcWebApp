@@ -85,10 +85,10 @@ function transferToDateTime(seconds) {
 
 //----------------------------------给任务添加备注----------------------------
 $(function () {
-    $(document).on('click', ".btnRemark,.btnRemarkRead", function () {
+    $(document).on('click', ".btnRemark", function () {
         if (!$("#remarkLine").hasClass("hide")) {
             $("#remarkLine").addClass("hide");
-            return;
+            return false;
         }
         $("#remarkLine").removeClass("hide");
         var currentLine = $(this).parent().parent();
@@ -98,6 +98,7 @@ $(function () {
         var hddRemark = $(currentLine).find(".hddRemark").first().val();
         $("#txtRemark").val(hddRemark);
         $("#txtRemark").focus();
+        return false;
     });
 
     $(document).on('click', "#btnSaveRemark", function () {
