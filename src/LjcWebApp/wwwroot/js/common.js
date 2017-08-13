@@ -108,6 +108,11 @@ $(function () {
         var hddEventId = $(currentLine).find(".hddEventId").first();
         var remark = $("#txtRemark").val();
 
+        if ($(hddEventId).val() == undefined) {
+            //有时该方法莫名其妙的会执行两次，第二次为undefined，只能让其返回
+            return false;
+        }
+
         var ajaxResult;
         $.ajax({
             url: '/TimeStatistic/UpdateRemark',
