@@ -97,16 +97,23 @@ namespace LjcWebApp.Controllers
             {
                 var pageNumber = page ?? 1;
                 var today = DateTime.UtcNow.AddHours(8);
+                //if (string.IsNullOrEmpty(startDateStr))
+                ////若起始日期为空则默认为本周一
+                //{
+                //    int i = today.DayOfWeek - DayOfWeek.Monday;
+                //    if (i == -1)
+                //        // i值 > = 0 ，因为枚举原因，Sunday排在最前，此时Sunday-Monday=-1，必须+7=6。 
+                //        i = 6;
+                //    var ts = new TimeSpan(i, 0, 0, 0);
+                //    startDateStr = today.Subtract(ts).ToString("yyyy-MM-dd");
+                //}
+
+                //主了配合显示出1天以上任务，先取今天
                 if (string.IsNullOrEmpty(startDateStr))
-                //若起始日期为空则默认为本周一
                 {
-                    int i = today.DayOfWeek - DayOfWeek.Monday;
-                    if (i == -1)
-                        // i值 > = 0 ，因为枚举原因，Sunday排在最前，此时Sunday-Monday=-1，必须+7=6。 
-                        i = 6;
-                    var ts = new TimeSpan(i, 0, 0, 0);
-                    startDateStr = today.Subtract(ts).ToString("yyyy-MM-dd");
+                    startDateStr = today.ToString("yyyy-MM-dd");
                 }
+
                 if (string.IsNullOrEmpty(endDateStr))
                 //若结束日期为空则默认为今天
                 {
