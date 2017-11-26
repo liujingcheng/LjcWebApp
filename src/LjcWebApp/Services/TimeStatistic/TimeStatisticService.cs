@@ -24,6 +24,7 @@ namespace LjcWebApp.Services.DataCRUD
         public string SaveEvent(string eventId, string eventName, int? effectiveTime, int? planTime, string status, string lastticks, int? quadrant, short inQuadrant)
         {
             string result = "-1";
+            var now = DateTime.UtcNow.AddHours(8);
             try
             {
                 using (var context = new LjcDbContext())
@@ -32,8 +33,8 @@ namespace LjcWebApp.Services.DataCRUD
                     if (status == "New" && eventId == null)
                     {
                         entity = new timestatistic();
-                        entity.CreatedOn = DateTime.UtcNow.AddHours(8);
-                        entity.ModifiedOn = DateTime.UtcNow.AddHours(8);
+                        entity.CreatedOn = now;
+                        entity.ModifiedOn = now;
                         entity.EventName = eventName;
                         entity.EffectiveTime = effectiveTime;
                         entity.PlanTime = planTime;
@@ -50,7 +51,7 @@ namespace LjcWebApp.Services.DataCRUD
                         //{
                         //    return "need refresh";
                         //}
-                        entity.ModifiedOn = DateTime.UtcNow.AddHours(8);
+                        entity.ModifiedOn = now;
                         entity.InQuadrant = inQuadrant;
                         if (quadrant != null) entity.Quadrant = quadrant;
                         result = entity.ModifiedOn.Ticks.ToString();
@@ -60,7 +61,7 @@ namespace LjcWebApp.Services.DataCRUD
                     {
                         if (entity.StartTime == null)
                         {
-                            entity.StartTime = DateTime.UtcNow.AddHours(8);
+                            entity.StartTime = now;
                         }
                         entity.EventName = eventName;
                         entity.EffectiveTime = effectiveTime;
@@ -73,7 +74,7 @@ namespace LjcWebApp.Services.DataCRUD
                         if (status != "Stopped" || effectiveTime - entity.EffectiveTime > 5)
                         //点Start后5秒内又点Stop的，把EndTime记为上一次的EndTime（这是由于非上一次 暂停的任务无法点击Stop按钮造成的,此时若确实想结束这个任务,只能先Start再Stop,此时的时间间隔应该不会大于5秒）
                         {
-                            entity.EndTime = DateTime.UtcNow.AddHours(8);
+                            entity.EndTime = now;
                             entity.EffectiveTime = effectiveTime;
                         }
                         entity.PlanTime = planTime;
@@ -95,6 +96,8 @@ namespace LjcWebApp.Services.DataCRUD
                     {
                         context.timestatistic.Update(entity);
                     }
+
+                    SaveOrUpdateTimeDetail(context, entity.EventId, now);
                     context.SaveChanges();
 
                     return result;
@@ -105,6 +108,28 @@ namespace LjcWebApp.Services.DataCRUD
                 LogHelper.WriteLog(ex.Message, ex);
                 return "-1";
             }
+        }
+
+        private void SaveOrUpdateTimeDetail(LjcDbContext context, string eventId, DateTime now)
+        {
+            var detail = context.timedetail.LastOrDefault(p => p.EventId == eventId);
+            if (detail == null || detail.EndTime != null)
+            {
+                var newDetai = new timedetail();
+                newDetai.EventId = eventId;
+                newDetai.StartTime = now;
+                newDetai.CreatedOn = now;
+                newDetai.ModifiedOn = now;
+                context.timedetail.Add(newDetai);
+            }
+            else
+            {
+                detail.EventId = eventId;
+                detail.EndTime = now;
+                detail.ModifiedOn = now;
+                context.timedetail.Update(detail);
+            }
+
         }
 
         /// <summary>
