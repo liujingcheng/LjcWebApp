@@ -19,6 +19,7 @@ namespace LjcWebApp
         [Key]
         public long TimedetailId { get; set; }
         public string EventId { get; set; }
+        public string UserId { get; set; }
         public System.DateTime StartTime { get; set; }
         public Nullable<System.DateTime> EndTime { get; set; }
         public System.DateTime CreatedOn { get; set; }

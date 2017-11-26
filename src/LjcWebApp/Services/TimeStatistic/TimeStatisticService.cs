@@ -25,6 +25,7 @@ namespace LjcWebApp.Services.DataCRUD
         {
             string result = "-1";
             var now = DateTime.UtcNow.AddHours(8);
+            string userId = CurrentUser.UserId;
             try
             {
                 using (var context = new LjcDbContext())
@@ -90,14 +91,14 @@ namespace LjcWebApp.Services.DataCRUD
                         entity.EventId = Guid.NewGuid().ToString();
                         result = entity.EventId + "|" + entity.ModifiedOn.Ticks;
                         context.timestatistic.Add(entity);
-                        entity.UserId = CurrentUser.UserId;
+                        entity.UserId = userId;
                     }
                     else
                     {
                         context.timestatistic.Update(entity);
                     }
 
-                    SaveOrUpdateTimeDetail(context, entity.EventId, now);
+                    SaveOrUpdateTimeDetail(context, entity.EventId, userId, now);
                     context.SaveChanges();
 
                     return result;
@@ -110,25 +111,24 @@ namespace LjcWebApp.Services.DataCRUD
             }
         }
 
-        private void SaveOrUpdateTimeDetail(LjcDbContext context, string eventId, DateTime now)
+        private void SaveOrUpdateTimeDetail(LjcDbContext context, string eventId, string userId, DateTime now)
         {
             var detail = context.timedetail.LastOrDefault(p => p.EventId == eventId);
             if (detail == null || detail.EndTime != null)
             {
-                var newDetai = new timedetail();
-                newDetai.EventId = eventId;
-                newDetai.StartTime = now;
-                newDetai.CreatedOn = now;
-                newDetai.ModifiedOn = now;
-                context.timedetail.Add(newDetai);
+                detail = new timedetail();
+                detail.StartTime = now;
+                detail.CreatedOn = now;
+                context.timedetail.Add(detail);
             }
             else
             {
-                detail.EventId = eventId;
                 detail.EndTime = now;
-                detail.ModifiedOn = now;
                 context.timedetail.Update(detail);
             }
+            detail.EventId = eventId;
+            detail.UserId = userId;
+            detail.ModifiedOn = now;
 
         }
 
@@ -144,22 +144,34 @@ namespace LjcWebApp.Services.DataCRUD
             {
                 using (var context = new LjcDbContext())
                 {
-                    if (startDate == null && endDate == null)
-                    {
-                        return context.timestatistic.Where(p => p.UserId == CurrentUser.UserId).OrderByDescending(p => p.CreatedOn).ToList();
-                    }
-                    if (startDate == null)
-                    {
-                        return context.timestatistic.OrderByDescending(p => p.Status != "New" && p.StartTime.Value.Date <= endDate.Value.Date).ToList();
-                    }
-                    if (endDate == null)
-                    {
-                        return context.timestatistic.OrderByDescending(p => p.Status != "New" && p.StartTime.Value.Date >= startDate.Value.Date).ToList();
-                    }
-                    return context.timestatistic.Where(p =>
+                    List<timestatistic> list;
+
+                    list = context.timestatistic.Where(p =>
                        p.Status != "New" && p.StartTime.Value.Date >= startDate.Value.Date && p.StartTime.Value.Date <= endDate.Value.Date
                        && p.InQuadrant != 1 && p.Quadrant != 0 && p.UserId == CurrentUser.UserId)
                         .OrderBy(p => p.StartTime).ToList();
+
+                    var hasSelectedEventIds = list.Select(p => p.EventId).ToList();
+                    var detailList =
+                        context.timedetail.Where(
+                            p => p.EndTime.HasValue && p.StartTime.Date >= startDate.Value.Date && p.StartTime.Date <= endDate.Value.Date
+                            && p.UserId == CurrentUser.UserId).ToList();
+                    var otherEventIds = detailList.Where(p => !hasSelectedEventIds.Contains(p.EventId)).Select(q => q.EventId).Distinct().ToList();
+                    if (otherEventIds.Count > 0)
+                    {
+                        var otherMainItems = context.timestatistic.Where(p => otherEventIds.Contains(p.EventId)).ToList();
+                        foreach (var otherEventId in otherEventIds)
+                        {
+                            var sumEffectiveSeconds =
+                                detailList.Where(p => p.EventId == otherEventId)
+                                    .Sum(q => (q.EndTime.Value - q.StartTime).TotalSeconds);
+                            var mainItem = otherMainItems.First(p => p.EventId == otherEventId);
+                            mainItem.EffectiveTime = (int)sumEffectiveSeconds;
+                            mainItem.StartTime = detailList.OrderBy(p => p.StartTime).First().StartTime;
+                            list.Add(mainItem);
+                        }
+                    }
+                    return list;
                 }
             }
             catch (Exception ex)
