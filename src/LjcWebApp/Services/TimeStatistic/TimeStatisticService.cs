@@ -56,6 +56,8 @@ namespace LjcWebApp.Services.DataCRUD
                         entity.InQuadrant = inQuadrant;
                         if (quadrant != null) entity.Quadrant = quadrant;
                         result = entity.ModifiedOn.Ticks.ToString();
+
+                        SaveOrUpdateTimeDetail(context, entity.EventId, userId, now);
                     }
 
                     if (status == "Started")
@@ -98,7 +100,6 @@ namespace LjcWebApp.Services.DataCRUD
                         context.timestatistic.Update(entity);
                     }
 
-                    SaveOrUpdateTimeDetail(context, entity.EventId, userId, now);
                     context.SaveChanges();
 
                     return result;
