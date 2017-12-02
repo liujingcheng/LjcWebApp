@@ -166,6 +166,11 @@ namespace LjcWebApp.Services.DataCRUD
                             var sumEffectiveSeconds =
                                 detailList.Where(p => p.EventId == otherEventId)
                                     .Sum(q => (q.EndTime.Value - q.StartTime).TotalSeconds);
+                            if (sumEffectiveSeconds < 5)
+                            //小于5秒的忽略
+                            {
+                                continue;
+                            }
                             var mainItem = otherMainItems.First(p => p.EventId == otherEventId);
                             mainItem.EffectiveTime = (int)sumEffectiveSeconds;
                             mainItem.StartTime = detailList.OrderBy(p => p.StartTime).First().StartTime;
