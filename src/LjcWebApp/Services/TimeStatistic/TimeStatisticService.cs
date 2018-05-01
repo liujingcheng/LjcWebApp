@@ -171,10 +171,13 @@ namespace LjcWebApp.Services.DataCRUD
                             {
                                 continue;
                             }
-                            var mainItem = otherMainItems.First(p => p.EventId == otherEventId);
-                            mainItem.EffectiveTime = (int)sumEffectiveSeconds;
-                            mainItem.StartTime = detailList.OrderBy(p => p.StartTime).First().StartTime;
-                            list.Add(mainItem);
+                            var mainItem = otherMainItems.FirstOrDefault(p => p.EventId == otherEventId);
+                            if (mainItem != null)
+                            {
+                                mainItem.EffectiveTime = (int)sumEffectiveSeconds;
+                                mainItem.StartTime = detailList.OrderBy(p => p.StartTime).First().StartTime;
+                                list.Add(mainItem);
+                            }
                         }
                     }
                     return list;
