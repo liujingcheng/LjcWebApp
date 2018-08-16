@@ -129,7 +129,7 @@ namespace LjcWebApp.Controllers
                 var list = TimeStatisticService.GetFinishedList(startDate, endDate);
                 if (!string.IsNullOrEmpty(searchText))
                 {
-                    list = list.Where(p => p.EventName.Contains(searchText)).ToList();
+                    list = list.Where(p => p.EventName.ToLower().Contains(searchText.ToLower())).ToList();
                 }
                 var days = list.Select(p => p.StartTime.Value.Date).Distinct();
                 var ondayDataModelList = new List<OneDayDataModel>();
