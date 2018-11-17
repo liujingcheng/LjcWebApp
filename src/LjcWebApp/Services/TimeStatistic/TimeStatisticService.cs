@@ -152,34 +152,34 @@ namespace LjcWebApp.Services.DataCRUD
                        && p.InQuadrant != 1 && p.Quadrant != 0 && p.UserId == CurrentUser.UserId)
                         .OrderBy(p => p.StartTime).ToList();
 
-                    var hasSelectedEventIds = list.Select(p => p.EventId).ToList();
-                    var detailList =
-                        context.timedetail.Where(
-                            p => p.EndTime.HasValue && p.StartTime.Date >= startDate.Value.Date && p.StartTime.Date <= endDate.Value.Date
-                            && p.UserId == CurrentUser.UserId).ToList();
-                    var otherEventIds = detailList.Where(p => !hasSelectedEventIds.Contains(p.EventId)).Select(q => q.EventId).Distinct().ToList();
-                    if (otherEventIds.Count > 0)
-                    {
-                        var otherMainItems = context.timestatistic.Where(p => otherEventIds.Contains(p.EventId)).ToList();
-                        foreach (var otherEventId in otherEventIds)
-                        {
-                            var sumEffectiveSeconds =
-                                detailList.Where(p => p.EventId == otherEventId)
-                                    .Sum(q => (q.EndTime.Value - q.StartTime).TotalSeconds);
-                            if (sumEffectiveSeconds < 5)
-                            //小于5秒的忽略
-                            {
-                                continue;
-                            }
-                            var mainItem = otherMainItems.FirstOrDefault(p => p.EventId == otherEventId);
-                            if (mainItem != null)
-                            {
-                                mainItem.EffectiveTime = (int)sumEffectiveSeconds;
-                                mainItem.StartTime = detailList.OrderBy(p => p.StartTime).First().StartTime;
-                                list.Add(mainItem);
-                            }
-                        }
-                    }
+                    //var hasSelectedEventIds = list.Select(p => p.EventId).ToList();
+                    //var detailList =
+                    //    context.timedetail.Where(
+                    //        p => p.EndTime.HasValue && p.StartTime.Date >= startDate.Value.Date && p.StartTime.Date <= endDate.Value.Date
+                    //        && p.UserId == CurrentUser.UserId).ToList();
+                    //var otherEventIds = detailList.Where(p => !hasSelectedEventIds.Contains(p.EventId)).Select(q => q.EventId).Distinct().ToList();
+                    //if (otherEventIds.Count > 0)
+                    //{
+                    //    var otherMainItems = context.timestatistic.Where(p => otherEventIds.Contains(p.EventId)).ToList();
+                    //    foreach (var otherEventId in otherEventIds)
+                    //    {
+                    //        var sumEffectiveSeconds =
+                    //            detailList.Where(p => p.EventId == otherEventId)
+                    //                .Sum(q => (q.EndTime.Value - q.StartTime).TotalSeconds);
+                    //        if (sumEffectiveSeconds < 5)
+                    //        //小于5秒的忽略
+                    //        {
+                    //            continue;
+                    //        }
+                    //        var mainItem = otherMainItems.FirstOrDefault(p => p.EventId == otherEventId);
+                    //        if (mainItem != null)
+                    //        {
+                    //            mainItem.EffectiveTime = (int)sumEffectiveSeconds;
+                    //            mainItem.StartTime = detailList.OrderBy(p => p.StartTime).First().StartTime;
+                    //            list.Add(mainItem);
+                    //        }
+                    //    }
+                    //}
                     return list;
                 }
             }
